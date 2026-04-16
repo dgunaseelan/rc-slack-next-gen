@@ -14,7 +14,7 @@
       ]
     },
     {
-      title: "Slack UI with AI Insights",
+      title: "Interactive UI with AI Insights",
       items: [
         { id: "01_home_tab",           title: "Home dashboard",        channel: "App Home · Sales Rep" },
         { id: "02_browse_products",    title: "Browse Products",       channel: "#deal-acme-q2" },
