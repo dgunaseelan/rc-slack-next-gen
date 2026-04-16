@@ -1,0 +1,140 @@
+{
+  "_meta": {
+    "id": "14_assistant_ar_collection_chat",
+    "title": "Assistant · Overdue AR worklist drive-through",
+    "surface": "assistant",
+    "description": "User-initiated. Meredith asks what's overdue; AI shows aging buckets, drills into Globex, drafts a payment plan, accepts an inline chat edit ('soften paragraph 2'), sends, and queues the next overdue account. Pattern: worklist loop with inline text edits.",
+    "rca_endpoint": "GET /revflow/ar/aging → GET /services/data/v66.0/sobjects/Account/{id}/Activities → Zuora POST /v1/payment-schedules → POST /services/data/v66.0/sobjects/Task → POST /services/data/v66.0/sobjects/EmailMessage"
+  },
+  "blocks": [
+    { "type": "context", "elements": [
+      { "type": "image", "image_url": "https://placehold.co/24x24/0ea5e9/ffffff/png?text=M", "alt_text": "Meredith" },
+      { "type": "mrkdwn", "text": "*Meredith*  ·  Fri 3:42 PM" }
+    ]},
+    { "type": "section", "text": { "type": "mrkdwn", "text": "What's overdue on my book?" }},
+    { "type": "divider" },
+    { "type": "context", "elements": [
+      { "type": "mrkdwn", "text": ":sparkles: *RevFlow AI*  ·  Fri 3:42 PM" }
+    ]},
+    { "type": "section", "text": { "type": "mrkdwn", "text": ":chart_with_downwards_trend: *Aging — your book*\n7 overdue invoices · *$127K* total" }},
+    { "type": "section", "fields": [
+      { "type": "mrkdwn", "text": "*0–30 days*\n4 invoices · $24K" },
+      { "type": "mrkdwn", "text": "*31–60 days*\n1 invoice · $18K" },
+      { "type": "mrkdwn", "text": "*61–90 days*\n1 invoice · $3K" },
+      { "type": "mrkdwn", "text": "*90+ days*\n:red_circle: 1 · *$82K*" }
+    ]},
+    { "type": "context", "elements": [
+      { "type": "mrkdwn", "text": ":warning: Biggest risk: *Globex — `INV-09877`, $82K, 74 days overdue.*" }
+    ]},
+    { "type": "actions", "elements": [
+      { "type": "button", "text": { "type": "plain_text", "text": ":clipboard: Open worklist", "emoji": true }, "value": "open_worklist", "action_id": "ar_open_worklist" },
+      { "type": "button", "text": { "type": "plain_text", "text": ":dart: Focus on Globex", "emoji": true }, "style": "primary", "value": "focus_globex", "action_id": "ar_focus_globex" },
+      { "type": "button", "text": { "type": "plain_text", "text": ":arrow_down: Export list", "emoji": true }, "value": "export_list", "action_id": "ar_export_list" }
+    ]},
+    { "type": "divider" },
+    { "type": "context", "elements": [
+      { "type": "image", "image_url": "https://placehold.co/24x24/0ea5e9/ffffff/png?text=M", "alt_text": "Meredith" },
+      { "type": "mrkdwn", "text": "*Meredith*  ·  Fri 3:43 PM" }
+    ]},
+    { "type": "section", "text": { "type": "mrkdwn", "text": "Focus on Globex." }},
+    { "type": "divider" },
+    { "type": "context", "elements": [
+      { "type": "mrkdwn", "text": ":sparkles: *RevFlow AI*  ·  Fri 3:43 PM" }
+    ]},
+    { "type": "plan", "title": "Thought for 1.4s", "tasks": [
+      { "task_id": "a1", "title": "Pulled INV-09877 + payment history", "status": "complete" },
+      { "task_id": "a2", "title": "Scanned Salesforce activities + email threads", "status": "complete" },
+      { "task_id": "a3", "title": "Checked late-fee clause + dispute history", "status": "complete" }
+    ]},
+    { "type": "section", "text": { "type": "mrkdwn", "text": "*Globex · `INV-09877`*\n$82,400  ·  74 days overdue  ·  Payment terms: NET 30" }},
+    { "type": "section", "fields": [
+      { "type": "mrkdwn", "text": "*Last payment*\n`INV-09612`, Aug 14" },
+      { "type": "mrkdwn", "text": "*Last contact*\n8 days ago (Finance)" },
+      { "type": "mrkdwn", "text": "*Payment method*\nACH, on file" },
+      { "type": "mrkdwn", "text": "*Disputes*\nNone" }
+    ]},
+    { "type": "context", "elements": [
+      { "type": "mrkdwn", "text": ":bulb: _CFO Tom Lin noted in Aug thread: \"cashflow tight through Q1 due to EU launch.\"_" }
+    ]},
+    { "type": "actions", "elements": [
+      { "type": "button", "text": { "type": "plain_text", "text": ":wave: Gentle nudge email", "emoji": true }, "value": "nudge", "action_id": "ar_nudge" },
+      { "type": "button", "text": { "type": "plain_text", "text": ":handshake: Offer payment plan", "emoji": true }, "style": "primary", "value": "payment_plan", "action_id": "ar_payment_plan" },
+      { "type": "button", "text": { "type": "plain_text", "text": ":fire: Escalate to Finance", "emoji": true }, "value": "escalate", "action_id": "ar_escalate" },
+      { "type": "button", "text": { "type": "plain_text", "text": ":people_holding_hands: Loop in CSM", "emoji": true }, "value": "loop_csm", "action_id": "ar_loop_csm" }
+    ]},
+    { "type": "divider" },
+    { "type": "context", "elements": [
+      { "type": "image", "image_url": "https://placehold.co/24x24/0ea5e9/ffffff/png?text=M", "alt_text": "Meredith" },
+      { "type": "mrkdwn", "text": "*Meredith*  ·  Fri 3:44 PM" }
+    ]},
+    { "type": "section", "text": { "type": "mrkdwn", "text": "Payment plan. Tom already flagged cashflow — meet him where he is." }},
+    { "type": "divider" },
+    { "type": "context", "elements": [
+      { "type": "mrkdwn", "text": ":sparkles: *RevFlow AI*  ·  Fri 3:44 PM" }
+    ]},
+    { "type": "section", "text": { "type": "mrkdwn", "text": ":dollar: *Payment plan options*" }},
+    { "type": "section", "fields": [
+      { "type": "mrkdwn", "text": "*A · 3 equal*\n$27,467 × 3 months" },
+      { "type": "mrkdwn", "text": "*B · 50 / 25 / 25*\n$41,200 now · 2 × $20,600" },
+      { "type": "mrkdwn", "text": "*C · Custom*\nYou pick dates + split" },
+      { "type": "mrkdwn", "text": "*Late-fee waiver*\n:heavy_check_mark: included in all" }
+    ]},
+    { "type": "section", "text": { "type": "mrkdwn", "text": ":email: *Draft email (plan B, recommended)*\n\n> Hi Tom,\n> \n> Touching base on INV-09877. I know Q1 has been tight with the EU launch — I want to make this easy. Proposing a split: *$41,200 now, then $20,600* each in Jan and Feb. Late fees waived on the full balance.\n> \n> Works for you? Happy to adjust the dates.\n> \n> — Meredith" }},
+    { "type": "context", "elements": [
+      { "type": "mrkdwn", "text": ":bulb: _Tone-matched to Tom's prior threads (direct, warm, short)._" }
+    ]},
+    { "type": "actions", "elements": [
+      { "type": "button", "text": { "type": "plain_text", "text": "Send plan A", "emoji": true }, "value": "send_a", "action_id": "ar_send_a" },
+      { "type": "button", "text": { "type": "plain_text", "text": ":star2: Send plan B", "emoji": true }, "style": "primary", "value": "send_b", "action_id": "ar_send_b" },
+      { "type": "button", "text": { "type": "plain_text", "text": "Switch to custom", "emoji": true }, "value": "custom", "action_id": "ar_custom" },
+      { "type": "button", "text": { "type": "plain_text", "text": ":pencil2: Edit email", "emoji": true }, "value": "edit", "action_id": "ar_edit" }
+    ]},
+    { "type": "divider" },
+    { "type": "context", "elements": [
+      { "type": "image", "image_url": "https://placehold.co/24x24/0ea5e9/ffffff/png?text=M", "alt_text": "Meredith" },
+      { "type": "mrkdwn", "text": "*Meredith*  ·  Fri 3:46 PM" }
+    ]},
+    { "type": "section", "text": { "type": "mrkdwn", "text": "Plan B — but soften the second paragraph, it sounds a bit transactional." }},
+    { "type": "divider" },
+    { "type": "context", "elements": [
+      { "type": "mrkdwn", "text": ":sparkles: *RevFlow AI*  ·  Fri 3:46 PM" }
+    ]},
+    { "type": "section", "text": { "type": "mrkdwn", "text": ":pencil2: *Revised paragraph 2*" }},
+    { "type": "section", "fields": [
+      { "type": "mrkdwn", "text": "*Before*\n_\"Proposing a split: $41,200 now, then $20,600 each in Jan and Feb. Late fees waived on the full balance.\"_" },
+      { "type": "mrkdwn", "text": "*After*\n_\"If it helps, here's a split we could run with — $41,200 this month, then $20,600 in Jan and again in Feb. We'll waive the late fees on our end so it's a clean reset.\"_" }
+    ]},
+    { "type": "context", "elements": [
+      { "type": "mrkdwn", "text": ":bulb: _Softened: removed \"proposing,\" added \"if it helps,\" reframed waiver as \"clean reset.\"_" }
+    ]},
+    { "type": "actions", "elements": [
+      { "type": "button", "text": { "type": "plain_text", "text": ":email: Send", "emoji": true }, "style": "primary", "value": "send_final", "action_id": "ar_send_final" },
+      { "type": "button", "text": { "type": "plain_text", "text": ":pencil2: Tweak more", "emoji": true }, "value": "tweak", "action_id": "ar_tweak" },
+      { "type": "button", "text": { "type": "plain_text", "text": ":leftwards_arrow_with_hook: Revert", "emoji": true }, "value": "revert", "action_id": "ar_revert" }
+    ]},
+    { "type": "divider" },
+    { "type": "context", "elements": [
+      { "type": "image", "image_url": "https://placehold.co/24x24/0ea5e9/ffffff/png?text=M", "alt_text": "Meredith" },
+      { "type": "mrkdwn", "text": "*Meredith*  ·  Fri 3:47 PM" }
+    ]},
+    { "type": "section", "text": { "type": "mrkdwn", "text": "Send." }},
+    { "type": "divider" },
+    { "type": "context", "elements": [
+      { "type": "mrkdwn", "text": ":sparkles: *RevFlow AI*  ·  Fri 3:47 PM" }
+    ]},
+    { "type": "section", "fields": [
+      { "type": "mrkdwn", "text": "*Email*\n:white_check_mark: sent to Tom" },
+      { "type": "mrkdwn", "text": "*Plan B*\n:white_check_mark: registered in Zuora" },
+      { "type": "mrkdwn", "text": "*Task*\nFollow up D+5 (Dec 19)" },
+      { "type": "mrkdwn", "text": "*Calendar*\nHold D+7 proposed" }
+    ]},
+    { "type": "context", "elements": [
+      { "type": "mrkdwn", "text": ":heavy_check_mark: *1 of 7 overdue handled.*  Keep going? Next up: *Initech* — `INV-10104`, $18K, 45 days." }
+    ]},
+    { "type": "actions", "elements": [
+      { "type": "button", "text": { "type": "plain_text", "text": ":arrow_right: Next — Initech", "emoji": true }, "style": "primary", "value": "next_initech", "action_id": "ar_next_initech" },
+      { "type": "button", "text": { "type": "plain_text", "text": ":coffee: Take a break", "emoji": true }, "value": "break", "action_id": "ar_break" },
+      { "type": "button", "text": { "type": "plain_text", "text": ":arrow_down: Export progress", "emoji": true }, "value": "export", "action_id": "ar_export" }
+    ]}
+  ]
+}

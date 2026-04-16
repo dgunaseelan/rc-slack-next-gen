@@ -1,0 +1,110 @@
+{
+  "_meta": {
+    "id": "13_assistant_invoice_dispute_chat",
+    "title": "Assistant · Invoice dispute → credit memo",
+    "surface": "assistant",
+    "description": "Cross-system forensic chat. Meredith forwards an AP dispute; AI pulls invoice, contract, utilization, amendment history, and email context, delivers a verdict + 3 trade-off options, models partial credit, creates the credit memo, drafts a tone-matched reply.",
+    "rca_endpoint": "GET /services/data/v66.0/sobjects/Invoice__c → GET /connect/cpq/contracts → GET /revflow/telemetry/seat-utilization → Zuora POST /v1/credit-memos → POST /services/data/v66.0/sobjects/EmailMessage"
+  },
+  "blocks": [
+    { "type": "context", "elements": [
+      { "type": "image", "image_url": "https://placehold.co/24x24/0ea5e9/ffffff/png?text=M", "alt_text": "Meredith" },
+      { "type": "mrkdwn", "text": "*Meredith*  ·  11:04 AM" }
+    ]},
+    { "type": "section", "text": { "type": "mrkdwn", "text": "Acme AP disputed `INV-10482`. They say we billed 30 CloudSync seats but only 22 are active. Is this right?" }},
+    { "type": "context", "elements": [
+      { "type": "mrkdwn", "text": ":paperclip: Forwarded email from priya.rao@acme.com  ·  _subject: Invoice discrepancy — October_" }
+    ]},
+    { "type": "divider" },
+    { "type": "context", "elements": [
+      { "type": "mrkdwn", "text": ":sparkles: *RevFlow AI*  ·  11:04 AM" }
+    ]},
+    { "type": "plan", "title": "Thought for 2.4s", "tasks": [
+      { "task_id": "i1", "title": "Pulled INV-10482 (Oct 1 — Oct 31)", "status": "complete" },
+      { "task_id": "i2", "title": "Cross-checked contract MSA-1187 + amendments", "status": "complete" },
+      { "task_id": "i3", "title": "Queried seat utilization (last 30d)", "status": "complete" },
+      { "task_id": "i4", "title": "Reviewed email thread with AP contact", "status": "complete" }
+    ]},
+    { "type": "section", "text": { "type": "mrkdwn", "text": ":mag: *Reconciliation — `INV-10482`*" }},
+    { "type": "section", "fields": [
+      { "type": "mrkdwn", "text": "*Billed*\n30 seats × $149" },
+      { "type": "mrkdwn", "text": "*Active (last 30d)*\n22 users" },
+      { "type": "mrkdwn", "text": "*Contract basis*\nCommitted, not consumption" },
+      { "type": "mrkdwn", "text": "*Amendment history*\n`A-1891` added 10 seats (Feb)" }
+    ]},
+    { "type": "context", "elements": [
+      { "type": "mrkdwn", "text": ":white_check_mark: *Verdict:* Billing is *correct* — but customer has a fair grievance." }
+    ]},
+    { "type": "section", "text": { "type": "mrkdwn", "text": ":bulb: Amendment `A-1891` was countersigned by *Jordan N.* (their prior AP lead). Jordan left Acme in March. Priya (new AP) wasn't copied on the amendment." }},
+    { "type": "divider" },
+    { "type": "context", "elements": [
+      { "type": "image", "image_url": "https://placehold.co/24x24/0ea5e9/ffffff/png?text=M", "alt_text": "Meredith" },
+      { "type": "mrkdwn", "text": "*Meredith*  ·  11:06 AM" }
+    ]},
+    { "type": "section", "text": { "type": "mrkdwn", "text": "They'll escalate if I say \"you owe it.\" What are my options?" }},
+    { "type": "divider" },
+    { "type": "context", "elements": [
+      { "type": "mrkdwn", "text": ":sparkles: *RevFlow AI*  ·  11:06 AM" }
+    ]},
+    { "type": "section", "text": { "type": "mrkdwn", "text": "Three options, sorted by relationship impact:" }},
+    { "type": "section", "fields": [
+      { "type": "mrkdwn", "text": ":shield: *A · Hold firm*\nRecover $4,470 AR" },
+      { "type": "mrkdwn", "text": "*Risk*\nChurn signal stacks, escalation likely" }
+    ]},
+    { "type": "section", "fields": [
+      { "type": "mrkdwn", "text": ":dove_of_peace: *B · Partial credit*\n$1,192 credit (8 unused seats, 1× only)" },
+      { "type": "mrkdwn", "text": "*Margin*\n-$1,192 this month" }
+    ]},
+    { "type": "section", "fields": [
+      { "type": "mrkdwn", "text": ":handshake: *C · Mid-term renegotiate*\nDrop to 22 seats, co-term reset" },
+      { "type": "mrkdwn", "text": "*ARR impact*\n-$1,788 annualized" }
+    ]},
+    { "type": "actions", "elements": [
+      { "type": "button", "text": { "type": "plain_text", "text": "A · Hold firm", "emoji": true }, "value": "opt_a", "action_id": "dispute_opt_a" },
+      { "type": "button", "text": { "type": "plain_text", "text": ":dove_of_peace: B · Model partial credit", "emoji": true }, "style": "primary", "value": "opt_b", "action_id": "dispute_opt_b" },
+      { "type": "button", "text": { "type": "plain_text", "text": "C · Model renegotiate", "emoji": true }, "value": "opt_c", "action_id": "dispute_opt_c" }
+    ]},
+    { "type": "divider" },
+    { "type": "context", "elements": [
+      { "type": "image", "image_url": "https://placehold.co/24x24/0ea5e9/ffffff/png?text=M", "alt_text": "Meredith" },
+      { "type": "mrkdwn", "text": "*Meredith*  ·  11:09 AM" }
+    ]},
+    { "type": "section", "text": { "type": "mrkdwn", "text": "Model partial credit." }},
+    { "type": "divider" },
+    { "type": "context", "elements": [
+      { "type": "mrkdwn", "text": ":sparkles: *RevFlow AI*  ·  11:09 AM" }
+    ]},
+    { "type": "section", "text": { "type": "mrkdwn", "text": ":receipt: *Credit memo preview*" }},
+    { "type": "section", "fields": [
+      { "type": "mrkdwn", "text": "*CM amount*\n$1,192" },
+      { "type": "mrkdwn", "text": "*GL account*\n4200 — Revenue refund" },
+      { "type": "mrkdwn", "text": "*Approval*\nNot required (< $2K)" },
+      { "type": "mrkdwn", "text": "*Applied to*\n`INV-10482` (partial)" }
+    ]},
+    { "type": "actions", "elements": [
+      { "type": "button", "text": { "type": "plain_text", "text": ":page_facing_up: Create credit memo", "emoji": true }, "style": "primary", "value": "create_cm", "action_id": "dispute_create_cm" },
+      { "type": "button", "text": { "type": "plain_text", "text": ":pencil2: Edit amount", "emoji": true }, "value": "edit_cm", "action_id": "dispute_edit_cm" },
+      { "type": "button", "text": { "type": "plain_text", "text": ":fire: Escalate for approval", "emoji": true }, "value": "escalate_cm", "action_id": "dispute_escalate_cm" }
+    ]},
+    { "type": "divider" },
+    { "type": "context", "elements": [
+      { "type": "image", "image_url": "https://placehold.co/24x24/0ea5e9/ffffff/png?text=M", "alt_text": "Meredith" },
+      { "type": "mrkdwn", "text": "*Meredith*  ·  11:10 AM" }
+    ]},
+    { "type": "section", "text": { "type": "mrkdwn", "text": "Create it. And draft the reply to Priya." }},
+    { "type": "divider" },
+    { "type": "context", "elements": [
+      { "type": "mrkdwn", "text": ":sparkles: *RevFlow AI*  ·  11:10 AM" }
+    ]},
+    { "type": "section", "text": { "type": "mrkdwn", "text": ":white_check_mark: Credit memo `CM-00218` created and applied. Draft reply below:" }},
+    { "type": "section", "text": { "type": "mrkdwn", "text": "> *Subject:* Re: Invoice discrepancy — October\n> \n> Hi Priya,\n> \n> Thanks for flagging this — I checked the numbers and you're billed on a committed-seat basis under MSA-1187, which is why October came through at 30 seats. That said, I see how the transition from Jordan's team created a gap in visibility.\n> \n> I've issued a one-time credit of *$1,192* for the 8 underutilized seats (CM-00218 attached). Happy to hop on a call this week to walk through the contract and the easiest path forward if your headcount has genuinely shifted.\n> \n> — Meredith" }},
+    { "type": "context", "elements": [
+      { "type": "mrkdwn", "text": ":bulb: _Tone-matched to Priya's prior emails (formal, direct, short paragraphs). ~140 words._" }
+    ]},
+    { "type": "actions", "elements": [
+      { "type": "button", "text": { "type": "plain_text", "text": ":email: Send email", "emoji": true }, "style": "primary", "value": "send_reply", "action_id": "dispute_send_reply" },
+      { "type": "button", "text": { "type": "plain_text", "text": ":pencil2: Edit draft", "emoji": true }, "value": "edit_reply", "action_id": "dispute_edit_reply" },
+      { "type": "button", "text": { "type": "plain_text", "text": ":floppy_disk: Save draft only", "emoji": true }, "value": "save_reply", "action_id": "dispute_save_reply" }
+    ]}
+  ]
+}

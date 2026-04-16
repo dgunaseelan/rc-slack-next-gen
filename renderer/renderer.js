@@ -1,30 +1,44 @@
 (() => {
   "use strict";
 
-  const MOCKS = [
-    { id: "01_home_tab",           title: "Home dashboard",        channel: "App Home · Sales Rep" },
-    { id: "02_browse_products",    title: "Browse Products",       channel: "#deal-acme-q2" },
-    { id: "03_product_details",    title: "Product Details",       channel: "#deal-acme-q2" },
-    { id: "04_create_quote_step1", title: "Create Quote · Step 1", channel: "New Quote" },
-    { id: "04_create_quote_step2", title: "Create Quote · Step 2", channel: "New Quote" },
-    { id: "04a_add_product_search", title: "↳ Add Product (overlay)", channel: "Add product" },
-    { id: "04b_add_bundle",         title: "↳ Add Bundle (overlay)",  channel: "Add bundle" },
-    { id: "04c_ai_suggest_addons",  title: "↳ AI Suggest Add-ons",    channel: "AI · Suggested add-ons" },
-    { id: "04d_configure_line",     title: "↳ Configure Line",        channel: "Configure line" },
-    { id: "04e_configure_bundle",   title: "↳ Configure Bundle",      channel: "Configure bundle" },
-    { id: "04_create_quote_step3", title: "Create Quote · Step 3", channel: "Review quote" },
-    { id: "05_apply_discount",     title: "Apply Discount",        channel: "Apply discount" },
-    { id: "06_approval_request",   title: "Approval Request",      channel: "Alex Chen · DM" },
-    { id: "06_approval_status",    title: "Approval Status",       channel: "#deal-acme-q2" },
-    { id: "07_invoice_canvas",     title: "Invoice Canvas",        channel: "Canvas · INV-9012" },
-    { id: "07_invoice_card",       title: "Invoice Card",          channel: "#deal-acme-q2" },
-    { id: "08_collect_payment",    title: "Collect Payment",       channel: "Collect payment" },
-    { id: "09_ai_assistant_plan",  title: "AI Assistant Plan",     channel: "RevFlow AI" },
-    { id: "10_ai_suggestion_card", title: "AI Proactive Nudge",    channel: "Meredith · DM" },
-    { id: "11a_assistant_quote_products", title: "Assistant chat · Products (1/3)",  channel: "Assistant panel" },
-    { id: "11b_assistant_quote_discount", title: "Assistant chat · Discount (2/3)",  channel: "Assistant panel" },
-    { id: "11c_assistant_quote_approval", title: "Assistant chat · Approval (3/3)",  channel: "Assistant panel" }
+  const SECTIONS = [
+    {
+      title: "Agent & Slack Experience",
+      items: [
+        { id: "11_assistant_quote_chat",           title: "Create quote",      channel: "Assistant panel" },
+        { id: "12_assistant_renewal_nudge_chat",   title: "Renewal at risk",   channel: "Assistant panel" },
+        { id: "13_assistant_invoice_dispute_chat", title: "Invoice dispute",   channel: "Assistant panel" },
+        { id: "14_assistant_ar_collection_chat",   title: "Overdue AR loop",   channel: "Assistant panel" },
+        { id: "15_assistant_gbb_packager_chat",    title: "Good / Better / Best", channel: "Assistant panel" },
+        { id: "16_assistant_usage_order_chat",     title: "Usage-based order", channel: "Assistant panel" }
+      ]
+    },
+    {
+      title: "Slack UI with AI Insights",
+      items: [
+        { id: "01_home_tab",           title: "Home dashboard",        channel: "App Home · Sales Rep" },
+        { id: "02_browse_products",    title: "Browse Products",       channel: "#deal-acme-q2" },
+        { id: "03_product_details",    title: "Product Details",       channel: "#deal-acme-q2" },
+        { id: "04_create_quote_step1", title: "Create Quote · Step 1", channel: "New Quote" },
+        { id: "04_create_quote_step2", title: "Create Quote · Step 2", channel: "New Quote" },
+        { id: "04a_add_product_search", title: "↳ Add Product (overlay)", channel: "Add product" },
+        { id: "04b_add_bundle",         title: "↳ Add Bundle (overlay)",  channel: "Add bundle" },
+        { id: "04c_ai_suggest_addons",  title: "↳ AI Suggest Add-ons",    channel: "AI · Suggested add-ons" },
+        { id: "04d_configure_line",     title: "↳ Configure Line",        channel: "Configure line" },
+        { id: "04e_configure_bundle",   title: "↳ Configure Bundle",      channel: "Configure bundle" },
+        { id: "04_create_quote_step3", title: "Create Quote · Step 3", channel: "Review quote" },
+        { id: "05_apply_discount",     title: "Apply Discount",        channel: "Apply discount" },
+        { id: "06_approval_request",   title: "Approval Request",      channel: "Alex Chen · DM" },
+        { id: "06_approval_status",    title: "Approval Status",       channel: "#deal-acme-q2" },
+        { id: "07_invoice_canvas",     title: "Invoice Canvas",        channel: "Canvas · INV-9012" },
+        { id: "07_invoice_card",       title: "Invoice Card",          channel: "#deal-acme-q2" },
+        { id: "08_collect_payment",    title: "Collect Payment",       channel: "Collect payment" },
+        { id: "09_ai_assistant_plan",  title: "AI Assistant Plan",     channel: "RevFlow AI" },
+        { id: "10_ai_suggestion_card", title: "AI Proactive Nudge",    channel: "Meredith · DM" }
+      ]
+    }
   ];
+  const MOCKS = SECTIONS.flatMap(s => s.items);
 
   // ============================================================
   // Emoji shortcode map (subset — covers what the mocks use)
@@ -548,12 +562,20 @@
 
   function renderSidebar() {
     const nav = document.getElementById("mock-nav");
-    nav.innerHTML = MOCKS.map((m, i) => {
-      const num = String(i + 1).padStart(2, "0");
-      return `<button class="nav-item" data-id="${m.id}">
-        <span class="nav-num">${num}</span>
-        <span class="nav-text">${escapeHtml(m.title)}<div class="nav-surface" id="ns-${m.id}">—</div></span>
-      </button>`;
+    let counter = 0;
+    nav.innerHTML = SECTIONS.map(section => {
+      const itemsHtml = section.items.map(m => {
+        counter += 1;
+        const num = String(counter).padStart(2, "0");
+        return `<button class="nav-item" data-id="${m.id}">
+          <span class="nav-num">${num}</span>
+          <span class="nav-text">${escapeHtml(m.title)}<div class="nav-surface" id="ns-${m.id}">—</div></span>
+        </button>`;
+      }).join("");
+      return `<div class="sidebar-section">
+        <div class="sidebar-title">${escapeHtml(section.title)}</div>
+        ${itemsHtml}
+      </div>`;
     }).join("");
     nav.addEventListener("click", e => {
       const btn = e.target.closest(".nav-item");
@@ -582,8 +604,6 @@
       surfaceEl.dataset.surface = meta.surface || "message";
 
       document.getElementById("stage-description").textContent = meta.description || "";
-      const endpointEl = document.getElementById("stage-endpoint");
-      endpointEl.textContent = meta.rca_endpoint ? `RCA · ${meta.rca_endpoint}` : "";
 
       // Update sidebar surface labels
       const ns = document.getElementById(`ns-${id}`);

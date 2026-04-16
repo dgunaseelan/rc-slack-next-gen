@@ -1,0 +1,294 @@
+{
+  "_meta": {
+    "id": "11_assistant_quote_chat",
+    "title": "Assistant · Full chat-to-quote conversation",
+    "surface": "assistant",
+    "description": "End-to-end 3-turn conversation in the Slack Assistant panel — Meredith chats with RevFlow AI to build a quote for Acme. Shows how a natural chat thread mixes user messages, AI reasoning (plan block), compact product/snapshot/approval cards, and inline action buttons instead of verbose prose. Covers: product recommendations → discount tier pick → approval submit → proactive email nudge.",
+    "rca_endpoint": "POST /revflow/ai/chat → GET /connect/cpq/products/search → POST /industries/cpq/quotes/actions/get-instant-price → POST /services/data/v66.0/composite (Approval.process) → POST /services/data/v66.0/sobjects/EmailMessage"
+  },
+  "blocks": [
+    {
+      "type": "context",
+      "elements": [
+        { "type": "image", "image_url": "https://placehold.co/24x24/0ea5e9/ffffff/png?text=M", "alt_text": "Meredith" },
+        { "type": "mrkdwn", "text": "*Meredith*  ·  2:31 PM" }
+      ]
+    },
+    {
+      "type": "section",
+      "text": { "type": "mrkdwn", "text": "Quote Acme: 20 ProBook laptops + renew CloudSync for the expanded team." }
+    },
+    { "type": "divider" },
+
+    {
+      "type": "context",
+      "elements": [
+        { "type": "mrkdwn", "text": ":sparkles: *RevFlow AI*  ·  2:31 PM" }
+      ]
+    },
+    {
+      "type": "plan",
+      "title": "Thought for 1.8s",
+      "tasks": [
+        { "task_id": "t1", "title": "Pulled Acme's last 6 quotes", "status": "complete" },
+        { "task_id": "t2", "title": "Checked CloudSync contract (ends May 31)", "status": "complete" },
+        { "task_id": "t3", "title": "Scored 12 candidate SKUs on affinity + margin", "status": "complete" },
+        { "task_id": "t4", "title": "Drafted recommendations", "status": "complete" }
+      ]
+    },
+    {
+      "type": "section",
+      "text": { "type": "mrkdwn", "text": "Here's what I'd add. Acme's pattern is *ProBook Elite + CloudSync Pro + 3yr Support*." }
+    },
+    {
+      "type": "section",
+      "fields": [
+        { "type": "mrkdwn", "text": ":computer: *ProBook Elite 14\"*\n`SKU-PBE-14`" },
+        { "type": "mrkdwn", "text": "*$2,299* / unit\n20 units = $45,980" },
+        { "type": "mrkdwn", "text": "*Margin*\n46%" },
+        { "type": "mrkdwn", "text": "*Acme attach*\n100% (last 6)" }
+      ]
+    },
+    {
+      "type": "actions",
+      "elements": [
+        {
+          "type": "button",
+          "text": { "type": "plain_text", "text": ":heavy_plus_sign: Add 20 to quote", "emoji": true },
+          "style": "primary",
+          "value": "add_sku_pbe14_20",
+          "action_id": "assistant_add_pbe14"
+        },
+        {
+          "type": "button",
+          "text": { "type": "plain_text", "text": "Configure", "emoji": true },
+          "value": "configure_pbe14",
+          "action_id": "assistant_config_pbe14"
+        },
+        {
+          "type": "button",
+          "text": { "type": "plain_text", "text": ":x: Skip", "emoji": true },
+          "value": "skip_pbe14",
+          "action_id": "assistant_skip_pbe14"
+        }
+      ]
+    },
+    { "type": "divider" },
+    {
+      "type": "section",
+      "fields": [
+        { "type": "mrkdwn", "text": ":cloud: *CloudSync Pro (renewal)*\n`SKU-CSP-ANN`" },
+        { "type": "mrkdwn", "text": "*$149* / user / yr\n30 seats = $4,470" },
+        { "type": "mrkdwn", "text": "*Term*\nAnnual, co-termed" },
+        { "type": "mrkdwn", "text": "*Uplift*\n20 → 30 seats (+50%)" }
+      ]
+    },
+    {
+      "type": "context",
+      "elements": [
+        { "type": "mrkdwn", "text": ":bulb: _Acme's headcount grew ~25% per LinkedIn. I sized 30 seats, not 20._" }
+      ]
+    },
+    {
+      "type": "actions",
+      "elements": [
+        {
+          "type": "button",
+          "text": { "type": "plain_text", "text": ":heavy_plus_sign: Add 30 seats", "emoji": true },
+          "style": "primary",
+          "value": "add_sku_csp_30",
+          "action_id": "assistant_add_csp30"
+        },
+        {
+          "type": "button",
+          "text": { "type": "plain_text", "text": ":arrow_down: 20 seats only", "emoji": true },
+          "value": "add_sku_csp_20",
+          "action_id": "assistant_add_csp20"
+        },
+        {
+          "type": "button",
+          "text": { "type": "plain_text", "text": ":x: Skip", "emoji": true },
+          "value": "skip_csp",
+          "action_id": "assistant_skip_csp"
+        }
+      ]
+    },
+
+    { "type": "divider" },
+
+    {
+      "type": "context",
+      "elements": [
+        { "type": "image", "image_url": "https://placehold.co/24x24/0ea5e9/ffffff/png?text=M", "alt_text": "Meredith" },
+        { "type": "mrkdwn", "text": "*Meredith*  ·  2:33 PM" }
+      ]
+    },
+    {
+      "type": "section",
+      "text": { "type": "mrkdwn", "text": "Add both. Go with 30 seats on CloudSync — you're right about the headcount." }
+    },
+    { "type": "divider" },
+    {
+      "type": "context",
+      "elements": [
+        { "type": "mrkdwn", "text": ":white_check_mark: *Added 2 lines.*  Draft quote `Q-DRAFT-8d2f`" }
+      ]
+    },
+    {
+      "type": "section",
+      "fields": [
+        { "type": "mrkdwn", "text": "*Subtotal*\n$50,450" },
+        { "type": "mrkdwn", "text": "*Blended margin*\n46%" },
+        { "type": "mrkdwn", "text": "*Lines*\n2" },
+        { "type": "mrkdwn", "text": "*Auto-approve under*\n10% or $60k" }
+      ]
+    },
+    { "type": "divider" },
+    {
+      "type": "context",
+      "elements": [
+        { "type": "mrkdwn", "text": ":sparkles: *RevFlow AI*  ·  2:34 PM" }
+      ]
+    },
+    {
+      "type": "section",
+      "text": { "type": "mrkdwn", "text": "Acme's last 6 deals averaged *11% off*. They have an open RFP with Globex — *12%* closes this at *85%* (historical pattern). Pick a tier:" }
+    },
+    {
+      "type": "actions",
+      "elements": [
+        {
+          "type": "button",
+          "text": { "type": "plain_text", "text": "5% — Safe win", "emoji": true },
+          "value": "disc_5",
+          "action_id": "assistant_disc_5"
+        },
+        {
+          "type": "button",
+          "text": { "type": "plain_text", "text": "10% — Expected", "emoji": true },
+          "value": "disc_10",
+          "action_id": "assistant_disc_10"
+        },
+        {
+          "type": "button",
+          "text": { "type": "plain_text", "text": ":star2: 12% — Recommended", "emoji": true },
+          "style": "primary",
+          "value": "disc_12",
+          "action_id": "assistant_disc_12"
+        },
+        {
+          "type": "button",
+          "text": { "type": "plain_text", "text": "Custom…", "emoji": true },
+          "value": "disc_custom",
+          "action_id": "assistant_disc_custom"
+        }
+      ]
+    },
+    {
+      "type": "context",
+      "elements": [
+        { "type": "mrkdwn", "text": ":warning: _12% triggers manager approval. 10% auto-approves. 5% leaves room if Globex counters._" }
+      ]
+    },
+
+    { "type": "divider" },
+
+    {
+      "type": "context",
+      "elements": [
+        { "type": "image", "image_url": "https://placehold.co/24x24/0ea5e9/ffffff/png?text=M", "alt_text": "Meredith" },
+        { "type": "mrkdwn", "text": "*Meredith*  ·  2:35 PM" }
+      ]
+    },
+    {
+      "type": "section",
+      "text": { "type": "mrkdwn", "text": "12% it is — let's go with your recommendation." }
+    },
+    { "type": "divider" },
+    {
+      "type": "context",
+      "elements": [
+        { "type": "mrkdwn", "text": ":white_check_mark: *Applied 12% discount.*  New total: *$45,961* (after tax)" }
+      ]
+    },
+    {
+      "type": "section",
+      "text": { "type": "mrkdwn", "text": ":clipboard: *Needs approval — 12% exceeds the 10% auto-threshold*" }
+    },
+    {
+      "type": "section",
+      "fields": [
+        { "type": "mrkdwn", "text": "*Approver*\n:bust_in_silhouette: Alex Chen (Sales Manager)" },
+        { "type": "mrkdwn", "text": "*SLA*\n24h (his avg: 3.2h)" },
+        { "type": "mrkdwn", "text": "*Margin impact*\n46% → 39%" },
+        { "type": "mrkdwn", "text": "*Competing with*\nGlobex (open RFP)" }
+      ]
+    },
+    {
+      "type": "actions",
+      "elements": [
+        {
+          "type": "button",
+          "text": { "type": "plain_text", "text": ":paper_plane: Submit for approval", "emoji": true },
+          "style": "primary",
+          "value": "submit_approval",
+          "action_id": "assistant_submit_approval"
+        },
+        {
+          "type": "button",
+          "text": { "type": "plain_text", "text": ":arrows_counterclockwise: Tweak discount", "emoji": true },
+          "value": "tweak_discount",
+          "action_id": "assistant_tweak_discount"
+        }
+      ]
+    },
+    { "type": "divider" },
+    {
+      "type": "context",
+      "elements": [
+        { "type": "image", "image_url": "https://placehold.co/24x24/0ea5e9/ffffff/png?text=M", "alt_text": "Meredith" },
+        { "type": "mrkdwn", "text": "*Meredith*  ·  2:37 PM" }
+      ]
+    },
+    {
+      "type": "section",
+      "text": { "type": "mrkdwn", "text": ":paper_plane: Submitted. Thanks." }
+    },
+    { "type": "divider" },
+    {
+      "type": "context",
+      "elements": [
+        { "type": "mrkdwn", "text": ":sparkles: *RevFlow AI*  ·  2:37 PM" }
+      ]
+    },
+    {
+      "type": "section",
+      "text": { "type": "mrkdwn", "text": ":bell: I'll ping you in Slack the moment Alex approves. Meanwhile — want me to draft the customer-facing email so it's ready to send?" }
+    },
+    {
+      "type": "actions",
+      "elements": [
+        {
+          "type": "button",
+          "text": { "type": "plain_text", "text": ":email: Draft the email", "emoji": true },
+          "style": "primary",
+          "value": "draft_email",
+          "action_id": "assistant_draft_email"
+        },
+        {
+          "type": "button",
+          "text": { "type": "plain_text", "text": "Later — I'll wait", "emoji": true },
+          "value": "email_later",
+          "action_id": "assistant_email_later"
+        }
+      ]
+    },
+    { "type": "divider" },
+    {
+      "type": "context",
+      "elements": [
+        { "type": "mrkdwn", "text": ":speech_balloon: _Type a follow-up, or tap a button above._" }
+      ]
+    }
+  ]
+}

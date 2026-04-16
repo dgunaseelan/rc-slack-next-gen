@@ -1,0 +1,114 @@
+{
+  "_meta": {
+    "id": "15_assistant_gbb_packager_chat",
+    "title": "Assistant · Good/Better/Best quote packager",
+    "surface": "assistant",
+    "description": "User-initiated, Revenue Cloud only. Meredith pastes discovery notes; AI generates 3 tiered quotes in parallel (compare card), drills into ramp schedule for Better, accepts Extended Warranty across tiers, finalizes 3 co-termed quotes, and offers a customer-facing compare deck.",
+    "rca_endpoint": "POST /revflow/ai/parse-discovery-notes → GET /connect/cpq/pricebooks/{id}/bundles → POST /industries/cpq/quotes/actions/build-package × 3 → /ramp-schedule → /co-term → POST /revflow/decks/compose"
+  },
+  "blocks": [
+    { "type": "context", "elements": [
+      { "type": "image", "image_url": "https://placehold.co/24x24/0ea5e9/ffffff/png?text=M", "alt_text": "Meredith" },
+      { "type": "mrkdwn", "text": "*Meredith*  ·  3:14 PM" }
+    ]},
+    { "type": "section", "text": { "type": "mrkdwn", "text": "Discovery notes from Initech call — give me good/better/best by Monday:\n\n> _Initech · ~80 engineers · wants ProBook laptops for 25 new hires · interested in CloudSync (comparing vs Dropbox) · kept mentioning SOC2 / ISO · budget ~$150K · CFO wants 3yr TCO not annual_" }},
+    { "type": "divider" },
+    { "type": "context", "elements": [
+      { "type": "mrkdwn", "text": ":sparkles: *RevFlow AI*  ·  3:14 PM" }
+    ]},
+    { "type": "plan", "title": "Thought for 3.2s", "tasks": [
+      { "task_id": "g1", "title": "Parsed 5 requirements from notes", "status": "complete" },
+      { "task_id": "g2", "title": "Pulled Initech account (net-new, no history)", "status": "complete" },
+      { "task_id": "g3", "title": "Ran lookalike on 14 SOC2 mid-market closes", "status": "complete" },
+      { "task_id": "g4", "title": "Queried bundle catalog + ramp rules", "status": "complete" },
+      { "task_id": "g5", "title": "Drafted 3 tiers (budget / margin / expansion)", "status": "complete" }
+    ]},
+    { "type": "section", "text": { "type": "mrkdwn", "text": ":package: *3 packages · 3yr term · co-termed to April (Initech's fiscal)*" }},
+    { "type": "markdown", "text": "|  | **Good** | **Better** ⭐ | **Best** |\n|---|---|---|---|\n| **3yr TCV** | $142K | **$168K** | $214K |\n| **Laptops** | 25 ProBook Core | 25 ProBook Elite | 25 Elite + 5 spare |\n| **File-sync** | CloudSync Std, 80 seats | CloudSync Pro, 80 seats | CloudSync Pro, 100 seats |\n| **Compliance** | — | SOC2 add-on | SOC2 + ISO add-ons |\n| **Support** | Standard | Premium | Premium + TAM |\n| **Margin** | 41% | 46% | 49% |\n| **AI pick** | — | :star: matches ICP | — |" },
+    { "type": "context", "elements": [
+      { "type": "mrkdwn", "text": ":bulb: _\"Better\" matches your *compliance-heavy mid-market* win pattern — 11 of 14 closed in that column._" }
+    ]},
+    { "type": "actions", "elements": [
+      { "type": "button", "text": { "type": "plain_text", "text": "Open Good", "emoji": true }, "value": "open_good", "action_id": "gbb_open_good" },
+      { "type": "button", "text": { "type": "plain_text", "text": ":star2: Open Better", "emoji": true }, "style": "primary", "value": "open_better", "action_id": "gbb_open_better" },
+      { "type": "button", "text": { "type": "plain_text", "text": "Open Best", "emoji": true }, "value": "open_best", "action_id": "gbb_open_best" },
+      { "type": "button", "text": { "type": "plain_text", "text": ":pencil2: Tweak a dimension", "emoji": true }, "value": "tweak", "action_id": "gbb_tweak" }
+    ]},
+    { "type": "divider" },
+    { "type": "context", "elements": [
+      { "type": "image", "image_url": "https://placehold.co/24x24/0ea5e9/ffffff/png?text=M", "alt_text": "Meredith" },
+      { "type": "mrkdwn", "text": "*Meredith*  ·  3:17 PM" }
+    ]},
+    { "type": "section", "text": { "type": "mrkdwn", "text": "CFO wants 3yr TCO not annual — are these ramped or flat? Show me year-by-year on Better." }},
+    { "type": "divider" },
+    { "type": "context", "elements": [
+      { "type": "mrkdwn", "text": ":sparkles: *RevFlow AI*  ·  3:17 PM" }
+    ]},
+    { "type": "section", "text": { "type": "mrkdwn", "text": ":chart_with_upwards_trend: *Ramp schedule — Better package*" }},
+    { "type": "image", "image_url": "https://placehold.co/720x220/f1f5f9/0f172a/png?text=Yr1+%2454K+%E2%86%92+Yr2+%2456K+%E2%86%92+Yr3+%2458K", "alt_text": "Ramp schedule: Yr1 $54K, Yr2 $56K, Yr3 $58K" },
+    { "type": "section", "fields": [
+      { "type": "mrkdwn", "text": "*Yr 1*\n$54K (prepay eligible)" },
+      { "type": "mrkdwn", "text": "*Yr 2*\n$56K (+3.7%)" },
+      { "type": "mrkdwn", "text": "*Yr 3*\n$58K (+3.6%)" },
+      { "type": "mrkdwn", "text": "*Cashflow (default)*\nAnnual in advance" }
+    ]},
+    { "type": "context", "elements": [
+      { "type": "mrkdwn", "text": ":bulb: _Prepay unlocks 4% discount → 3yr TCV $168K → $161.3K._" }
+    ]},
+    { "type": "actions", "elements": [
+      { "type": "button", "text": { "type": "plain_text", "text": ":moneybag: Switch to prepay (-4%)", "emoji": true }, "value": "prepay", "action_id": "gbb_prepay" },
+      { "type": "button", "text": { "type": "plain_text", "text": "Annual in advance", "emoji": true }, "value": "annual_advance", "action_id": "gbb_annual" },
+      { "type": "button", "text": { "type": "plain_text", "text": "Add 3% annual uplift", "emoji": true }, "value": "add_uplift", "action_id": "gbb_uplift" }
+    ]},
+    { "type": "divider" },
+    { "type": "context", "elements": [
+      { "type": "image", "image_url": "https://placehold.co/24x24/0ea5e9/ffffff/png?text=M", "alt_text": "Meredith" },
+      { "type": "mrkdwn", "text": "*Meredith*  ·  3:20 PM" }
+    ]},
+    { "type": "section", "text": { "type": "mrkdwn", "text": "Prepay. And add Extended Warranty on laptops for Better and Best." }},
+    { "type": "divider" },
+    { "type": "context", "elements": [
+      { "type": "mrkdwn", "text": ":sparkles: *RevFlow AI*  ·  3:20 PM" }
+    ]},
+    { "type": "plan", "title": "Re-priced both tiers", "tasks": [
+      { "task_id": "r1", "title": "Added SKU-EXT-WAR to Better + Best", "status": "complete" },
+      { "task_id": "r2", "title": "Applied prepay discount to both", "status": "complete" },
+      { "task_id": "r3", "title": "Re-co-termed end dates", "status": "complete" }
+    ]},
+    { "type": "section", "text": { "type": "mrkdwn", "text": ":arrows_counterclockwise: *Re-priced (diffs shown)*" }},
+    { "type": "section", "fields": [
+      { "type": "mrkdwn", "text": "*Better*\n$168K → *$165.5K*" },
+      { "type": "mrkdwn", "text": "*Δ Better*\n+$4K warr · -$6.5K prepay = *-$2.5K*" },
+      { "type": "mrkdwn", "text": "*Best*\n$214K → *$211K*" },
+      { "type": "mrkdwn", "text": "*Δ Best*\n+$5K warr · -$8K prepay = *-$3K*" }
+    ]},
+    { "type": "actions", "elements": [
+      { "type": "button", "text": { "type": "plain_text", "text": ":heavy_check_mark: Accept both", "emoji": true }, "style": "primary", "value": "accept_both", "action_id": "gbb_accept_both" },
+      { "type": "button", "text": { "type": "plain_text", "text": "Only apply to Better", "emoji": true }, "value": "only_better", "action_id": "gbb_only_better" },
+      { "type": "button", "text": { "type": "plain_text", "text": ":leftwards_arrow_with_hook: Undo", "emoji": true }, "value": "undo", "action_id": "gbb_undo" }
+    ]},
+    { "type": "divider" },
+    { "type": "context", "elements": [
+      { "type": "image", "image_url": "https://placehold.co/24x24/0ea5e9/ffffff/png?text=M", "alt_text": "Meredith" },
+      { "type": "mrkdwn", "text": "*Meredith*  ·  3:22 PM" }
+    ]},
+    { "type": "section", "text": { "type": "mrkdwn", "text": "Accept both. Finalize the 3 quotes." }},
+    { "type": "divider" },
+    { "type": "context", "elements": [
+      { "type": "mrkdwn", "text": ":sparkles: *RevFlow AI*  ·  3:22 PM" }
+    ]},
+    { "type": "section", "text": { "type": "mrkdwn", "text": ":white_check_mark: *3 quotes saved* · attached to Opp `0069Y-IN` · all co-termed April 2029" }},
+    { "type": "section", "fields": [
+      { "type": "mrkdwn", "text": "*Good*\n`Q-IN-0041` · $142K" },
+      { "type": "mrkdwn", "text": "*Better* :star:\n`Q-IN-0042` · $165.5K" },
+      { "type": "mrkdwn", "text": "*Best*\n`Q-IN-0043` · $211K" },
+      { "type": "mrkdwn", "text": "*Status*\nDraft — ready to send" }
+    ]},
+    { "type": "section", "text": { "type": "mrkdwn", "text": ":bulb: Initech's CFO historically responded to visuals over PDFs (inferred from 3 comparable deals). Want me to generate a single compare deck?" }},
+    { "type": "actions", "elements": [
+      { "type": "button", "text": { "type": "plain_text", "text": ":art: Generate compare deck", "emoji": true }, "style": "primary", "value": "deck", "action_id": "gbb_deck" },
+      { "type": "button", "text": { "type": "plain_text", "text": ":page_facing_up: Generate 3 PDFs", "emoji": true }, "value": "pdfs", "action_id": "gbb_pdfs" },
+      { "type": "button", "text": { "type": "plain_text", "text": "I'll send them manually", "emoji": true }, "value": "manual", "action_id": "gbb_manual" }
+    ]}
+  ]
+}

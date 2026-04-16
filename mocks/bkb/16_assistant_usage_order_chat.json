@@ -1,0 +1,156 @@
+{
+  "_meta": {
+    "id": "16_assistant_usage_order_chat",
+    "title": "Assistant · Usage-based order (direct, paper-light)",
+    "surface": "assistant",
+    "description": "User-initiated. Meredith pastes Hooli's 12-month usage forecast; AI parses → maps to usage SKUs → proposes rate card → negotiates multi-parameter concessions → validates MSA clause for 2yr rate lock → generates paper-light order (no quote). Finalization activates metering webhooks + revrec schedule.",
+    "rca_endpoint": "POST /revflow/ai/parse-usage-requirements → GET /connect/cpq/products/usage → GET Contract/MSA-2043 → POST /industries/cpq/usage/negotiate-rates → POST /industries/cpq/usage/rate-lock → POST /industries/cpq/orders/actions/paper-light → POST /revflow/metering/activate-webhooks"
+  },
+  "blocks": [
+    { "type": "context", "elements": [
+      { "type": "image", "image_url": "https://placehold.co/24x24/0ea5e9/ffffff/png?text=M", "alt_text": "Meredith" },
+      { "type": "mrkdwn", "text": "*Meredith*  ·  10:12 AM" }
+    ]},
+    { "type": "section", "text": { "type": "mrkdwn", "text": "Hooli Gen-AI launch — they gave me a 12-mo forecast:\n\n> _45M API calls/mo steady, peak 80M Nov · 12K GPU-hrs/mo · 8TB storage +500GB/mo · p95 <50ms · 20% committed rest on-demand · budget ~$420K/yr · MSA-2043 signed, paper-light, close EOW_" }},
+    { "type": "divider" },
+    { "type": "context", "elements": [
+      { "type": "mrkdwn", "text": ":sparkles: *RevFlow AI*  ·  10:12 AM" }
+    ]},
+    { "type": "plan", "title": "Thought for 2.9s", "tasks": [
+      { "task_id": "u1", "title": "Parsed 6 requirement lines → 4 SKUs + SLA add-on", "status": "complete" },
+      { "task_id": "u2", "title": "Pulled MSA-2043 (paper-light + 2yr rate-lock eligible)", "status": "complete" },
+      { "task_id": "u3", "title": "Benchmarked 8 peer accounts at similar volume", "status": "complete" },
+      { "task_id": "u4", "title": "Optimized commit/overage mix under budget", "status": "complete" }
+    ]},
+    { "type": "section", "text": { "type": "mrkdwn", "text": ":white_check_mark: *Requirement → SKU mapping*" }},
+    { "type": "section", "fields": [
+      { "type": "mrkdwn", "text": "*API calls 45M/mo*\n`USG-API-CALL` · Tier 3 :large_green_circle:" },
+      { "type": "mrkdwn", "text": "*GPU-hrs 12K/mo*\n`USG-GPU-HR` · Enterprise :large_green_circle:" },
+      { "type": "mrkdwn", "text": "*Storage 8TB+500/mo*\n`USG-STORAGE-GB` · Tier 2 ramped :large_green_circle:" },
+      { "type": "mrkdwn", "text": "*p95 <50ms*\n`USG-SLA-PREMIUM` add-on :large_green_circle:" }
+    ]},
+    { "type": "section", "text": { "type": "mrkdwn", "text": ":moneybag: *Rate card at list*" }},
+    { "type": "section", "fields": [
+      { "type": "mrkdwn", "text": "*Commit (20%)*\n$84K / yr" },
+      { "type": "mrkdwn", "text": "*Overage projection*\n$321K / yr" },
+      { "type": "mrkdwn", "text": "*SLA premium*\n$33K / yr" },
+      { "type": "mrkdwn", "text": "*Annual total*\n*$438K* :warning:" }
+    ]},
+    { "type": "context", "elements": [
+      { "type": "mrkdwn", "text": ":warning: _Over budget by $18K. Negotiating below list is needed to land this._" }
+    ]},
+    { "type": "actions", "elements": [
+      { "type": "button", "text": { "type": "plain_text", "text": ":handshake: Negotiate rates", "emoji": true }, "style": "primary", "value": "negotiate", "action_id": "usage_negotiate" },
+      { "type": "button", "text": { "type": "plain_text", "text": ":gear: Optimize commit mix", "emoji": true }, "value": "optimize_mix", "action_id": "usage_optimize_mix" },
+      { "type": "button", "text": { "type": "plain_text", "text": "Ship at list anyway", "emoji": true }, "value": "ship_list", "action_id": "usage_ship_list" }
+    ]},
+    { "type": "divider" },
+    { "type": "context", "elements": [
+      { "type": "image", "image_url": "https://placehold.co/24x24/0ea5e9/ffffff/png?text=M", "alt_text": "Meredith" },
+      { "type": "mrkdwn", "text": "*Meredith*  ·  10:15 AM" }
+    ]},
+    { "type": "section", "text": { "type": "mrkdwn", "text": "Negotiate. Push to $410K — they've been a good customer." }},
+    { "type": "divider" },
+    { "type": "context", "elements": [
+      { "type": "mrkdwn", "text": ":sparkles: *RevFlow AI*  ·  10:15 AM" }
+    ]},
+    { "type": "plan", "title": "Thought for 1.7s", "tasks": [
+      { "task_id": "n1", "title": "Checked your discount authority (cap: 22%)", "status": "complete" },
+      { "task_id": "n2", "title": "Pulled peer rates at 40M+ call volume", "status": "complete" },
+      { "task_id": "n3", "title": "Modeled blended margin floor (48%)", "status": "complete" }
+    ]},
+    { "type": "section", "text": { "type": "mrkdwn", "text": ":handshake: *Negotiation proposal*" }},
+    { "type": "section", "fields": [
+      { "type": "mrkdwn", "text": "*API calls*\n$0.0008 → *$0.00068* (-15%)" },
+      { "type": "mrkdwn", "text": "*GPU-hrs*\n$4.20 → *$3.78* (-10%)" },
+      { "type": "mrkdwn", "text": "*Storage*\nHold at list (already competitive)" },
+      { "type": "mrkdwn", "text": "*SLA premium*\nHold at list" }
+    ]},
+    { "type": "context", "elements": [
+      { "type": "mrkdwn", "text": ":sparkles: _Kicker: auto-graduate to Tier 4 rate at 60M calls/mo — free upside for Hooli during Nov peak._" }
+    ]},
+    { "type": "section", "fields": [
+      { "type": "mrkdwn", "text": "*New annual*\n*$408.4K* :large_green_circle: under budget" },
+      { "type": "mrkdwn", "text": "*Margin impact*\n54% → 49% (above floor)" }
+    ]},
+    { "type": "actions", "elements": [
+      { "type": "button", "text": { "type": "plain_text", "text": ":heavy_check_mark: Accept all", "emoji": true }, "style": "primary", "value": "accept_all", "action_id": "usage_accept_all" },
+      { "type": "button", "text": { "type": "plain_text", "text": "Accept except SLA", "emoji": true }, "value": "accept_except_sla", "action_id": "usage_accept_except_sla" },
+      { "type": "button", "text": { "type": "plain_text", "text": ":arrows_counterclockwise: Counter", "emoji": true }, "value": "counter", "action_id": "usage_counter" },
+      { "type": "button", "text": { "type": "plain_text", "text": ":chart_with_upwards_trend: Show vs peers", "emoji": true }, "value": "peers", "action_id": "usage_peers" }
+    ]},
+    { "type": "divider" },
+    { "type": "context", "elements": [
+      { "type": "image", "image_url": "https://placehold.co/24x24/0ea5e9/ffffff/png?text=M", "alt_text": "Meredith" },
+      { "type": "mrkdwn", "text": "*Meredith*  ·  10:18 AM" }
+    ]},
+    { "type": "section", "text": { "type": "mrkdwn", "text": "Accept all. And lock $0.00068 for 2 years with 3% annual uplift — MSA allows it." }},
+    { "type": "divider" },
+    { "type": "context", "elements": [
+      { "type": "mrkdwn", "text": ":sparkles: *RevFlow AI*  ·  10:18 AM" }
+    ]},
+    { "type": "plan", "title": "Verified MSA clause 7.3", "tasks": [
+      { "task_id": "l1", "title": "Parsed MSA-2043 clause 7.3 (rate lock, ≤5% uplift)", "status": "complete" },
+      { "task_id": "l2", "title": "Validated 2yr horizon + 3% uplift within limit", "status": "complete" }
+    ]},
+    { "type": "section", "text": { "type": "mrkdwn", "text": ":lock: *Rate lock — MSA clause 7.3* :white_check_mark:" }},
+    { "type": "section", "fields": [
+      { "type": "mrkdwn", "text": "*Yr 1 rate*\n$0.00068 / call (locked)" },
+      { "type": "mrkdwn", "text": "*Yr 2 rate*\n$0.00070 / call (+3%)" },
+      { "type": "mrkdwn", "text": "*2yr TCV (at forecast)*\n$836K" },
+      { "type": "mrkdwn", "text": "*Clause cite*\nMSA-2043 §7.3" }
+    ]},
+    { "type": "actions", "elements": [
+      { "type": "button", "text": { "type": "plain_text", "text": ":lock: Lock rates (2yr)", "emoji": true }, "style": "primary", "value": "lock_2yr", "action_id": "usage_lock_2yr" },
+      { "type": "button", "text": { "type": "plain_text", "text": "1yr only", "emoji": true }, "value": "lock_1yr", "action_id": "usage_lock_1yr" },
+      { "type": "button", "text": { "type": "plain_text", "text": "Skip lock", "emoji": true }, "value": "skip_lock", "action_id": "usage_skip_lock" }
+    ]},
+    { "type": "divider" },
+    { "type": "context", "elements": [
+      { "type": "image", "image_url": "https://placehold.co/24x24/0ea5e9/ffffff/png?text=M", "alt_text": "Meredith" },
+      { "type": "mrkdwn", "text": "*Meredith*  ·  10:20 AM" }
+    ]},
+    { "type": "section", "text": { "type": "mrkdwn", "text": "Lock 2yr. Build the order." }},
+    { "type": "divider" },
+    { "type": "context", "elements": [
+      { "type": "mrkdwn", "text": ":sparkles: *RevFlow AI*  ·  10:20 AM" }
+    ]},
+    { "type": "section", "text": { "type": "mrkdwn", "text": ":memo: *Order preview — paper-light* (no quote step)" }},
+    { "type": "section", "fields": [
+      { "type": "mrkdwn", "text": "*Lines*\n4 + SLA add-on" },
+      { "type": "mrkdwn", "text": "*Billing*\nCommits Q-advance · Overage M-arrears" },
+      { "type": "mrkdwn", "text": "*Effective*\nMon, Apr 20" },
+      { "type": "mrkdwn", "text": "*Legal*\n:large_green_circle: No re-sign (MSA path)" }
+    ]},
+    { "type": "actions", "elements": [
+      { "type": "button", "text": { "type": "plain_text", "text": ":rocket: Create order", "emoji": true }, "style": "primary", "value": "create_order", "action_id": "usage_create_order" },
+      { "type": "button", "text": { "type": "plain_text", "text": ":email: Send confirm to Hooli", "emoji": true }, "value": "send_confirm", "action_id": "usage_send_confirm" },
+      { "type": "button", "text": { "type": "plain_text", "text": ":pencil2: Edit line items", "emoji": true }, "value": "edit_lines", "action_id": "usage_edit_lines" }
+    ]},
+    { "type": "divider" },
+    { "type": "context", "elements": [
+      { "type": "image", "image_url": "https://placehold.co/24x24/0ea5e9/ffffff/png?text=M", "alt_text": "Meredith" },
+      { "type": "mrkdwn", "text": "*Meredith*  ·  10:21 AM" }
+    ]},
+    { "type": "section", "text": { "type": "mrkdwn", "text": "Create order." }},
+    { "type": "divider" },
+    { "type": "context", "elements": [
+      { "type": "mrkdwn", "text": ":sparkles: *RevFlow AI*  ·  10:21 AM" }
+    ]},
+    { "type": "section", "text": { "type": "mrkdwn", "text": ":rocket: *Order `ORD-16-0047` created* · provisioned against MSA-2043" }},
+    { "type": "section", "fields": [
+      { "type": "mrkdwn", "text": "*Metering*\n:white_check_mark: webhooks active" },
+      { "type": "mrkdwn", "text": "*API keys*\n:white_check_mark: pushed to Hooli platform" },
+      { "type": "mrkdwn", "text": "*RevRec schedule*\n:white_check_mark: ratable + point-in-time (ASC 606)" },
+      { "type": "mrkdwn", "text": "*Drift monitor*\n:white_check_mark: armed (±15% alert)" }
+    ]},
+    { "type": "context", "elements": [
+      { "type": "mrkdwn", "text": ":bulb: _Want the kickoff email for Hooli's platform team? I'll include endpoint URLs, rate tiers, and the drift-alert note._" }
+    ]},
+    { "type": "actions", "elements": [
+      { "type": "button", "text": { "type": "plain_text", "text": ":email: Draft kickoff email", "emoji": true }, "style": "primary", "value": "draft_kickoff", "action_id": "usage_draft_kickoff" },
+      { "type": "button", "text": { "type": "plain_text", "text": ":people_holding_hands: Alert CSM too", "emoji": true }, "value": "alert_csm", "action_id": "usage_alert_csm" },
+      { "type": "button", "text": { "type": "plain_text", "text": ":heavy_check_mark: I'm good — done", "emoji": true }, "value": "done", "action_id": "usage_done" }
+    ]}
+  ]
+}

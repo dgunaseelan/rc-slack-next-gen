@@ -1,0 +1,126 @@
+{
+  "_meta": {
+    "id": "12_assistant_renewal_nudge_chat",
+    "title": "Assistant · Proactive renewal at risk → amendment",
+    "surface": "assistant",
+    "description": "AI-initiated (unprompted DM). RevFlow AI flags Acme's renewal as at-risk, Meredith investigates, they negotiate a retention play, jump into an amendment modal mid-thread, then loop in the CSM. Pattern: AI starts the thread, negotiation loop, modal jump-out.",
+    "rca_endpoint": "POST /revflow/ai/proactive-signals → GET /connect/cpq/contracts/{id}/usage → POST /industries/cpq/amendments → DocuSign POST /v2.1/envelopes"
+  },
+  "blocks": [
+    { "type": "context", "elements": [
+      { "type": "mrkdwn", "text": ":sparkles: *RevFlow AI*  ·  9:02 AM  ·  _proactive_" }
+    ]},
+    { "type": "section", "text": { "type": "mrkdwn", "text": ":rotating_light: *Renewal at risk — Acme Corp*\nContract `MSA-1187` ends in *47 days*." }},
+    { "type": "section", "fields": [
+      { "type": "mrkdwn", "text": "*Health score*\n:red_circle: 38 / 100" },
+      { "type": "mrkdwn", "text": "*At stake*\n$148K ARR" },
+      { "type": "mrkdwn", "text": "*Usage (QoQ)*\n-38% CloudSync" },
+      { "type": "mrkdwn", "text": "*Signals*\n3 / 3 :warning:" }
+    ]},
+    { "type": "context", "elements": [
+      { "type": "mrkdwn", "text": ":chart_with_downwards_trend: Usage -38%  ·  :ticket: 2 tickets tagged _evaluating alternatives_  ·  :bust_in_silhouette: Champion Jordan changed roles" }
+    ]},
+    { "type": "actions", "elements": [
+      { "type": "button", "text": { "type": "plain_text", "text": ":mag: Investigate", "emoji": true }, "style": "primary", "value": "investigate", "action_id": "renewal_investigate" },
+      { "type": "button", "text": { "type": "plain_text", "text": ":shield: Draft save play", "emoji": true }, "value": "save_play", "action_id": "renewal_save_play" },
+      { "type": "button", "text": { "type": "plain_text", "text": ":zzz: Snooze 7d", "emoji": true }, "value": "snooze", "action_id": "renewal_snooze" }
+    ]},
+    { "type": "divider" },
+    { "type": "context", "elements": [
+      { "type": "image", "image_url": "https://placehold.co/24x24/0ea5e9/ffffff/png?text=M", "alt_text": "Meredith" },
+      { "type": "mrkdwn", "text": "*Meredith*  ·  9:07 AM" }
+    ]},
+    { "type": "section", "text": { "type": "mrkdwn", "text": "What exactly dropped? And who's the new champion?" }},
+    { "type": "divider" },
+    { "type": "context", "elements": [
+      { "type": "mrkdwn", "text": ":sparkles: *RevFlow AI*  ·  9:07 AM" }
+    ]},
+    { "type": "plan", "title": "Thought for 2.1s", "tasks": [
+      { "task_id": "t1", "title": "Pulled CloudSync usage telemetry (90d)", "status": "complete" },
+      { "task_id": "t2", "title": "Cross-referenced Acme org chart (LinkedIn + SF)", "status": "complete" },
+      { "task_id": "t3", "title": "Analyzed 2 support tickets for intent signals", "status": "complete" },
+      { "task_id": "t4", "title": "Identified likely new champion", "status": "complete" }
+    ]},
+    { "type": "section", "fields": [
+      { "type": "mrkdwn", "text": "*Active users*\n22 → 14 (-36%)" },
+      { "type": "mrkdwn", "text": "*API calls/mo*\n12M → 7.8M (-35%)" },
+      { "type": "mrkdwn", "text": "*New likely champion*\n:bust_in_silhouette: Priya Rao, VP Ops" },
+      { "type": "mrkdwn", "text": "*Promoted*\n14 days ago (LinkedIn)" }
+    ]},
+    { "type": "context", "elements": [
+      { "type": "mrkdwn", "text": ":ticket: Ticket #4471 mentions _\"evaluating Box\"_  ·  :ticket: Ticket #4502 asks about _\"export tooling\"_" }
+    ]},
+    { "type": "actions", "elements": [
+      { "type": "button", "text": { "type": "plain_text", "text": ":shield: Build retention play", "emoji": true }, "style": "primary", "value": "build_play", "action_id": "renewal_build_play" },
+      { "type": "button", "text": { "type": "plain_text", "text": ":wave: Intro me to Priya", "emoji": true }, "value": "intro_priya", "action_id": "renewal_intro_priya" },
+      { "type": "button", "text": { "type": "plain_text", "text": ":eye: Keep watching", "emoji": true }, "value": "keep_watching", "action_id": "renewal_keep_watching" }
+    ]},
+    { "type": "divider" },
+    { "type": "context", "elements": [
+      { "type": "image", "image_url": "https://placehold.co/24x24/0ea5e9/ffffff/png?text=M", "alt_text": "Meredith" },
+      { "type": "mrkdwn", "text": "*Meredith*  ·  9:11 AM" }
+    ]},
+    { "type": "section", "text": { "type": "mrkdwn", "text": "Build the play. I can go to 15% off but I want seats *expanded*, not shrunk." }},
+    { "type": "divider" },
+    { "type": "context", "elements": [
+      { "type": "mrkdwn", "text": ":sparkles: *RevFlow AI*  ·  9:11 AM" }
+    ]},
+    { "type": "plan", "title": "Thought for 1.6s", "tasks": [
+      { "task_id": "r1", "title": "Scored 4 retention patterns vs Acme's profile", "status": "complete" },
+      { "task_id": "r2", "title": "Modeled 3yr value under each", "status": "complete" },
+      { "task_id": "r3", "title": "Selected expand-and-lock play", "status": "complete" }
+    ]},
+    { "type": "section", "text": { "type": "mrkdwn", "text": ":shield: *Retention play — Expand & lock*\nMulti-year lock with ramped expansion. Stops Priya's team from re-evaluating vendors." }},
+    { "type": "section", "fields": [
+      { "type": "mrkdwn", "text": "*Term*\n3 years" },
+      { "type": "mrkdwn", "text": "*Discount*\n12% (below your 15% cap)" },
+      { "type": "mrkdwn", "text": "*Seats*\n22 → 32 (Yr1 free, ramped)" },
+      { "type": "mrkdwn", "text": "*3yr TCV*\n$148K → $392K" }
+    ]},
+    { "type": "context", "elements": [
+      { "type": "mrkdwn", "text": ":bulb: _Comparable save plays landed 7 / 9 times when champion changed within 60d of renewal._" }
+    ]},
+    { "type": "actions", "elements": [
+      { "type": "button", "text": { "type": "plain_text", "text": ":page_facing_up: Open in amendment modal", "emoji": true }, "style": "primary", "value": "open_amendment", "action_id": "renewal_open_amendment" },
+      { "type": "button", "text": { "type": "plain_text", "text": ":arrows_counterclockwise: Swap incentive", "emoji": true }, "value": "swap_incentive", "action_id": "renewal_swap_incentive" },
+      { "type": "button", "text": { "type": "plain_text", "text": ":bulb: Try different angle", "emoji": true }, "value": "different_angle", "action_id": "renewal_different_angle" }
+    ]},
+    { "type": "divider" },
+    { "type": "context", "elements": [
+      { "type": "mrkdwn", "text": ":information_source: _Amendment modal opened. Meredith reviewed the 3-yr terms, confirmed the seat ramp, and hit Save._" }
+    ]},
+    { "type": "divider" },
+    { "type": "context", "elements": [
+      { "type": "mrkdwn", "text": ":sparkles: *RevFlow AI*  ·  9:18 AM" }
+    ]},
+    { "type": "section", "text": { "type": "mrkdwn", "text": ":white_check_mark: *Amendment `A-2047` drafted.*  Here's what Priya will see." }},
+    { "type": "section", "fields": [
+      { "type": "mrkdwn", "text": "*Amendment*\n`A-2047`" },
+      { "type": "mrkdwn", "text": "*TCV delta*\n+$244K over 3yr" },
+      { "type": "mrkdwn", "text": "*Effective*\nMay 1, 2026" },
+      { "type": "mrkdwn", "text": "*Approver*\nAuto-approves (under 15%)" }
+    ]},
+    { "type": "context", "elements": [
+      { "type": "mrkdwn", "text": ":bulb: _Suggested cadence: intro email D0 (warm intro from Jordan), follow-up D3, decision call D7._" }
+    ]},
+    { "type": "actions", "elements": [
+      { "type": "button", "text": { "type": "plain_text", "text": ":pen: Send for e-sign", "emoji": true }, "style": "primary", "value": "send_esign", "action_id": "renewal_send_esign" },
+      { "type": "button", "text": { "type": "plain_text", "text": ":people_holding_hands: Loop in CSM first", "emoji": true }, "value": "loop_csm", "action_id": "renewal_loop_csm" },
+      { "type": "button", "text": { "type": "plain_text", "text": ":eye: Preview customer PDF", "emoji": true }, "value": "preview_pdf", "action_id": "renewal_preview_pdf" }
+    ]},
+    { "type": "divider" },
+    { "type": "context", "elements": [
+      { "type": "image", "image_url": "https://placehold.co/24x24/0ea5e9/ffffff/png?text=M", "alt_text": "Meredith" },
+      { "type": "mrkdwn", "text": "*Meredith*  ·  9:19 AM" }
+    ]},
+    { "type": "section", "text": { "type": "mrkdwn", "text": "Loop in CSM first. Give her 24h to warm-intro Priya." }},
+    { "type": "divider" },
+    { "type": "context", "elements": [
+      { "type": "mrkdwn", "text": ":sparkles: *RevFlow AI*  ·  9:19 AM" }
+    ]},
+    { "type": "section", "text": { "type": "mrkdwn", "text": ":white_check_mark: Looped in *@Sara Kim* (CSM). 24h hold on e-sign. I'll nudge you if she hasn't responded by 9 AM tomorrow." }},
+    { "type": "context", "elements": [
+      { "type": "mrkdwn", "text": ":speech_balloon: _Anything else — or I'll go quiet?_" }
+    ]}
+  ]
+}
