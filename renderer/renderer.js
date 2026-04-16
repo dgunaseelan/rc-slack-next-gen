@@ -799,7 +799,7 @@
           </div>
           <div>
             <div class="home-footer-label">Prototype by</div>
-            <div>Dinesh Gunaseelan</div>
+            <div>Dharsunn Gunaseelan</div>
           </div>
         </div>
       </footer>
