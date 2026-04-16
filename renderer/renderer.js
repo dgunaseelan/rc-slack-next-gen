@@ -1,7 +1,110 @@
 (() => {
   "use strict";
 
+  // ============================================================
+  // Interactive flow definition — chains mocks together so buttons
+  // actually navigate, mimicking the real Slack experience.
+  // ============================================================
+  const FLOW_SEQ = [
+    { id: "02_browse_products",     label: "Browse Catalog",    channel: "#deal-acme-q2" },
+    { id: "03_product_details",     label: "Product Details",   channel: "#deal-acme-q2" },
+    { id: "04_create_quote_step1",  label: "Quote Terms",       channel: "New Quote" },
+    { id: "04_create_quote_step2",  label: "Line Items",        channel: "New Quote · Acme" },
+    { id: "04d_configure_line",     label: "Configure Line",    channel: "Configure line" },
+    { id: "04_create_quote_step3",  label: "Review + AI",       channel: "Review quote" },
+    { id: "06_approval_request",    label: "Approval Request",  channel: "Alex Chen · DM" },
+    { id: "06_approval_status",     label: "Approved",          channel: "#deal-acme-q2" }
+  ];
+  const FLOW_MAIN_IDS = FLOW_SEQ.map(s => s.id);
+  // When the user is on a side-overlay mock, which main step it "belongs" to.
+  const OVERLAY_PARENT = {
+    "04a_add_product_search": "04_create_quote_step2",
+    "04b_add_bundle":         "04_create_quote_step2",
+    "04c_ai_suggest_addons":  "04_create_quote_step2",
+    "04e_configure_bundle":   "04_create_quote_step2",
+    "05_apply_discount":      "04_create_quote_step3"
+  };
+  // Per-mock interception rules. Keys are action_ids; modal submit/close use the
+  // pseudo-ids "modal-submit" / "modal-close". Value "__toast__" means: don't
+  // navigate, just flash a toast (the action fires but the UI state is stable).
+  const FLOW_RULES = {
+    "02_browse_products": {
+      "view_product":              "03_product_details",
+      "start_quote_with_selected": "04_create_quote_step1",
+      "refine_search":             "__toast__",
+      "ask_ai":                    "__toast__",
+      "category_filter":           "__toast__",
+      "sort_by":                   "__toast__",
+      "pricebook":                 "__toast__"
+    },
+    "03_product_details": {
+      "add_to_quote":     "04_create_quote_step1",
+      "add_bundle":       "04_create_quote_step1",
+      "compare_product":  "__toast__",
+      "product_overflow": "__toast__"
+    },
+    "04_create_quote_step1": {
+      "modal-submit": "04_create_quote_step2",
+      "modal-close":  "03_product_details"
+    },
+    "04_create_quote_step2": {
+      "modal-submit":      "04_create_quote_step3",
+      "modal-close":       "04_create_quote_step1",
+      "add_product":       "04a_add_product_search",
+      "add_bundle":        "04b_add_bundle",
+      "ai_suggest_addons": "04c_ai_suggest_addons",
+      "line_1_configure":  "04d_configure_line",
+      "line_1_menu":       "04d_configure_line",
+      "line_2_menu":       "__toast__",
+      "line_3_menu":       "__toast__"
+    },
+    "04a_add_product_search": {
+      "modal-submit": "04_create_quote_step2",
+      "modal-close":  "04_create_quote_step2"
+    },
+    "04b_add_bundle": {
+      "modal-submit": "04_create_quote_step2",
+      "modal-close":  "04_create_quote_step2"
+    },
+    "04c_ai_suggest_addons": {
+      "modal-submit":    "04_create_quote_step2",
+      "modal-close":     "04_create_quote_step2",
+      "ai_feedback_bad": "__toast__",
+      "ai_reasoning":    "__toast__"
+    },
+    "04d_configure_line": {
+      "modal-submit":    "04_create_quote_step2",
+      "modal-close":     "04_create_quote_step2",
+      "apply_ai_config": "__toast__"
+    },
+    "04_create_quote_step3": {
+      "modal-submit": "06_approval_request",
+      "modal-close":  "04_create_quote_step2"
+    },
+    "05_apply_discount": {
+      "modal-submit": "04_create_quote_step3",
+      "modal-close":  "04_create_quote_step3"
+    },
+    "06_approval_request": {
+      "approve":          "06_approval_status",
+      "reject":           "__toast__",
+      "request_changes":  "__toast__",
+      "approval_overflow": "__toast__"
+    },
+    "06_approval_status": {
+      "send_customer":  "__toast__",
+      "generate_order": "__toast__",
+      "view_audit":     "__toast__"
+    }
+  };
+
   const SECTIONS = [
+    {
+      title: "▶ Interactive Demo",
+      items: [
+        { id: "__flow__", title: "Quote-to-Cash end-to-end", channel: "Click-through demo", flow: true }
+      ]
+    },
     {
       title: "Agent & Slack Experience",
       items: [
@@ -38,7 +141,7 @@
       ]
     }
   ];
-  const MOCKS = SECTIONS.flatMap(s => s.items);
+  const MOCKS = SECTIONS.flatMap(s => s.items).filter(m => !m.flow);
 
   // ============================================================
   // Emoji shortcode map (subset — covers what the mocks use)
@@ -246,7 +349,9 @@
         const label = renderTextObject(el.text);
         const tag = el.url ? "a" : "button";
         const href = el.url ? ` href="${escapeHtml(el.url)}" target="_blank" rel="noopener"` : "";
-        return `<${tag} class="bk-button${style}" type="button"${href}>${label}</${tag}>`;
+        const aid = el.action_id ? ` data-action-id="${escapeHtml(el.action_id)}"` : "";
+        const val = el.value ? ` data-action-value="${escapeHtml(el.value)}"` : "";
+        return `<${tag} class="bk-button${style}" type="button"${href}${aid}${val}>${label}</${tag}>`;
       }
       case "static_select":
       case "external_select": {
@@ -301,7 +406,12 @@
         return renderChoiceList(el, "radio");
       }
       case "overflow": {
-        return `<button class="bk-overflow" aria-label="More options">⋯</button>`;
+        const aid = el.action_id ? ` data-action-id="${escapeHtml(el.action_id)}"` : "";
+        const opts = encodeURIComponent(JSON.stringify((el.options || []).map(o => ({
+          text: (o.text && o.text.text) || "",
+          value: o.value || ""
+        }))));
+        return `<button class="bk-overflow" aria-label="More options"${aid} data-overflow-options="${opts}">⋯</button>`;
       }
       case "image": {
         return `<div class="bk-image" style="width:72px;height:72px"><img src="${escapeHtml(el.image_url)}" alt="${escapeHtml(el.alt_text || "")}" onerror="this.style.display='none'"></div>`;
@@ -490,12 +600,12 @@
           <div class="slack-surface">
             <div class="modal-title">
               <span>${renderTextObject(payload.title)}</span>
-              <button class="modal-close" aria-label="Close">×</button>
+              <button class="modal-close" aria-label="Close" data-flow-action="modal-close">×</button>
             </div>
             <div class="modal-body">${blocksHtml}</div>
             <div class="modal-footer">
-              ${payload.close ? `<button class="bk-button">${renderTextObject(payload.close)}</button>` : ""}
-              ${payload.submit ? `<button class="bk-button primary">${renderTextObject(payload.submit)}</button>` : ""}
+              ${payload.close ? `<button class="bk-button" data-flow-action="modal-close">${renderTextObject(payload.close)}</button>` : ""}
+              ${payload.submit ? `<button class="bk-button primary" data-flow-action="modal-submit">${renderTextObject(payload.submit)}</button>` : ""}
             </div>
           </div>`;
         break;
@@ -562,9 +672,20 @@
 
   function renderSidebar() {
     const nav = document.getElementById("mock-nav");
+    const homeBtn = `<button class="nav-item nav-home" data-id="home">
+      <span class="nav-num">⌂</span>
+      <span class="nav-text">Home<div class="nav-surface">OVERVIEW</div></span>
+    </button>`;
     let counter = 0;
-    nav.innerHTML = SECTIONS.map(section => {
+    const sectionsHtml = SECTIONS.map(section => {
+      const isFlowSection = section.items.some(i => i.flow);
       const itemsHtml = section.items.map(m => {
+        if (m.flow) {
+          return `<button class="nav-item nav-item--flow" data-id="${m.id}">
+            <span class="nav-num">▶</span>
+            <span class="nav-text">${escapeHtml(m.title)}<div class="nav-surface">${escapeHtml(m.channel || "")}</div></span>
+          </button>`;
+        }
         counter += 1;
         const num = String(counter).padStart(2, "0");
         return `<button class="nav-item" data-id="${m.id}">
@@ -572,15 +693,130 @@
           <span class="nav-text">${escapeHtml(m.title)}<div class="nav-surface" id="ns-${m.id}">—</div></span>
         </button>`;
       }).join("");
-      return `<div class="sidebar-section">
+      const cls = isFlowSection ? "sidebar-section sidebar-section--flow" : "sidebar-section";
+      return `<div class="${cls}">
         <div class="sidebar-title">${escapeHtml(section.title)}</div>
         ${itemsHtml}
       </div>`;
     }).join("");
+    nav.innerHTML = homeBtn + sectionsHtml;
     nav.addEventListener("click", e => {
       const btn = e.target.closest(".nav-item");
-      if (btn) selectMock(btn.dataset.id);
+      if (!btn) return;
+      const id = btn.dataset.id;
+      if (id === "home") {
+        if (flowMode) exitFlowMode({ navigate: false });
+        renderHome();
+      } else if (id === "__flow__") {
+        enterFlowMode();
+      } else {
+        if (flowMode) exitFlowMode({ navigate: false });
+        selectMock(id);
+      }
     });
+  }
+
+  const HOME_HTML = `
+    <div class="home">
+      <header class="home-hero">
+        <div class="home-eyebrow">RevFlow · 2026 Prototype</div>
+        <h1 class="home-title">
+          Reimagining <span class="home-title-accent">Revenue Cloud</span><br>
+          inside Slack.
+        </h1>
+        <p class="home-lede">
+          Sales, AR, and CS teams already spend their day in Slack.<br>
+          What if they never had to leave it to run revenue?
+        </p>
+      </header>
+
+      <section class="home-vision">
+        <p>
+          Every quote, renewal, invoice, approval, and collection already lands
+          in Slack — as a notification. Then you bounce out: a browser tab,
+          Salesforce, a CPQ form, a billing console, a DocuSign link, back to
+          inbox. This prototype asks a simpler question:
+          <strong>what if the work itself happened inside Slack — and the
+          notification was just the start, not the end?</strong>
+          Two surfaces, one place to run the whole revenue operation.
+        </p>
+      </section>
+
+      <section class="home-cards">
+        <a href="#11_assistant_quote_chat" class="home-card home-card-agent">
+          <div>
+            <span class="home-card-tag">Section 01 · 6 conversations</span>
+            <h2>Agent &amp; Slack Experience</h2>
+            <p class="home-card-lede">The revenue AI as a full coworker — not a chatbot.</p>
+          </div>
+          <ul class="home-card-bullets">
+            <li><strong>Proactive.</strong> It pings you when a renewal is at risk, an invoice is disputed, or an account trips a usage threshold — before you ask.</li>
+            <li><strong>Reactive.</strong> Paste discovery notes, forward a dispute email, ask <em>"what's overdue on my book?"</em> It streams back reasoning, pulls from Salesforce + billing + email, hands you compact cards with rich action buttons.</li>
+            <li><strong>Not verbose.</strong> Every step is a tap, not a paragraph. No <em>"reply YES to confirm."</em> No 400-word AI essays. Buttons replace the chat, the chat replaces the worklist.</li>
+          </ul>
+          <div class="home-card-cta">Start with the chat-to-quote flow <span class="arrow">→</span></div>
+        </a>
+
+        <a href="#01_home_tab" class="home-card home-card-ui">
+          <div>
+            <span class="home-card-tag">Section 02 · 19 screens</span>
+            <h2>Interactive UI with AI Insights</h2>
+            <p class="home-card-lede">The full Revenue Cloud UX, rendered inside Slack.</p>
+          </div>
+          <ul class="home-card-bullets">
+            <li><strong>Native surfaces.</strong> Home tabs, product browsers, multi-step quote forms, approval modals, invoice canvases, payment collectors — all inside Slack. No iframe, no web wrapper.</li>
+            <li><strong>Slash-command entry.</strong> <em>/quote new</em>, <em>/discount acme</em>, <em>/approve</em> — type a command, get a full interactive UI that walks you through the rest.</li>
+            <li><strong>AI in the margins.</strong> Margin warnings, attach-rate hints, suggested add-ons, proactive nudges — baked into every screen so the AI lives <em>inside</em> the form, not beside it.</li>
+          </ul>
+          <div class="home-card-cta">Start with the home dashboard <span class="arrow">→</span></div>
+        </a>
+      </section>
+
+      <section class="home-stats">
+        <div class="home-stat">
+          <div class="home-stat-num">6–8</div>
+          <div class="home-stat-label">tools opened per deal. Each context switch costs ~23 minutes of focus.</div>
+        </div>
+        <div class="home-stat">
+          <div class="home-stat-num">3×</div>
+          <div class="home-stat-label">faster AR dispute resolution when the record, invoice, and email sit in one surface.</div>
+        </div>
+        <div class="home-stat">
+          <div class="home-stat-num">0</div>
+          <div class="home-stat-label">new tools to learn. It's the Slack you already have — it just knows your pipeline.</div>
+        </div>
+      </section>
+
+      <footer class="home-footer">
+        <div class="home-footer-row">
+          <div>
+            <div class="home-footer-label">Built on</div>
+            <div>Slack Block Kit 2026 · Assistant API · Agentforce</div>
+          </div>
+          <div>
+            <div class="home-footer-label">Covers</div>
+            <div>CPQ · Contracts · Amendments · Billing · Collections · Usage</div>
+          </div>
+          <div>
+            <div class="home-footer-label">Prototype by</div>
+            <div>Dinesh Gunaseelan</div>
+          </div>
+        </div>
+      </footer>
+    </div>
+  `;
+
+  function renderHome() {
+    activeId = "home";
+    location.hash = "home";
+    document.querySelectorAll(".nav-item").forEach(b => {
+      b.classList.toggle("active", b.dataset.id === "home");
+    });
+    document.querySelector(".stage-bar").style.display = "none";
+    document.getElementById("stage-description").style.display = "none";
+    const vp = document.getElementById("viewport");
+    vp.dataset.surface = "landing";
+    vp.innerHTML = HOME_HTML;
   }
 
   // Convert AI-surface-only block types (plan, markdown) into BKB-compatible
@@ -619,6 +855,8 @@
       b.classList.toggle("active", b.dataset.id === id);
     });
     location.hash = id;
+    document.querySelector(".stage-bar").style.display = "";
+    document.getElementById("stage-description").style.display = "";
 
     const info = MOCKS.find(m => m.id === id);
     try {
@@ -656,6 +894,225 @@
     }
   }
 
+  // ============================================================
+  // Interactive flow mode
+  // ============================================================
+  let flowMode = false;
+  let flowCurrentId = null; // id of the mock currently visible (main or overlay)
+
+  function isMainStep(id)   { return FLOW_MAIN_IDS.includes(id); }
+  function mainStepIdxFor(id) {
+    if (isMainStep(id)) return FLOW_MAIN_IDS.indexOf(id);
+    const parent = OVERLAY_PARENT[id];
+    return parent ? FLOW_MAIN_IDS.indexOf(parent) : -1;
+  }
+
+  function enterFlowMode(startId) {
+    flowMode = true;
+    document.body.classList.add("flow-mode");
+    document.getElementById("flow-bar").hidden = false;
+    document.getElementById("flow-actions").hidden = false;
+    document.getElementById("stage-actions").hidden = true;
+    // Sidebar activation: mark the interactive-demo entry active
+    document.querySelectorAll(".nav-item").forEach(b => {
+      b.classList.toggle("active", b.dataset.id === "__flow__");
+    });
+    const first = startId && (isMainStep(startId) || OVERLAY_PARENT[startId]) ? startId : FLOW_SEQ[0].id;
+    location.hash = `flow/${first}`;
+    loadFlowStep(first);
+  }
+
+  function exitFlowMode(opts = {}) {
+    flowMode = false;
+    flowCurrentId = null;
+    document.body.classList.remove("flow-mode");
+    document.getElementById("flow-bar").hidden = true;
+    document.getElementById("flow-actions").hidden = true;
+    document.getElementById("stage-actions").hidden = false;
+    hideOverflowPopover();
+    if (opts.navigate !== false) renderHome();
+  }
+
+  async function loadFlowStep(id) {
+    flowCurrentId = id;
+    location.hash = `flow/${id}`;
+    document.querySelector(".stage-bar").style.display = "";
+    document.getElementById("stage-description").style.display = "";
+    renderFlowStepper();
+    const info = (MOCKS.find(m => m.id === id)) || { id, title: id, channel: "" };
+    try {
+      const res = await fetch(`../mocks/bkb/${id}.json`);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const payload = await res.json();
+      const meta = payload._meta || {};
+      document.getElementById("stage-title").textContent = meta.title || info.title;
+      const surfaceEl = document.getElementById("stage-surface");
+      surfaceEl.textContent = (meta.surface || "message").toUpperCase();
+      surfaceEl.dataset.surface = meta.surface || "message";
+      document.getElementById("stage-description").textContent = meta.description || "";
+      const { html, surface } = renderSurface(payload, info);
+      const vp = document.getElementById("viewport");
+      vp.dataset.surface = surface;
+      vp.innerHTML = html;
+      vp.classList.remove("flow-transition");
+      void vp.offsetWidth; // reflow so the transition re-triggers
+      vp.classList.add("flow-transition");
+    } catch (err) {
+      document.getElementById("viewport").innerHTML =
+        `<div style="padding:30px;color:var(--danger)">Failed to load: ${escapeHtml(err.message)}</div>`;
+    }
+  }
+
+  function renderFlowStepper() {
+    const stepper = document.getElementById("flow-stepper");
+    const activeIdx = mainStepIdxFor(flowCurrentId);
+    const overlayLabel = OVERLAY_PARENT[flowCurrentId]
+      ? (MOCKS.find(m => m.id === flowCurrentId)?.title || flowCurrentId)
+      : null;
+    stepper.innerHTML = FLOW_SEQ.map((step, i) => {
+      const state = i < activeIdx ? "done" : i === activeIdx ? "active" : "pending";
+      const connector = i < FLOW_SEQ.length - 1 ? `<span class="flow-connector ${i < activeIdx ? "done" : ""}"></span>` : "";
+      return `<button class="flow-step ${state}" data-flow-jump="${step.id}" type="button" title="${escapeHtml(step.label)}">
+          <span class="flow-step-dot">${i < activeIdx ? "✓" : i + 1}</span>
+          <span class="flow-step-label">${escapeHtml(step.label)}</span>
+        </button>${connector}`;
+    }).join("");
+    // Overlay banner
+    const hint = document.getElementById("flow-hint");
+    if (overlayLabel) {
+      hint.innerHTML = `<span class="flow-hint-dot overlay"></span><span class="flow-hint-text"><strong>Overlay:</strong> ${escapeHtml(overlayLabel)} · Cancel/Save returns to Line items.</span>`;
+    } else {
+      hint.innerHTML = `<span class="flow-hint-dot"></span><span class="flow-hint-text">Click any button inside the mock to advance. Non-navigating actions fire a toast below.</span>`;
+    }
+    // Prev/Next enablement
+    const prevBtn = document.getElementById("flow-prev");
+    const nextBtn = document.getElementById("flow-next");
+    prevBtn.disabled = activeIdx <= 0;
+    nextBtn.disabled = activeIdx >= FLOW_SEQ.length - 1 || activeIdx < 0;
+  }
+
+  function flowNavigate(targetId, actionLabel) {
+    showToast(`→ ${actionLabel || "Navigating"}`, "nav");
+    loadFlowStep(targetId);
+  }
+
+  function handleFlowClick(e) {
+    if (!flowMode) return;
+    // Stepper jump
+    const jumpEl = e.target.closest("[data-flow-jump]");
+    if (jumpEl) {
+      e.preventDefault();
+      loadFlowStep(jumpEl.dataset.flowJump);
+      return;
+    }
+    // Find a relevant actionable element inside the viewport
+    const vp = document.getElementById("viewport");
+    if (!vp.contains(e.target)) return;
+    const actionable = e.target.closest("[data-action-id],[data-flow-action],.bk-overflow");
+    if (!actionable) return;
+    e.preventDefault();
+    e.stopPropagation();
+
+    // Overflow: pop menu instead of immediately firing
+    if (actionable.classList.contains("bk-overflow") && actionable.dataset.overflowOptions) {
+      openOverflowPopover(actionable);
+      return;
+    }
+
+    const rules = FLOW_RULES[flowCurrentId] || {};
+    const actionId = actionable.dataset.actionId || actionable.dataset.flowAction;
+    const target = rules[actionId];
+    const value = actionable.dataset.actionValue ? ` · value=${actionable.dataset.actionValue}` : "";
+    if (!target || target === "__toast__") {
+      showToast(`${actionId || "action"} fired${value}`, "action");
+      return;
+    }
+    flowNavigate(target, `${actionId} → ${stepLabelFor(target)}`);
+  }
+
+  function stepLabelFor(id) {
+    const main = FLOW_SEQ.find(s => s.id === id);
+    if (main) return main.label;
+    const mock = MOCKS.find(m => m.id === id);
+    return mock ? mock.title : id;
+  }
+
+  // ----- Overflow popover -----
+  function openOverflowPopover(anchor) {
+    const pop = document.getElementById("overflow-popover");
+    const opts = JSON.parse(decodeURIComponent(anchor.dataset.overflowOptions || "%5B%5D"));
+    const actionId = anchor.dataset.actionId || "";
+    pop.innerHTML = opts.map(o =>
+      `<button type="button" class="overflow-option" data-pop-action="${escapeHtml(actionId)}" data-pop-value="${escapeHtml(o.value)}">
+         ${escapeHtml(renderEmoji(o.text))}
+       </button>`).join("") || `<div class="overflow-empty">No options</div>`;
+    const rect = anchor.getBoundingClientRect();
+    pop.style.top  = `${rect.bottom + window.scrollY + 4}px`;
+    pop.style.left = `${Math.max(8, rect.right + window.scrollX - 240)}px`;
+    pop.hidden = false;
+  }
+  function hideOverflowPopover() {
+    const pop = document.getElementById("overflow-popover");
+    if (pop) pop.hidden = true;
+  }
+
+  // ----- Toast -----
+  let toastSeq = 0;
+  function showToast(msg, kind) {
+    const host = document.getElementById("toast-container");
+    const el = document.createElement("div");
+    el.className = `toast toast-${kind || "action"}`;
+    el.textContent = msg;
+    el.dataset.id = ++toastSeq;
+    host.appendChild(el);
+    requestAnimationFrame(() => el.classList.add("in"));
+    setTimeout(() => {
+      el.classList.remove("in");
+      el.classList.add("out");
+      setTimeout(() => el.remove(), 240);
+    }, 2200);
+  }
+
+  // ----- Flow controls wiring -----
+  function initFlowControls() {
+    document.getElementById("flow-prev").addEventListener("click", () => {
+      const idx = mainStepIdxFor(flowCurrentId);
+      if (idx > 0) loadFlowStep(FLOW_SEQ[idx - 1].id);
+    });
+    document.getElementById("flow-next").addEventListener("click", () => {
+      const idx = mainStepIdxFor(flowCurrentId);
+      if (idx >= 0 && idx < FLOW_SEQ.length - 1) loadFlowStep(FLOW_SEQ[idx + 1].id);
+    });
+    document.getElementById("flow-restart").addEventListener("click", () => loadFlowStep(FLOW_SEQ[0].id));
+    document.getElementById("flow-exit").addEventListener("click", exitFlowMode);
+    // Viewport + stepper interception (delegated, survives innerHTML swaps)
+    document.addEventListener("click", e => {
+      // Dismiss overflow popover on outside click; allow option clicks inside it
+      const pop = document.getElementById("overflow-popover");
+      if (pop && !pop.hidden) {
+        const opt = e.target.closest(".overflow-option");
+        if (opt) {
+          e.preventDefault();
+          const actionId = opt.dataset.popAction;
+          const value = opt.dataset.popValue;
+          hideOverflowPopover();
+          if (flowMode) {
+            const rules = FLOW_RULES[flowCurrentId] || {};
+            const target = rules[actionId];
+            if (target && target !== "__toast__") {
+              flowNavigate(target, `${actionId}:${value} → ${stepLabelFor(target)}`);
+            } else {
+              showToast(`${actionId} · ${value}`, "action");
+            }
+          }
+          return;
+        }
+        if (!e.target.closest(".bk-overflow")) hideOverflowPopover();
+      }
+      handleFlowClick(e);
+    });
+  }
+
   // Eagerly fetch metadata for each mock to populate sidebar surface labels
   async function prefetchSurfaces() {
     await Promise.all(MOCKS.map(async m => {
@@ -685,17 +1142,44 @@
     });
   }
 
+  function parseFlowHash(h) {
+    if (h === "flow") return { flow: true, id: FLOW_SEQ[0].id };
+    if (h.startsWith("flow/")) {
+      const id = h.slice(5);
+      const valid = isMainStep(id) || OVERLAY_PARENT[id];
+      return { flow: true, id: valid ? id : FLOW_SEQ[0].id };
+    }
+    return null;
+  }
+
   // Boot
   document.addEventListener("DOMContentLoaded", () => {
     initTheme();
     renderSidebar();
     prefetchSurfaces();
+    initFlowControls();
     const hash = location.hash.replace("#", "");
-    const initial = MOCKS.find(m => m.id === hash) ? hash : MOCKS[0].id;
-    selectMock(initial);
+    const flowReq = parseFlowHash(hash);
+    if (flowReq) {
+      enterFlowMode(flowReq.id);
+    } else if (!hash || hash === "home") {
+      renderHome();
+    } else if (MOCKS.find(m => m.id === hash)) {
+      selectMock(hash);
+    } else {
+      renderHome();
+    }
     window.addEventListener("hashchange", () => {
       const h = location.hash.replace("#", "");
-      if (MOCKS.find(m => m.id === h) && h !== activeId) selectMock(h);
+      const fr = parseFlowHash(h);
+      if (fr) {
+        if (!flowMode) enterFlowMode(fr.id);
+        else if (fr.id !== flowCurrentId) loadFlowStep(fr.id);
+        return;
+      }
+      if (flowMode) exitFlowMode({ navigate: false });
+      if ((h === "" || h === "home") && activeId !== "home") renderHome();
+      else if (MOCKS.find(m => m.id === h) && h !== activeId) selectMock(h);
     });
   });
 })();
