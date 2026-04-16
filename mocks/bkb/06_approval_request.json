@@ -1,0 +1,107 @@
+{
+  "_meta": {
+    "id": "06_approval_request",
+    "title": "Approval Request — DM to sales manager",
+    "surface": "dm",
+    "description": "DM sent to Alex Chen (Sales Manager) after rep submits a 12% discount. RCA has only a preview endpoint — submission goes through standard Salesforce /process/approvals/. Approve/Reject buttons call back to RevFlow which posts to the approval API.",
+    "rca_endpoint": "POST /services/data/v66.0/process/approvals/ (standard Salesforce — gap in RCA)"
+  },
+  "blocks": [
+    {
+      "type": "header",
+      "text": { "type": "plain_text", "text": ":clipboard: Approval requested — 12% discount", "emoji": true }
+    },
+    {
+      "type": "context",
+      "elements": [
+        {
+          "type": "image",
+          "image_url": "https://placehold.co/48x48/0ea5e9/ffffff/png?text=P",
+          "alt_text": "Priya Sharma"
+        },
+        { "type": "mrkdwn", "text": "*Priya Sharma* (AE) · requested 2 minutes ago · SLA *24 hours*" }
+      ]
+    },
+    {
+      "type": "section",
+      "fields": [
+        { "type": "mrkdwn", "text": "*Account*\nAcme Corp" },
+        { "type": "mrkdwn", "text": "*Quote*\n`Q-8847`" },
+        { "type": "mrkdwn", "text": "*Deal size*\n$45,961.00 USD" },
+        { "type": "mrkdwn", "text": "*Discount*\n*12%* (-$5,784)" },
+        { "type": "mrkdwn", "text": "*Margin after*\n39%  _(was 46%)_" },
+        { "type": "mrkdwn", "text": "*Close target*\nApr 30, 2026" }
+      ]
+    },
+    { "type": "divider" },
+    {
+      "type": "section",
+      "text": { "type": "mrkdwn", "text": "*Line items*" }
+    },
+    {
+      "type": "section",
+      "fields": [
+        { "type": "mrkdwn", "text": "*ProBook Elite 14\"*\n20 × 12% = *$40,462*" },
+        { "type": "mrkdwn", "text": "*CloudSync Pro (annual)*\n20 × 12% = *$2,622*" },
+        { "type": "mrkdwn", "text": "*Extended Support 3yr*\n20 × 12% = *$3,502*" }
+      ]
+    },
+    { "type": "divider" },
+    {
+      "type": "section",
+      "text": { "type": "mrkdwn", "text": ":sparkles: *RevFlow AI analysis*" }
+    },
+    {
+      "type": "markdown",
+      "text": "**Requester reason.** Acme is renewing + expanding. Competing against Globex in a parallel RFP. Acme expects ~11% based on their last 6 purchase orders.\n\n**Historical precedent.** Acme's average discount over the last 18 months: **11.2%**. Last quarter's comparable deal (Q-8712, $52k) closed at **13%**.\n\n**Risk.** Margin drops from 46% → 39% — still **2 points above the 37% floor** set in the FY26 plan.\n\n**Recommendation.** :large_green_circle: Low-risk approval. 78% of comparable 12% approvals this FY converted within 10 days. Declining is likely to push Acme to renegotiate closer to 15%."
+    },
+    {
+      "type": "context",
+      "elements": [
+        { "type": "mrkdwn", "text": ":pushpin: Next approver if escalated: *Sarah Vance* (VP Sales)" }
+      ]
+    },
+    { "type": "divider" },
+    {
+      "type": "actions",
+      "elements": [
+        {
+          "type": "button",
+          "text": { "type": "plain_text", "text": ":white_check_mark: Approve", "emoji": true },
+          "style": "primary",
+          "value": "approve_Q-8847",
+          "action_id": "approve"
+        },
+        {
+          "type": "button",
+          "text": { "type": "plain_text", "text": ":x: Reject", "emoji": true },
+          "style": "danger",
+          "value": "reject_Q-8847",
+          "action_id": "reject",
+          "confirm": {
+            "title": { "type": "plain_text", "text": "Reject this discount?" },
+            "text": { "type": "mrkdwn", "text": "Priya will be notified. Add a reason on the next step." },
+            "confirm": { "type": "plain_text", "text": "Reject" },
+            "deny": { "type": "plain_text", "text": "Cancel" }
+          }
+        },
+        {
+          "type": "button",
+          "text": { "type": "plain_text", "text": "Request changes", "emoji": true },
+          "value": "changes_Q-8847",
+          "action_id": "request_changes"
+        },
+        {
+          "type": "overflow",
+          "action_id": "approval_overflow",
+          "options": [
+            { "text": { "type": "plain_text", "text": "View full quote" }, "value": "view_quote" },
+            { "text": { "type": "plain_text", "text": "View account" }, "value": "view_account" },
+            { "text": { "type": "plain_text", "text": "Delegate to someone else" }, "value": "delegate" },
+            { "text": { "type": "plain_text", "text": "Snooze 2 hours" }, "value": "snooze" }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,144 @@
+{
+  "_meta": {
+    "id": "09_ai_assistant_plan",
+    "title": "AI Assistant — streaming plan block",
+    "surface": "assistant",
+    "description": "Posted inside the Bolt Assistant side-panel in response to '@revflow suggest upsell for Acme'. The plan + task_card primitives (GA Feb 2026) stream updates as each step progresses, giving users transparent 'thinking steps'. Final answer is rendered with the markdown block (GA Feb 2025).",
+    "rca_endpoint": "SOQL + POST /connect/cpq/products/search + RAG query"
+  },
+  "blocks": [
+    {
+      "type": "context",
+      "elements": [
+        {
+          "type": "image",
+          "image_url": "https://placehold.co/48x48/0ea5e9/ffffff/png?text=P",
+          "alt_text": "Priya"
+        },
+        { "type": "mrkdwn", "text": "*Priya*  ·  2:14 PM" }
+      ]
+    },
+    {
+      "type": "section",
+      "text": { "type": "mrkdwn", "text": "@revflow suggest upsell for Acme" }
+    },
+    { "type": "divider" },
+    {
+      "type": "context",
+      "elements": [
+        { "type": "mrkdwn", "text": ":sparkles: *RevFlow AI*  ·  Thinking…" }
+      ]
+    },
+    {
+      "type": "plan",
+      "title": "Thinking completed",
+      "tasks": [
+        {
+          "task_id": "call_001",
+          "title": "Querying Acme's purchase history",
+          "status": "complete",
+          "output": {
+            "type": "rich_text",
+            "elements": [
+              {
+                "type": "rich_text_section",
+                "elements": [
+                  { "type": "text", "text": "Last 18 months: 6 orders · $412k total · 73% product concentration on ProBook + CloudSync" }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "task_id": "call_002",
+          "title": "Ranking candidate products",
+          "status": "complete",
+          "output": {
+            "type": "rich_text",
+            "elements": [
+              {
+                "type": "rich_text_section",
+                "elements": [
+                  { "type": "text", "text": "Pulled 47 SKUs from their price book; scored on affinity + margin + contract alignment" }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "task_id": "call_003",
+          "title": "Checking renewal + contract timing",
+          "status": "complete",
+          "output": {
+            "type": "rich_text",
+            "elements": [
+              {
+                "type": "rich_text_section",
+                "elements": [
+                  { "type": "text", "text": "CloudSync annual term ends May 31. Support contract renewal window is open." }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "task_id": "call_004",
+          "title": "Building recommendation summary",
+          "status": "complete",
+          "output": {
+            "type": "rich_text",
+            "elements": [
+              {
+                "type": "rich_text_section",
+                "elements": [
+                  { "type": "text", "text": "Drafted 3 upsell angles with expected revenue and confidence" }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    { "type": "divider" },
+    {
+      "type": "markdown",
+      "text": "### Top 3 upsell angles for Acme\n\n**1. Expand CloudSync seats (highest confidence)**\nAcme bought 20 seats last June. Their headcount has grown ~25% based on LinkedIn signals. Offer 10 more seats at their negotiated $149/seat (12% disc) = **+$1,488 ARR**. Close probability: **~82%**.\n\n**2. Upgrade ProBook Elite → ProBook Pro workstations (5 units)**\nIT lead at Acme asked about 'workstation performance' in last Zoom (captured in gong call transcript). Pro model is +$800/unit. 5 units × $2,999 = **+$14,995 one-time**. Close probability: **~55%** (needs budget approval).\n\n**3. Attach Extended Support 5-year (vs current 3-year)**\n2-year uplift at $99/device × 20 devices = **+$1,980** ARR. Slam dunk — 94% of customers renewing CloudSync attach this. Close probability: **~90%**.\n\n---\n\n**Total upside if all three land:** ~$18,463. Recommended order: start with (3) — it's easiest, then pitch (1) at the renewal meeting, and keep (2) warm for Q3."
+    },
+    {
+      "type": "actions",
+      "elements": [
+        {
+          "type": "button",
+          "text": { "type": "plain_text", "text": ":page_facing_up: Create quote with all 3", "emoji": true },
+          "style": "primary",
+          "value": "quote_upsell_all",
+          "action_id": "quote_upsell_all"
+        },
+        {
+          "type": "button",
+          "text": { "type": "plain_text", "text": ":envelope: Draft email to Acme", "emoji": true },
+          "value": "draft_email",
+          "action_id": "draft_email"
+        },
+        {
+          "type": "button",
+          "text": { "type": "plain_text", "text": ":thumbsup: Helpful", "emoji": true },
+          "value": "feedback_up",
+          "action_id": "feedback_up"
+        },
+        {
+          "type": "button",
+          "text": { "type": "plain_text", "text": ":thumbsdown: Not useful", "emoji": true },
+          "value": "feedback_down",
+          "action_id": "feedback_down"
+        }
+      ]
+    },
+    {
+      "type": "context",
+      "elements": [
+        { "type": "mrkdwn", "text": ":zap: 4 tools called  ·  2,180 input tokens  ·  840 output  ·  1.9s · Claude Sonnet 4.5" }
+      ]
+    }
+  ]
+}

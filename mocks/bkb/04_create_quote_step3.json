@@ -1,0 +1,123 @@
+{
+  "_meta": {
+    "id": "04_create_quote_step3",
+    "title": "Create Quote — Step 3: Review & submit",
+    "surface": "modal",
+    "description": "Final review. Hero donut chart shows subtotal/discount/tax/total breakdown. Submit calls POST /connect/rev/sales-transaction/actions/place with the full graph.",
+    "rca_endpoint": "POST /connect/rev/sales-transaction/actions/place",
+    "chart_asset": "../assets/chart-quote-total.svg"
+  },
+  "type": "modal",
+  "callback_id": "create_quote_step3",
+  "private_metadata": "{\"step\":3,\"draft_id\":\"draft-8d2f\"}",
+  "title": { "type": "plain_text", "text": "Review quote" },
+  "submit": { "type": "plain_text", "text": "Submit quote" },
+  "close": { "type": "plain_text", "text": "Back" },
+  "blocks": [
+    {
+      "type": "context",
+      "elements": [
+        { "type": "mrkdwn", "text": "*Step 3 of 3* · Review  ·  :white_check_mark: :white_check_mark: :white_circle:" }
+      ]
+    },
+    {
+      "type": "header",
+      "text": { "type": "plain_text", "text": "Quote for Acme Corp", "emoji": true }
+    },
+    {
+      "type": "section",
+      "fields": [
+        { "type": "mrkdwn", "text": "*Account*\nAcme Corp" },
+        { "type": "mrkdwn", "text": "*Opportunity*\nAcme Q2 refresh" },
+        { "type": "mrkdwn", "text": "*Currency*\nUSD" },
+        { "type": "mrkdwn", "text": "*Valid until*\nMay 16, 2026" }
+      ]
+    },
+    {
+      "type": "image",
+      "title": { "type": "plain_text", "text": "Totals breakdown" },
+      "image_url": "https://dgunaseelan.github.io/rc-slack-next-gen/mocks/assets/chart-quote-total.png",
+      "alt_text": "Quote breakdown: Subtotal $48,200, Discount -$5,784 (12%), Tax $3,545, Total $45,961"
+    },
+    { "type": "divider" },
+    {
+      "type": "section",
+      "text": { "type": "mrkdwn", "text": "*Line items (3)*" }
+    },
+    {
+      "type": "section",
+      "text": { "type": "mrkdwn", "text": "*ProBook Elite 14\"*  `SKU-PBE-14`" },
+      "fields": [
+        { "type": "mrkdwn", "text": "*Qty*\n20" },
+        { "type": "mrkdwn", "text": "*Unit*\n$2,299" },
+        { "type": "mrkdwn", "text": "*Discount*\n12%" },
+        { "type": "mrkdwn", "text": "*Subtotal*\n$40,462" }
+      ]
+    },
+    {
+      "type": "section",
+      "text": { "type": "mrkdwn", "text": "*CloudSync Pro*  `SKU-CSP-ANN`  _· 20 seats · billed annually_" },
+      "fields": [
+        { "type": "mrkdwn", "text": "*Qty*\n20" },
+        { "type": "mrkdwn", "text": "*Unit*\n$149" },
+        { "type": "mrkdwn", "text": "*Discount*\n12%" },
+        { "type": "mrkdwn", "text": "*Subtotal*\n$2,622" }
+      ]
+    },
+    {
+      "type": "section",
+      "text": { "type": "mrkdwn", "text": "*Extended Support 3yr*  `SKU-SUP-3Y`" },
+      "fields": [
+        { "type": "mrkdwn", "text": "*Qty*\n20" },
+        { "type": "mrkdwn", "text": "*Unit*\n$199" },
+        { "type": "mrkdwn", "text": "*Discount*\n12%" },
+        { "type": "mrkdwn", "text": "*Subtotal*\n$3,502" }
+      ]
+    },
+    { "type": "divider" },
+    {
+      "type": "section",
+      "fields": [
+        { "type": "mrkdwn", "text": "*Subtotal*\n$48,200.00" },
+        { "type": "mrkdwn", "text": "*Discount (12%)*\n:red_circle: -$5,784.00" },
+        { "type": "mrkdwn", "text": "*Tax*\n$3,545.00" },
+        { "type": "mrkdwn", "text": "*Total*\n*$45,961.00*" }
+      ]
+    },
+    {
+      "type": "context",
+      "elements": [
+        { "type": "mrkdwn", "text": ":warning:  *12% discount exceeds 10% manager-approval threshold* — RevFlow will route this to *@alex-chen* for approval after submit." }
+      ]
+    },
+    {
+      "type": "input",
+      "block_id": "terms",
+      "optional": true,
+      "label": { "type": "plain_text", "text": "Terms & notes (optional)" },
+      "element": {
+        "type": "plain_text_input",
+        "action_id": "terms_input",
+        "multiline": true,
+        "initial_value": "Net-30 payment terms. 12% volume discount approved for 20+ device orders.",
+        "max_length": 500
+      }
+    },
+    {
+      "type": "input",
+      "block_id": "action_after",
+      "optional": true,
+      "label": { "type": "plain_text", "text": "After submit" },
+      "element": {
+        "type": "radio_buttons",
+        "action_id": "action_radio",
+        "initial_option": { "text": { "type": "plain_text", "text": "Submit for approval, then send to customer" }, "value": "approve_send" },
+        "options": [
+          { "text": { "type": "plain_text", "text": "Submit for approval, then send to customer" }, "value": "approve_send" },
+          { "text": { "type": "plain_text", "text": "Submit for approval, hold before sending" }, "value": "approve_hold" },
+          { "text": { "type": "plain_text", "text": "Save as draft" }, "value": "draft" }
+        ]
+      }
+    }
+  ]
+}

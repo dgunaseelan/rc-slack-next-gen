@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 280" width="500" height="280" role="img" aria-label="Quote breakdown: Subtotal $48,200, Discount -$5,784, Tax $3,545, Total $45,961">
+  <rect width="500" height="280" fill="#1a1d21"/>
+  <text x="24" y="32" fill="#d1d2d3" font-family="-apple-system, system-ui, sans-serif" font-size="14" font-weight="700">Quote breakdown</text>
+  <text x="24" y="58" fill="#ffffff" font-family="-apple-system, system-ui, sans-serif" font-size="24" font-weight="700">$45,961.00</text>
+  <text x="170" y="58" fill="#868686" font-family="-apple-system, system-ui, sans-serif" font-size="12">Total after discount &amp; tax</text>
+
+  <g transform="translate(140, 155)">
+    <circle r="65" fill="none" stroke="#2c2d30" stroke-width="22"/>
+    <circle r="65" fill="none" stroke="#36c5f0" stroke-width="22"
+            stroke-dasharray="329 80" stroke-dashoffset="0" transform="rotate(-90)"/>
+    <circle r="65" fill="none" stroke="#e01e5a" stroke-width="22"
+            stroke-dasharray="49 360" stroke-dashoffset="-329" transform="rotate(-90)"/>
+    <circle r="65" fill="none" stroke="#2eb67d" stroke-width="22"
+            stroke-dasharray="30 380" stroke-dashoffset="-378" transform="rotate(-90)"/>
+    <text text-anchor="middle" y="-4" fill="#ffffff" font-family="-apple-system, system-ui, sans-serif" font-size="18" font-weight="700">12%</text>
+    <text text-anchor="middle" y="15" fill="#868686" font-family="-apple-system, system-ui, sans-serif" font-size="10">discount</text>
+  </g>
+
+  <g font-family="-apple-system, system-ui, sans-serif" font-size="12">
+    <rect x="280" y="100" width="12" height="12" fill="#36c5f0" rx="2"/>
+    <text x="300" y="110" fill="#d1d2d3">Subtotal</text>
+    <text x="460" y="110" fill="#ffffff" font-weight="600" text-anchor="end">$48,200.00</text>
+
+    <rect x="280" y="130" width="12" height="12" fill="#e01e5a" rx="2"/>
+    <text x="300" y="140" fill="#d1d2d3">Discount (12%)</text>
+    <text x="460" y="140" fill="#e01e5a" font-weight="600" text-anchor="end">-$5,784.00</text>
+
+    <rect x="280" y="160" width="12" height="12" fill="#2eb67d" rx="2"/>
+    <text x="300" y="170" fill="#d1d2d3">Tax</text>
+    <text x="460" y="170" fill="#ffffff" font-weight="600" text-anchor="end">$3,545.00</text>
+
+    <line x1="280" y1="185" x2="460" y2="185" stroke="#2c2d30"/>
+
+    <text x="300" y="205" fill="#ffffff" font-weight="700">Total</text>
+    <text x="460" y="205" fill="#ffffff" font-weight="700" text-anchor="end">$45,961.00</text>
+  </g>
+</svg>

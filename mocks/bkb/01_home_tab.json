@@ -1,0 +1,186 @@
+{
+  "_meta": {
+    "id": "01_home_tab",
+    "title": "Home Tab — Sales Rep Dashboard",
+    "surface": "home",
+    "description": "Published via views.publish on app_home_opened. Four stat tiles, hero MRR chart, proactive AI suggestions, native table of recent quotes, primary CTAs.",
+    "chart_asset": "../assets/chart-mrr.svg"
+  },
+  "type": "home",
+  "blocks": [
+    {
+      "type": "header",
+      "text": { "type": "plain_text", "text": "Good morning, Priya  :sunny:", "emoji": true }
+    },
+    {
+      "type": "context",
+      "elements": [
+        { "type": "mrkdwn", "text": "*RevFlow* · Revenue Cloud connected · Last refresh 2m ago" }
+      ]
+    },
+    { "type": "divider" },
+    {
+      "type": "section",
+      "fields": [
+        { "type": "mrkdwn", "text": "*:chart_with_upwards_trend:  MRR*\n`$412,380`  :small_green_triangle: 8.2%" },
+        { "type": "mrkdwn", "text": "*:briefcase:  Open Pipeline*\n`$1.84M`  across 23 deals" },
+        { "type": "mrkdwn", "text": "*:pencil:  Quotes in flight*\n`7`  · 2 awaiting approval" },
+        { "type": "mrkdwn", "text": "*:warning:  AR at risk*\n`$27,410`  · 60+ days overdue" }
+      ]
+    },
+    {
+      "type": "image",
+      "title": { "type": "plain_text", "text": "Monthly Recurring Revenue — 6-month trend" },
+      "image_url": "https://dgunaseelan.github.io/rc-slack-next-gen/mocks/assets/chart-mrr.png",
+      "alt_text": "MRR trend: $412k this month, up 8.2% MoM. Growth consistent across the last 6 months."
+    },
+    { "type": "divider" },
+    {
+      "type": "section",
+      "text": { "type": "mrkdwn", "text": ":sparkles:  *Proactive suggestions from RevFlow AI*" }
+    },
+    {
+      "type": "rich_text",
+      "elements": [
+        {
+          "type": "rich_text_list",
+          "style": "bullet",
+          "indent": 0,
+          "elements": [
+            { "type": "rich_text_section", "elements": [
+              { "type": "text", "text": "Invoice ", "style": { "italic": false } },
+              { "type": "text", "text": "INV-4521", "style": { "code": true } },
+              { "type": "text", "text": " (Acme Corp) is 45 days overdue — similar accounts recovered 73% of balance within 10 days after a 5% early-pay discount offer." }
+            ]},
+            { "type": "rich_text_section", "elements": [
+              { "type": "text", "text": "Globex Inc", "style": { "bold": true } },
+              { "type": "text", "text": " bought 40 seats of CloudSync Pro last June. Their renewal window opens in 18 days — upsell window is open." }
+            ]},
+            { "type": "rich_text_section", "elements": [
+              { "type": "text", "text": "Quote ", "style": { "italic": false } },
+              { "type": "text", "text": "Q-8841", "style": { "code": true } },
+              { "type": "text", "text": " has been sitting in Draft for 6 days. Send to Sarah at Initech?" }
+            ]}
+          ]
+        }
+      ]
+    },
+    {
+      "type": "actions",
+      "elements": [
+        {
+          "type": "button",
+          "text": { "type": "plain_text", "text": "Offer early-pay discount", "emoji": true },
+          "style": "primary",
+          "value": "dunning_INV-4521",
+          "action_id": "suggest_dunning"
+        },
+        {
+          "type": "button",
+          "text": { "type": "plain_text", "text": "Start Globex renewal quote", "emoji": true },
+          "value": "renewal_Globex",
+          "action_id": "suggest_renewal"
+        },
+        {
+          "type": "button",
+          "text": { "type": "plain_text", "text": "Review Q-8841", "emoji": true },
+          "value": "quote_Q-8841",
+          "action_id": "suggest_review"
+        }
+      ]
+    },
+    { "type": "divider" },
+    {
+      "type": "section",
+      "text": { "type": "mrkdwn", "text": "*Recent quotes*" }
+    },
+    {
+      "type": "section",
+      "text": { "type": "mrkdwn", "text": ":large_yellow_circle:  *Q-8847*  ·  Acme Corp  ·  `$45,961`\nPending approval · updated 2h ago" },
+      "accessory": {
+        "type": "button",
+        "text": { "type": "plain_text", "text": "Open" },
+        "action_id": "open_Q-8847",
+        "value": "Q-8847"
+      }
+    },
+    {
+      "type": "section",
+      "text": { "type": "mrkdwn", "text": ":large_green_circle:  *Q-8846*  ·  Globex Inc  ·  `$128,300`\nSent to customer · Yesterday" },
+      "accessory": {
+        "type": "button",
+        "text": { "type": "plain_text", "text": "Open" },
+        "action_id": "open_Q-8846",
+        "value": "Q-8846"
+      }
+    },
+    {
+      "type": "section",
+      "text": { "type": "mrkdwn", "text": ":white_circle:  *Q-8841*  ·  Initech  ·  `$12,400`\nDraft (6 days) · updated 6d ago" },
+      "accessory": {
+        "type": "button",
+        "text": { "type": "plain_text", "text": "Open" },
+        "action_id": "open_Q-8841",
+        "value": "Q-8841"
+      }
+    },
+    {
+      "type": "section",
+      "text": { "type": "mrkdwn", "text": ":large_blue_circle:  *Q-8833*  ·  Stark Industries  ·  `$302,000`\nOrder placed · 3d ago" },
+      "accessory": {
+        "type": "button",
+        "text": { "type": "plain_text", "text": "Open" },
+        "action_id": "open_Q-8833",
+        "value": "Q-8833"
+      }
+    },
+    {
+      "type": "section",
+      "text": { "type": "mrkdwn", "text": ":large_green_circle:  *Q-8829*  ·  Wayne Enterprises  ·  `$78,420`\nInvoiced · 5d ago" },
+      "accessory": {
+        "type": "button",
+        "text": { "type": "plain_text", "text": "Open" },
+        "action_id": "open_Q-8829",
+        "value": "Q-8829"
+      }
+    },
+    { "type": "divider" },
+    {
+      "type": "actions",
+      "elements": [
+        {
+          "type": "button",
+          "text": { "type": "plain_text", "text": ":heavy_plus_sign: New Quote", "emoji": true },
+          "style": "primary",
+          "action_id": "create_quote"
+        },
+        {
+          "type": "button",
+          "text": { "type": "plain_text", "text": ":mag: Browse Products", "emoji": true },
+          "action_id": "browse_products"
+        },
+        {
+          "type": "button",
+          "text": { "type": "plain_text", "text": ":page_facing_up: Find Invoice", "emoji": true },
+          "action_id": "find_invoice"
+        },
+        {
+          "type": "overflow",
+          "action_id": "home_overflow",
+          "options": [
+            { "text": { "type": "plain_text", "text": "Refresh dashboard" }, "value": "refresh" },
+            { "text": { "type": "plain_text", "text": "Connect another org" }, "value": "connect_org" },
+            { "text": { "type": "plain_text", "text": "Settings" }, "value": "settings" },
+            { "text": { "type": "plain_text", "text": "Help & shortcuts" }, "value": "help" }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "context",
+      "elements": [
+        { "type": "mrkdwn", "text": ":zap: Tip — type `/revflow` anywhere to search products, quotes, or invoices." }
+      ]
+    }
+  ]
+}

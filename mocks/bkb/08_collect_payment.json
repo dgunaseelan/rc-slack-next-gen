@@ -1,0 +1,108 @@
+{
+  "_meta": {
+    "id": "08_collect_payment",
+    "title": "Collect Payment — charge against existing PaymentMethod",
+    "surface": "modal",
+    "description": "Opened from the invoice canvas or card. RCA has NO capture API — this modal calls a customer-supplied Apex REST endpoint that wraps the Payment Gateway Adapter (Stripe/Adyen/Payeezy). Gap is disclosed inline.",
+    "rca_endpoint": "Custom Apex REST → Payment Gateway Adapter; then POST /commerce/billing/payments/{paymentId}/actions/apply"
+  },
+  "type": "modal",
+  "callback_id": "collect_payment",
+  "private_metadata": "{\"invoice_id\":\"INV-9012\"}",
+  "title": { "type": "plain_text", "text": "Collect payment" },
+  "submit": { "type": "plain_text", "text": "Charge now" },
+  "close": { "type": "plain_text", "text": "Cancel" },
+  "blocks": [
+    {
+      "type": "context",
+      "elements": [
+        { "type": "mrkdwn", "text": ":receipt: *Invoice INV-9012* · Acme Corp · Posted Apr 16, 2026 · Due May 16" }
+      ]
+    },
+    {
+      "type": "section",
+      "fields": [
+        { "type": "mrkdwn", "text": "*Balance due*\n*$45,915.28 USD*" },
+        { "type": "mrkdwn", "text": "*Early-pay discount*\n2% ($918.31) if paid in 10 days" }
+      ]
+    },
+    { "type": "divider" },
+    {
+      "type": "input",
+      "block_id": "method",
+      "label": { "type": "plain_text", "text": "Payment method" },
+      "hint": { "type": "plain_text", "text": "Tokenized methods on file for Acme. New methods are added in Salesforce." },
+      "element": {
+        "type": "external_select",
+        "action_id": "method_select",
+        "placeholder": { "type": "plain_text", "text": "Select a saved method…" },
+        "min_query_length": 0
+      }
+    },
+    {
+      "type": "section",
+      "text": { "type": "mrkdwn", "text": "*On file for Acme Corp:*\n:credit_card:  Visa ending *4242* — default\n:credit_card:  Amex ending *0005*\n:bank:  ACH — Wells Fargo *...8821*\n:receipt:  Wire instructions on file" }
+    },
+    {
+      "type": "input",
+      "block_id": "amount",
+      "label": { "type": "plain_text", "text": "Amount to charge" },
+      "hint": { "type": "plain_text", "text": "Defaults to full balance. Partial payments allowed." },
+      "element": {
+        "type": "number_input",
+        "action_id": "amount_input",
+        "is_decimal_allowed": true,
+        "min_value": "0.01",
+        "initial_value": "45915.28",
+        "placeholder": { "type": "plain_text", "text": "45915.28" }
+      }
+    },
+    {
+      "type": "input",
+      "block_id": "apply_discount",
+      "optional": true,
+      "label": { "type": "plain_text", "text": "Early-pay discount" },
+      "element": {
+        "type": "checkboxes",
+        "action_id": "discount_check",
+        "options": [
+          {
+            "text": { "type": "plain_text", "text": "Apply 2% early-pay discount (saves $918.31)" },
+            "value": "early_pay"
+          }
+        ]
+      }
+    },
+    {
+      "type": "input",
+      "block_id": "memo",
+      "optional": true,
+      "label": { "type": "plain_text", "text": "Internal memo" },
+      "element": {
+        "type": "plain_text_input",
+        "action_id": "memo_input",
+        "placeholder": { "type": "plain_text", "text": "e.g. Confirmed over phone with Sarah Okonkwo at 2:15pm" },
+        "max_length": 200
+      }
+    },
+    { "type": "divider" },
+    {
+      "type": "context",
+      "elements": [
+        { "type": "mrkdwn", "text": ":lock: *Security.* RevFlow never stores card data. The `Charge` button calls your Salesforce Payment Gateway Adapter (configured per tenant). PCI-DSS scope stays in Salesforce." }
+      ]
+    },
+    {
+      "type": "context",
+      "elements": [
+        { "type": "mrkdwn", "text": ":warning:  *Gap disclosure.* Revenue Cloud Advanced has no REST API for capturing funds. This action uses a customer-supplied Apex REST endpoint wrapping the Payment Gateway Adapter, then calls `/commerce/billing/payments/{id}/actions/apply` to allocate." }
+      ]
+    },
+    {
+      "type": "context",
+      "elements": [
+        { "type": "mrkdwn", "text": ":sparkles: *RevFlow AI* — Acme's average days-to-pay is 18. A 2% early-pay discount is rare for them; if you're trying to pull cash forward this quarter, this is a reliable lever." }
+      ]
+    }
+  ]
+}

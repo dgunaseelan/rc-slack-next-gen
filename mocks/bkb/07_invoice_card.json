@@ -1,0 +1,62 @@
+{
+  "_meta": {
+    "id": "07_invoice_card",
+    "title": "Invoice summary card — channel message",
+    "surface": "message",
+    "description": "Compact channel message posted in #deal-acme-q2 when an invoice is generated. Links to the invoice canvas (Mock 07a) for the full document view.",
+    "rca_endpoint": "(summary of generated invoice)"
+  },
+  "blocks": [
+    {
+      "type": "context",
+      "elements": [
+        { "type": "mrkdwn", "text": ":receipt: *Invoice INV-9012* — Acme Corp" }
+      ]
+    },
+    {
+      "type": "section",
+      "text": { "type": "mrkdwn", "text": "*$45,915.28* USD  ·  :large_blue_circle: *Posted*  ·  Due *May 16, 2026* (_30 days_)" },
+      "accessory": {
+        "type": "image",
+        "image_url": "https://placehold.co/80x80/ef4444/ffffff/png?text=Acme",
+        "alt_text": "Acme Corp logo"
+      }
+    },
+    {
+      "type": "context",
+      "elements": [
+        { "type": "mrkdwn", "text": "Generated from <fakeurl.com|Order SO-2271> (from Q-8847)  ·  Terms Net-30  ·  Tax $3,499.28" }
+      ]
+    },
+    {
+      "type": "actions",
+      "elements": [
+        {
+          "type": "button",
+          "text": { "type": "plain_text", "text": ":bookmark_tabs: Open canvas", "emoji": true },
+          "style": "primary",
+          "url": "https://slack.com/canvases/F01234CANVAS",
+          "action_id": "open_canvas"
+        },
+        {
+          "type": "button",
+          "text": { "type": "plain_text", "text": ":page_facing_up: Download PDF", "emoji": true },
+          "value": "pdf_INV-9012",
+          "action_id": "download_pdf"
+        },
+        {
+          "type": "button",
+          "text": { "type": "plain_text", "text": ":email: Send reminder", "emoji": true },
+          "value": "remind_INV-9012",
+          "action_id": "send_reminder"
+        },
+        {
+          "type": "button",
+          "text": { "type": "plain_text", "text": ":credit_card: Collect", "emoji": true },
+          "value": "pay_INV-9012",
+          "action_id": "collect_payment"
+        }
+      ]
+    }
+  ]
+}

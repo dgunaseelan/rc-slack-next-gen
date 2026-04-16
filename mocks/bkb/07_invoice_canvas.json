@@ -1,0 +1,138 @@
+{
+  "_meta": {
+    "id": "07_invoice_canvas",
+    "title": "Invoice Canvas — long-form document",
+    "surface": "canvas",
+    "description": "Created via canvases.create after /commerce/invoicing/invoices/collection/actions/generate + post. Canvases accept embedded Block Kit elements, so Generate PDF and Send to Customer live inline. Shared in the deal channel.",
+    "rca_endpoint": "POST /commerce/invoicing/invoices/collection/actions/generate → post → revenue/billing/document/actions/generate"
+  },
+  "blocks": [
+    {
+      "type": "context",
+      "elements": [
+        { "type": "mrkdwn", "text": ":link: revflow.example.com › Invoices › INV-9012 · :large_blue_circle: *Posted* · Net-30" }
+      ]
+    },
+    {
+      "type": "header",
+      "text": { "type": "plain_text", "text": "Invoice INV-9012", "emoji": true }
+    },
+    {
+      "type": "section",
+      "fields": [
+        { "type": "mrkdwn", "text": "*Customer*\nAcme Corp\n201 Innovation Way, Palo Alto, CA" },
+        { "type": "mrkdwn", "text": "*Billing contact*\nsarah.okonkwo@acme.com\n+1 (650) 555-0142" },
+        { "type": "mrkdwn", "text": "*Issued*\nApr 16, 2026" },
+        { "type": "mrkdwn", "text": "*Due*\nMay 16, 2026 _(30 days)_" },
+        { "type": "mrkdwn", "text": "*Purchase order*\n#PO-4823" },
+        { "type": "mrkdwn", "text": "*Order*\n<fakeurl.com|SO-2271> _(from Q-8847)_" }
+      ]
+    },
+    { "type": "divider" },
+    {
+      "type": "section",
+      "text": { "type": "mrkdwn", "text": "*Line items*" }
+    },
+    {
+      "type": "section",
+      "text": { "type": "mrkdwn", "text": "*ProBook Elite 14\" — Enterprise*  `SKU-PBE-14`" },
+      "fields": [
+        { "type": "mrkdwn", "text": "*Qty*\n20" },
+        { "type": "mrkdwn", "text": "*Unit*\n$2,299.00" },
+        { "type": "mrkdwn", "text": "*Discount*\n-12%" },
+        { "type": "mrkdwn", "text": "*Total*\n$40,462.40" }
+      ]
+    },
+    {
+      "type": "section",
+      "text": { "type": "mrkdwn", "text": "*CloudSync Pro — Annual*  `SKU-CSP-ANN`  _· 20 seats · billed annually_" },
+      "fields": [
+        { "type": "mrkdwn", "text": "*Qty*\n20" },
+        { "type": "mrkdwn", "text": "*Unit*\n$149.00" },
+        { "type": "mrkdwn", "text": "*Discount*\n-12%" },
+        { "type": "mrkdwn", "text": "*Total*\n$2,622.40" }
+      ]
+    },
+    {
+      "type": "section",
+      "text": { "type": "mrkdwn", "text": "*Extended Support — 3yr Onsite*  `SKU-SUP-3Y`" },
+      "fields": [
+        { "type": "mrkdwn", "text": "*Qty*\n20" },
+        { "type": "mrkdwn", "text": "*Unit*\n$199.00" },
+        { "type": "mrkdwn", "text": "*Discount*\n-12%" },
+        { "type": "mrkdwn", "text": "*Total*\n$3,502.40" }
+      ]
+    },
+    { "type": "divider" },
+    {
+      "type": "section",
+      "fields": [
+        { "type": "mrkdwn", "text": "*Subtotal*\n$48,200.00" },
+        { "type": "mrkdwn", "text": "*Discount (12%)*\n-$5,784.00" },
+        { "type": "mrkdwn", "text": "*Tax (CA, 8.25%)*\n$3,499.28" },
+        { "type": "mrkdwn", "text": "*Total due*\n*$45,915.28*" }
+      ]
+    },
+    { "type": "divider" },
+    {
+      "type": "section",
+      "text": { "type": "mrkdwn", "text": "*Payment terms*" }
+    },
+    {
+      "type": "rich_text",
+      "elements": [
+        {
+          "type": "rich_text_list",
+          "style": "bullet",
+          "elements": [
+            { "type": "rich_text_section", "elements": [{ "type": "text", "text": "Net-30. Payment due by May 16, 2026." }]},
+            { "type": "rich_text_section", "elements": [{ "type": "text", "text": "ACH, wire, credit card, and check accepted." }]},
+            { "type": "rich_text_section", "elements": [{ "type": "text", "text": "2% early-pay discount if paid within 10 days." }]},
+            { "type": "rich_text_section", "elements": [{ "type": "text", "text": "Late payment: 1.5% monthly service charge on unpaid balance." }]}
+          ]
+        }
+      ]
+    },
+    { "type": "divider" },
+    {
+      "type": "actions",
+      "elements": [
+        {
+          "type": "button",
+          "text": { "type": "plain_text", "text": ":email: Send to customer", "emoji": true },
+          "style": "primary",
+          "value": "send_INV-9012",
+          "action_id": "send_invoice"
+        },
+        {
+          "type": "button",
+          "text": { "type": "plain_text", "text": ":page_facing_up: Generate PDF", "emoji": true },
+          "value": "pdf_INV-9012",
+          "action_id": "generate_pdf"
+        },
+        {
+          "type": "button",
+          "text": { "type": "plain_text", "text": ":credit_card: Collect payment", "emoji": true },
+          "value": "pay_INV-9012",
+          "action_id": "collect_payment"
+        },
+        {
+          "type": "overflow",
+          "action_id": "invoice_overflow",
+          "options": [
+            { "text": { "type": "plain_text", "text": "Clone invoice" }, "value": "clone" },
+            { "text": { "type": "plain_text", "text": "Add credit memo" }, "value": "credit" },
+            { "text": { "type": "plain_text", "text": "Void invoice" }, "value": "void" },
+            { "text": { "type": "plain_text", "text": "Download .xlsx" }, "value": "xlsx" }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "context",
+      "elements": [
+        { "type": "mrkdwn", "text": ":sparkles: *RevFlow AI* — Acme's average days-to-pay is *18 days*. No dunning action needed yet. I'll nudge you on day 25 if unpaid." }
+      ]
+    }
+  ]
+}

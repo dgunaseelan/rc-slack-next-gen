@@ -1,0 +1,133 @@
+{
+  "_meta": {
+    "id": "05_apply_discount",
+    "title": "Apply Discount — AI-suggested tiers",
+    "surface": "modal",
+    "description": "Opened from Quote line overflow menu 'Apply line discount' or header-level 'Apply discount'. AI recommends 3 tiers with margin impact. Submit patches the QuoteLineItem discount field, then re-prices.",
+    "rca_endpoint": "POST /industries/cpq/quotes/actions/get-instant-price (after discount applied to graph)"
+  },
+  "type": "modal",
+  "callback_id": "apply_discount",
+  "private_metadata": "{\"quote_id\":\"Q-8847\",\"scope\":\"header\"}",
+  "title": { "type": "plain_text", "text": "Apply discount" },
+  "submit": { "type": "plain_text", "text": "Apply & re-price" },
+  "close": { "type": "plain_text", "text": "Cancel" },
+  "blocks": [
+    {
+      "type": "context",
+      "elements": [
+        { "type": "mrkdwn", "text": ":page_facing_up: *Quote Q-8847* · Acme Corp · 3 lines · Current subtotal $48,200.00" }
+      ]
+    },
+    {
+      "type": "header",
+      "text": { "type": "plain_text", "text": ":sparkles: RevFlow AI suggests", "emoji": true }
+    },
+    {
+      "type": "section",
+      "text": { "type": "mrkdwn", "text": "Based on *deal size* ($48k), *account history* (avg 11% on last 6 deals), and *product margins*, here are three tiers RevFlow recommends:" }
+    },
+    {
+      "type": "input",
+      "block_id": "tier",
+      "label": { "type": "plain_text", "text": "Discount" },
+      "element": {
+        "type": "radio_buttons",
+        "action_id": "tier_radio",
+        "initial_option": {
+          "text": { "type": "plain_text", "text": ":moneybag: 10% — Standard volume" },
+          "description": { "type": "plain_text", "text": "No approval needed · Margin: 41% · Historical close rate: 78%" },
+          "value": "10"
+        },
+        "options": [
+          {
+            "text": { "type": "plain_text", "text": ":tada: 5% — Safe win" },
+            "description": { "type": "plain_text", "text": "No approval needed · Margin: 46% · Historical close rate: 82%" },
+            "value": "5"
+          },
+          {
+            "text": { "type": "plain_text", "text": ":moneybag: 10% — Standard volume" },
+            "description": { "type": "plain_text", "text": "No approval needed · Margin: 41% · Historical close rate: 78%" },
+            "value": "10"
+          },
+          {
+            "text": { "type": "plain_text", "text": ":star2: 12% — Recommended for Acme" },
+            "description": { "type": "plain_text", "text": "Requires manager approval · Margin: 39% · Close rate 85%" },
+            "value": "12"
+          },
+          {
+            "text": { "type": "plain_text", "text": ":warning: 15% — Aggressive" },
+            "description": { "type": "plain_text", "text": "Requires VP approval · Margin: 36% · Use only if Acme signals walk-away" },
+            "value": "15"
+          },
+          {
+            "text": { "type": "plain_text", "text": "Custom amount" },
+            "value": "custom"
+          }
+        ]
+      }
+    },
+    {
+      "type": "input",
+      "block_id": "custom_pct",
+      "optional": true,
+      "label": { "type": "plain_text", "text": "Custom % (leave blank if using a tier above)" },
+      "element": {
+        "type": "number_input",
+        "action_id": "custom_pct_input",
+        "is_decimal_allowed": true,
+        "min_value": "0",
+        "max_value": "50",
+        "placeholder": { "type": "plain_text", "text": "e.g. 13.5" }
+      }
+    },
+    { "type": "divider" },
+    {
+      "type": "section",
+      "text": { "type": "mrkdwn", "text": "*If you apply 12%:*" }
+    },
+    {
+      "type": "section",
+      "fields": [
+        { "type": "mrkdwn", "text": "*New subtotal*\n$42,416.00" },
+        { "type": "mrkdwn", "text": "*Discount amount*\n:red_circle: -$5,784.00" },
+        { "type": "mrkdwn", "text": "*New total (after tax)*\n*$45,961.00*" },
+        { "type": "mrkdwn", "text": "*Margin impact*\n46% → 39%" }
+      ]
+    },
+    {
+      "type": "context",
+      "elements": [
+        { "type": "mrkdwn", "text": ":clipboard: *Approval chain:* 10%+ → Alex Chen (Sales Manager) → auto-approved below $50k deal size." }
+      ]
+    },
+    {
+      "type": "input",
+      "block_id": "reason",
+      "label": { "type": "plain_text", "text": "Business reason (shown to approver)" },
+      "element": {
+        "type": "plain_text_input",
+        "action_id": "reason_input",
+        "multiline": true,
+        "max_length": 400,
+        "placeholder": { "type": "plain_text", "text": "Why this discount? Acme is renewing + expanding — consistent with their historical 11% expectation. Competing against Globex in parallel RFP." }
+      }
+    },
+    {
+      "type": "input",
+      "block_id": "urgency",
+      "optional": true,
+      "label": { "type": "plain_text", "text": "Priority" },
+      "element": {
+        "type": "static_select",
+        "action_id": "urgency_select",
+        "initial_option": { "text": { "type": "plain_text", "text": "Normal — 24h SLA" }, "value": "normal" },
+        "options": [
+          { "text": { "type": "plain_text", "text": "Normal — 24h SLA" }, "value": "normal" },
+          { "text": { "type": "plain_text", "text": "High — 4h SLA" }, "value": "high" },
+          { "text": { "type": "plain_text", "text": "Urgent — ping approver now" }, "value": "urgent" }
+        ]
+      }
+    }
+  ]
+}

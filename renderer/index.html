@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RevFlow · Slack Mock Previews</title>
+  <link rel="stylesheet" href="renderer.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <header class="sidebar-header">
+      <div class="logo">
+        <span class="logo-mark" aria-hidden="true">R</span>
+        <div>
+          <h1>RevFlow</h1>
+          <p>Slack mock previews</p>
+        </div>
+      </div>
+      <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
+        <span class="theme-toggle-dot"></span>
+      </button>
+    </header>
+
+    <div class="sidebar-section">
+      <div class="sidebar-title">Product-to-Cash</div>
+      <nav id="mock-nav" aria-label="Mocks"></nav>
+    </div>
+
+  </aside>
+
+  <main class="stage">
+    <div class="stage-bar">
+      <div>
+        <span id="stage-title" class="stage-title">—</span>
+        <span id="stage-surface" class="stage-surface">—</span>
+      </div>
+      <div class="stage-actions">
+        <a id="open-in-bkb" class="btn btn-ghost" target="_blank" rel="noopener">Open in Block Kit Builder ↗</a>
+        <a id="view-json" class="btn btn-ghost" target="_blank" rel="noopener">View raw JSON ↗</a>
+      </div>
+    </div>
+    <p id="stage-description" class="stage-description"></p>
+    <div id="stage-endpoint" class="stage-endpoint"></div>
+
+    <div id="viewport" class="viewport"></div>
+  </main>
+
+  <script src="renderer.js"></script>
+</body>
+</html>

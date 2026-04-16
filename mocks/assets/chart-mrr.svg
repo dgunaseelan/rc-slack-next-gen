@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 300" width="800" height="300" role="img" aria-label="MRR trend: $412k this month, up 8% month-over-month, 6-month trend">
+  <defs>
+    <linearGradient id="mrrFill" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1d9bd1" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#1d9bd1" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="mrrLine" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#36c5f0"/>
+      <stop offset="100%" stop-color="#1d9bd1"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="300" fill="#1a1d21"/>
+  <text x="24" y="32" fill="#d1d2d3" font-family="-apple-system, system-ui, sans-serif" font-size="14" font-weight="700">Monthly Recurring Revenue</text>
+  <text x="24" y="58" fill="#ffffff" font-family="-apple-system, system-ui, sans-serif" font-size="28" font-weight="700">$412,380</text>
+  <text x="168" y="58" fill="#2eb67d" font-family="-apple-system, system-ui, sans-serif" font-size="14" font-weight="600">&#9650; 8.2% MoM</text>
+
+  <g stroke="#2c2d30" stroke-width="1">
+    <line x1="24" y1="260" x2="776" y2="260"/>
+    <line x1="24" y1="210" x2="776" y2="210"/>
+    <line x1="24" y1="160" x2="776" y2="160"/>
+    <line x1="24" y1="110" x2="776" y2="110"/>
+  </g>
+
+  <path d="M 60 220 L 180 200 L 300 185 L 420 175 L 540 150 L 660 130 L 760 110 L 760 260 L 60 260 Z" fill="url(#mrrFill)"/>
+  <path d="M 60 220 L 180 200 L 300 185 L 420 175 L 540 150 L 660 130 L 760 110" fill="none" stroke="url(#mrrLine)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <g fill="#36c5f0">
+    <circle cx="60" cy="220" r="4"/>
+    <circle cx="180" cy="200" r="4"/>
+    <circle cx="300" cy="185" r="4"/>
+    <circle cx="420" cy="175" r="4"/>
+    <circle cx="540" cy="150" r="4"/>
+    <circle cx="660" cy="130" r="4"/>
+    <circle cx="760" cy="110" r="5" stroke="#ffffff" stroke-width="2"/>
+  </g>
+
+  <g fill="#868686" font-family="-apple-system, system-ui, sans-serif" font-size="11">
+    <text x="60" y="282" text-anchor="middle">Nov</text>
+    <text x="180" y="282" text-anchor="middle">Dec</text>
+    <text x="300" y="282" text-anchor="middle">Jan</text>
+    <text x="420" y="282" text-anchor="middle">Feb</text>
+    <text x="540" y="282" text-anchor="middle">Mar</text>
+    <text x="660" y="282" text-anchor="middle">Apr</text>
+    <text x="760" y="282" text-anchor="middle">Now</text>
+  </g>
+
+  <g fill="#868686" font-family="-apple-system, system-ui, sans-serif" font-size="10">
+    <text x="18" y="264" text-anchor="end">$300k</text>
+    <text x="18" y="214" text-anchor="end">$350k</text>
+    <text x="18" y="164" text-anchor="end">$400k</text>
+    <text x="18" y="114" text-anchor="end">$450k</text>
+  </g>
+</svg>

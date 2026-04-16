@@ -1,0 +1,96 @@
+{
+  "_meta": {
+    "id": "10_ai_suggestion_card",
+    "title": "Proactive AI nudge — dunning suggestion",
+    "surface": "message",
+    "description": "Unsolicited chat.postMessage to the rep who owns an aging invoice. Triggered by a scheduled background job that scans open invoices past a DSO threshold. Includes an embedded aging chart and one-click action buttons.",
+    "rca_endpoint": "SOQL on Invoice + Payment; action triggers early-pay discount credit memo",
+    "chart_asset": "../assets/chart-aging.svg"
+  },
+  "blocks": [
+    {
+      "type": "context",
+      "elements": [
+        { "type": "mrkdwn", "text": ":sparkles: *RevFlow AI* — proactive nudge  ·  Apr 16, 2026 at 9:03 AM" }
+      ]
+    },
+    {
+      "type": "header",
+      "text": { "type": "plain_text", "text": ":bell: Invoice INV-4521 is aging", "emoji": true }
+    },
+    {
+      "type": "section",
+      "text": { "type": "mrkdwn", "text": "Stark Industries owes *$27,410.00* — now *45 days past due*. Their typical days-to-pay is *22* — this is 2× their norm and the first time in 18 months they've crossed 30 days." }
+    },
+    {
+      "type": "image",
+      "title": { "type": "plain_text", "text": "AR aging buckets (your accounts)" },
+      "image_url": "https://dgunaseelan.github.io/rc-slack-next-gen/mocks/assets/chart-aging.png",
+      "alt_text": "AR aging: Current $184k, 1-30 days $62k, 31-60 $34k, 61-90 $18k, 90+ $9k. $27k at risk in 60+ bucket."
+    },
+    { "type": "divider" },
+    {
+      "type": "section",
+      "text": { "type": "mrkdwn", "text": ":bulb:  *What usually works for accounts like this:*" }
+    },
+    {
+      "type": "rich_text",
+      "elements": [
+        {
+          "type": "rich_text_list",
+          "style": "ordered",
+          "elements": [
+            { "type": "rich_text_section", "elements": [
+              { "type": "text", "text": "5% early-pay discount ", "style": { "bold": true }},
+              { "type": "text", "text": "— recovered 73% of balance within 10 days on 18 similar cases this FY." }
+            ]},
+            { "type": "rich_text_section", "elements": [
+              { "type": "text", "text": "Polite reminder with CC to AP ", "style": { "bold": true }},
+              { "type": "text", "text": "— Stark's AP contact (Tony L.) typically responds within 48h." }
+            ]},
+            { "type": "rich_text_section", "elements": [
+              { "type": "text", "text": "Escalate to CFO", "style": { "bold": true }},
+              { "type": "text", "text": " — reserved; use only after 60 days, damages relationship." }
+            ]}
+          ]
+        }
+      ]
+    },
+    {
+      "type": "actions",
+      "elements": [
+        {
+          "type": "button",
+          "text": { "type": "plain_text", "text": ":moneybag: Offer 5% early-pay", "emoji": true },
+          "style": "primary",
+          "value": "dunning_offer_INV-4521",
+          "action_id": "offer_discount"
+        },
+        {
+          "type": "button",
+          "text": { "type": "plain_text", "text": ":email: Send reminder", "emoji": true },
+          "value": "dunning_remind_INV-4521",
+          "action_id": "send_reminder"
+        },
+        {
+          "type": "button",
+          "text": { "type": "plain_text", "text": ":calendar: Schedule call", "emoji": true },
+          "value": "dunning_call_INV-4521",
+          "action_id": "schedule_call"
+        },
+        {
+          "type": "button",
+          "text": { "type": "plain_text", "text": ":zzz: Snooze 7 days", "emoji": true },
+          "value": "dunning_snooze_INV-4521",
+          "action_id": "snooze"
+        }
+      ]
+    },
+    {
+      "type": "context",
+      "elements": [
+        { "type": "mrkdwn", "text": "Not helpful? <https://revflow.app/settings/nudges|Turn off proactive nudges> · <https://revflow.app/settings/thresholds|Adjust thresholds>" }
+      ]
+    }
+  ]
+}

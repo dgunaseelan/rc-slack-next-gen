@@ -1,0 +1,98 @@
+{
+  "_meta": {
+    "id": "03_product_details",
+    "title": "Product Details — unfurl card",
+    "surface": "message",
+    "description": "Rendered when a rep pastes a revflow.example.com/products/PBE-14 URL. Backed by POST /connect/cpq/products/{productId}. Treats every URL as an entry point (Linear-style pattern).",
+    "rca_endpoint": "POST /connect/cpq/products/{productId}"
+  },
+  "blocks": [
+    {
+      "type": "context",
+      "elements": [
+        { "type": "mrkdwn", "text": ":link: revflow.example.com › Products › ProBook Elite" }
+      ]
+    },
+    {
+      "type": "header",
+      "text": { "type": "plain_text", "text": "ProBook Elite 14\" — Enterprise", "emoji": true }
+    },
+    {
+      "type": "section",
+      "text": { "type": "mrkdwn", "text": "`SKU-PBE-14` · *Hardware › Laptops*\n:large_green_circle:  Active · 247 in stock · Ships in 3-5 business days" },
+      "accessory": {
+        "type": "image",
+        "image_url": "https://placehold.co/1000x420/0f172a/38bdf8/png?text=ProBook+Elite+14",
+        "alt_text": "ProBook Elite 14-inch laptop, silver aluminum chassis"
+      }
+    },
+    {
+      "type": "section",
+      "fields": [
+        { "type": "mrkdwn", "text": "*List price*\n$2,499.00 USD" },
+        { "type": "mrkdwn", "text": "*Acme Corp price*\n$2,299.00 USD _(neg. -8%)_" },
+        { "type": "mrkdwn", "text": "*Configurable*\n:white_check_mark: Yes (bundle)" },
+        { "type": "mrkdwn", "text": "*Selling model*\n One-time" }
+      ]
+    },
+    {
+      "type": "rich_text",
+      "elements": [
+        { "type": "rich_text_section", "elements": [{ "type": "text", "text": "Key features", "style": { "bold": true }}]},
+        {
+          "type": "rich_text_list",
+          "style": "bullet",
+          "indent": 0,
+          "elements": [
+            { "type": "rich_text_section", "elements": [{ "type": "text", "text": "Intel Core Ultra 9 185H · 16-core · 24MB cache" }]},
+            { "type": "rich_text_section", "elements": [{ "type": "text", "text": "32GB DDR5-5600 RAM · upgradeable to 64GB" }]},
+            { "type": "rich_text_section", "elements": [{ "type": "text", "text": "1TB NVMe Gen4 SSD · TPM 2.0 + self-encrypting drive" }]},
+            { "type": "rich_text_section", "elements": [{ "type": "text", "text": "14\" WQXGA+ (3024×1964) OLED · 120Hz · VESA DisplayHDR 500 True Black" }]},
+            { "type": "rich_text_section", "elements": [{ "type": "text", "text": "Intel vPro Enterprise · remote manageability out of the box" }]},
+            { "type": "rich_text_section", "elements": [{ "type": "text", "text": "3-year onsite warranty included (extensible to 5 years)" }]}
+          ]
+        }
+      ]
+    },
+    {
+      "type": "context",
+      "elements": [
+        { "type": "mrkdwn", "text": ":sparkles: *RevFlow AI* — Acme bought 40 ProBook Elite units in Q3 2025. Their IT team typically pairs this with *CloudSync Pro* and *3-year extended support*. Bundle price $2,799 saves $200 vs individual SKUs." }
+      ]
+    },
+    { "type": "divider" },
+    {
+      "type": "actions",
+      "elements": [
+        {
+          "type": "button",
+          "text": { "type": "plain_text", "text": ":heavy_plus_sign: Add to quote", "emoji": true },
+          "style": "primary",
+          "value": "PBE-14",
+          "action_id": "add_to_quote"
+        },
+        {
+          "type": "button",
+          "text": { "type": "plain_text", "text": ":package: Add bundle instead", "emoji": true },
+          "value": "BUNDLE-PBE-ENT",
+          "action_id": "add_bundle"
+        },
+        {
+          "type": "button",
+          "text": { "type": "plain_text", "text": "Compare", "emoji": true },
+          "action_id": "compare_product"
+        },
+        {
+          "type": "overflow",
+          "action_id": "product_overflow",
+          "options": [
+            { "text": { "type": "plain_text", "text": "View in Salesforce" }, "value": "view_sf" },
+            { "text": { "type": "plain_text", "text": "Share with teammate" }, "value": "share" },
+            { "text": { "type": "plain_text", "text": "Copy SKU" }, "value": "copy_sku" },
+            { "text": { "type": "plain_text", "text": "Report an issue" }, "value": "report" }
+          ]
+        }
+      ]
+    }
+  ]
+}

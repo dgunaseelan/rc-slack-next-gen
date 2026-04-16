@@ -1,0 +1,162 @@
+{
+  "_meta": {
+    "id": "04d_configure_line",
+    "title": "Configure line — product options (ProBook Elite 14\")",
+    "surface": "modal",
+    "description": "views.push triggered by 'Configure line' on a quote line in Step 2. Surfaces the SKU's configurable attributes (CPU, RAM, storage, warranty, engraving) plus per-line overrides (start date, ship-to, PO line ref). Submitting PATCHes QuoteLineItem and re-prices.",
+    "rca_endpoint": "GET /connect/cpq/products/{id}/options  →  PATCH QuoteLineItem  →  POST /industries/cpq/quotes/actions/get-instant-price"
+  },
+  "type": "modal",
+  "callback_id": "configure_line",
+  "private_metadata": "{\"draft_id\":\"draft-8d2f\",\"line_id\":\"line_1\",\"sku\":\"SKU-PBE-14\",\"return_to\":\"create_quote_step2\"}",
+  "title": { "type": "plain_text", "text": "Configure line" },
+  "submit": { "type": "plain_text", "text": "Save & re-price" },
+  "close": { "type": "plain_text", "text": "Cancel" },
+  "blocks": [
+    {
+      "type": "context",
+      "elements": [
+        { "type": "mrkdwn", "text": ":computer: *Line 1* · *ProBook Elite 14\"* — Enterprise · `SKU-PBE-14` · Qty 20 · Base $2,299.00" }
+      ]
+    },
+    {
+      "type": "header",
+      "text": { "type": "plain_text", "text": "Hardware options", "emoji": true }
+    },
+    {
+      "type": "input",
+      "block_id": "cpu",
+      "label": { "type": "plain_text", "text": "Processor" },
+      "element": {
+        "type": "static_select",
+        "action_id": "cpu_select",
+        "initial_option": { "text": { "type": "plain_text", "text": "Intel Core Ultra 9 — 185H  (+$0)" }, "value": "ultra9" },
+        "options": [
+          { "text": { "type": "plain_text", "text": "Intel Core Ultra 7 — 155H  (−$200)" }, "value": "ultra7" },
+          { "text": { "type": "plain_text", "text": "Intel Core Ultra 9 — 185H  (+$0)" }, "value": "ultra9" },
+          { "text": { "type": "plain_text", "text": "Intel Core Ultra 9 — 185HX  (+$350)" }, "value": "ultra9hx" }
+        ]
+      }
+    },
+    {
+      "type": "input",
+      "block_id": "ram",
+      "label": { "type": "plain_text", "text": "Memory" },
+      "element": {
+        "type": "radio_buttons",
+        "action_id": "ram_radio",
+        "initial_option": { "text": { "type": "plain_text", "text": "32 GB DDR5  (+$0)" }, "value": "32" },
+        "options": [
+          { "text": { "type": "plain_text", "text": "16 GB DDR5  (−$150)" }, "value": "16" },
+          { "text": { "type": "plain_text", "text": "32 GB DDR5  (+$0)" }, "value": "32" },
+          { "text": { "type": "plain_text", "text": "64 GB DDR5  (+$280)" }, "value": "64" }
+        ]
+      }
+    },
+    {
+      "type": "input",
+      "block_id": "storage",
+      "label": { "type": "plain_text", "text": "Storage" },
+      "element": {
+        "type": "static_select",
+        "action_id": "storage_select",
+        "initial_option": { "text": { "type": "plain_text", "text": "1 TB NVMe  (+$0)" }, "value": "1tb" },
+        "options": [
+          { "text": { "type": "plain_text", "text": "512 GB NVMe  (−$100)" }, "value": "512" },
+          { "text": { "type": "plain_text", "text": "1 TB NVMe  (+$0)" }, "value": "1tb" },
+          { "text": { "type": "plain_text", "text": "2 TB NVMe  (+$180)" }, "value": "2tb" },
+          { "text": { "type": "plain_text", "text": "4 TB NVMe  (+$460)" }, "value": "4tb" }
+        ]
+      }
+    },
+    {
+      "type": "input",
+      "block_id": "warranty",
+      "label": { "type": "plain_text", "text": "Warranty" },
+      "element": {
+        "type": "radio_buttons",
+        "action_id": "warranty_radio",
+        "initial_option": { "text": { "type": "plain_text", "text": "3yr Onsite  (+$0 — covered by SKU-SUP-3Y)" }, "value": "3y_on" },
+        "options": [
+          { "text": { "type": "plain_text", "text": "1yr Return-to-depot  (−$120)" }, "value": "1y_rtd" },
+          { "text": { "type": "plain_text", "text": "3yr Onsite  (+$0 — covered by SKU-SUP-3Y)" }, "value": "3y_on" },
+          { "text": { "type": "plain_text", "text": "5yr Onsite + accidental damage  (+$349)" }, "value": "5y_acc" }
+        ]
+      }
+    },
+    { "type": "divider" },
+    {
+      "type": "header",
+      "text": { "type": "plain_text", "text": "Fulfillment", "emoji": true }
+    },
+    {
+      "type": "input",
+      "block_id": "engraving",
+      "optional": true,
+      "label": { "type": "plain_text", "text": "Laser engraving (optional, +$15/unit)" },
+      "element": {
+        "type": "plain_text_input",
+        "action_id": "engraving_input",
+        "max_length": 30,
+        "placeholder": { "type": "plain_text", "text": "e.g. ACME-IT-{ASSET_TAG}" }
+      }
+    },
+    {
+      "type": "input",
+      "block_id": "ship_to",
+      "label": { "type": "plain_text", "text": "Ship-to" },
+      "element": {
+        "type": "static_select",
+        "action_id": "ship_to_select",
+        "initial_option": { "text": { "type": "plain_text", "text": "Acme HQ — San Francisco, CA" }, "value": "sf" },
+        "options": [
+          { "text": { "type": "plain_text", "text": "Acme HQ — San Francisco, CA" }, "value": "sf" },
+          { "text": { "type": "plain_text", "text": "Acme East — Austin, TX" }, "value": "atx" },
+          { "text": { "type": "plain_text", "text": "Split shipment — enter on next step" }, "value": "split" }
+        ]
+      }
+    },
+    {
+      "type": "input",
+      "block_id": "start_date",
+      "optional": true,
+      "label": { "type": "plain_text", "text": "Preferred ship date" },
+      "element": {
+        "type": "datepicker",
+        "action_id": "start_date_picker",
+        "initial_date": "2026-05-01"
+      }
+    },
+    {
+      "type": "input",
+      "block_id": "po_ref",
+      "optional": true,
+      "label": { "type": "plain_text", "text": "Customer PO line ref" },
+      "element": {
+        "type": "plain_text_input",
+        "action_id": "po_ref_input",
+        "placeholder": { "type": "plain_text", "text": "ACME-PO-2026-001 / line 1" }
+      }
+    },
+    { "type": "divider" },
+    {
+      "type": "section",
+      "text": { "type": "mrkdwn", "text": ":sparkles: *RevFlow AI* · Your last 3 Acme quotes shipped with 64 GB + 2 TB. This config under-specs by one tier — want to bump it?" },
+      "accessory": {
+        "type": "button",
+        "text": { "type": "plain_text", "text": "Apply suggestion" },
+        "action_id": "apply_ai_config",
+        "style": "primary"
+      }
+    },
+    {
+      "type": "section",
+      "fields": [
+        { "type": "mrkdwn", "text": "*New unit price*\n$2,299.00 → *$2,299.00*" },
+        { "type": "mrkdwn", "text": "*Line total (×20)*\n$45,980.00" },
+        { "type": "mrkdwn", "text": "*Δ vs base*\n$0.00" },
+        { "type": "mrkdwn", "text": "*Est. ship*\nMay 1 — June 3, 2026" }
+      ]
+    }
+  ]
+}

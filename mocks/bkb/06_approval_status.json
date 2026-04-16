@@ -1,0 +1,69 @@
+{
+  "_meta": {
+    "id": "06_approval_status",
+    "title": "Approval status — decision posted back to requester",
+    "surface": "message",
+    "description": "Posted in the thread of the original Quote message after the approver clicks Approve. Optimistic chat.update within 500ms, confirmed server-side after the /process/approvals/ call succeeds.",
+    "rca_endpoint": "(status from ProcessInstance via SOQL)"
+  },
+  "blocks": [
+    {
+      "type": "header",
+      "text": { "type": "plain_text", "text": ":large_green_circle: Discount approved", "emoji": true }
+    },
+    {
+      "type": "context",
+      "elements": [
+        {
+          "type": "image",
+          "image_url": "https://placehold.co/48x48/16a34a/ffffff/png?text=A",
+          "alt_text": "Alex Chen"
+        },
+        { "type": "mrkdwn", "text": "*Alex Chen* · Sales Manager · *Apr 16, 2026 at 2:47 PM* · via RevFlow" }
+      ]
+    },
+    {
+      "type": "section",
+      "text": { "type": "mrkdwn", "text": "*12% discount* approved on <fakeurl.com|Quote Q-8847> for *Acme Corp* ($45,961.00)" }
+    },
+    {
+      "type": "section",
+      "fields": [
+        { "type": "mrkdwn", "text": "*Decision*\n:white_check_mark: Approved" },
+        { "type": "mrkdwn", "text": "*Requested*\n2:45 PM (2m)" },
+        { "type": "mrkdwn", "text": "*Approver*\n@alex-chen" },
+        { "type": "mrkdwn", "text": "*Quote status*\nReady to send" }
+      ]
+    },
+    {
+      "type": "context",
+      "elements": [
+        { "type": "mrkdwn", "text": "_Approver note: \"Matches their pattern — go.\"_" }
+      ]
+    },
+    { "type": "divider" },
+    {
+      "type": "actions",
+      "elements": [
+        {
+          "type": "button",
+          "text": { "type": "plain_text", "text": ":email: Send to customer", "emoji": true },
+          "style": "primary",
+          "value": "send_Q-8847",
+          "action_id": "send_customer"
+        },
+        {
+          "type": "button",
+          "text": { "type": "plain_text", "text": ":page_facing_up: Generate order", "emoji": true },
+          "value": "order_Q-8847",
+          "action_id": "generate_order"
+        },
+        {
+          "type": "button",
+          "text": { "type": "plain_text", "text": "View audit trail", "emoji": true },
+          "action_id": "view_audit"
+        }
+      ]
+    }
+  ]
+}

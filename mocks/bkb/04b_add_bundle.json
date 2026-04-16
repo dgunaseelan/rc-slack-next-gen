@@ -1,0 +1,126 @@
+{
+  "_meta": {
+    "id": "04b_add_bundle",
+    "title": "Add Bundle — curated + AI-suggested (from Step 2)",
+    "surface": "modal",
+    "description": "views.push triggered by 'Add bundle' on Create Quote · Step 2. Lists curated bundles from the CPQ bundle catalog plus AI-composed bundles tailored to Acme's buying pattern. Selecting a bundle expands all its component lines into the draft quote and returns to Step 2.",
+    "rca_endpoint": "GET /connect/cpq/bundles  +  POST /industries/cpq/quotes/actions/get-instant-price"
+  },
+  "type": "modal",
+  "callback_id": "add_bundle",
+  "private_metadata": "{\"draft_id\":\"draft-8d2f\",\"account_id\":\"001XX000003DHPr\",\"return_to\":\"create_quote_step2\"}",
+  "title": { "type": "plain_text", "text": "Add bundle" },
+  "submit": { "type": "plain_text", "text": "Add bundle to quote" },
+  "close": { "type": "plain_text", "text": "Cancel" },
+  "blocks": [
+    {
+      "type": "context",
+      "elements": [
+        { "type": "mrkdwn", "text": ":package: *New Quote · Acme Corp* · draft-8d2f · Current subtotal $48,200.00" }
+      ]
+    },
+    {
+      "type": "header",
+      "text": { "type": "plain_text", "text": ":sparkles: Recommended for Acme", "emoji": true }
+    },
+    {
+      "type": "section",
+      "text": { "type": "mrkdwn", "text": "Based on Acme's last 6 deals (78% include CloudSync, 62% include Extended Support), these bundles match their buying pattern." }
+    },
+    {
+      "type": "input",
+      "block_id": "bundle_choice",
+      "label": { "type": "plain_text", "text": "Choose a bundle" },
+      "element": {
+        "type": "radio_buttons",
+        "action_id": "bundle_radio",
+        "initial_option": {
+          "text": { "type": "plain_text", "text": ":star2: ProBook Enterprise Bundle — AI-recommended" },
+          "description": { "type": "plain_text", "text": "Elite 14\" + CloudSync + 3yr · $2,799/seat (save $200) · 78% Acme attach" },
+          "value": "BUNDLE-PBE-ENT"
+        },
+        "options": [
+          {
+            "text": { "type": "plain_text", "text": ":star2: ProBook Enterprise Bundle — AI-recommended" },
+            "description": { "type": "plain_text", "text": "Elite 14\" + CloudSync + 3yr · $2,799/seat (save $200) · 78% Acme attach" },
+            "value": "BUNDLE-PBE-ENT"
+          },
+          {
+            "text": { "type": "plain_text", "text": ":package: Remote Workforce Starter" },
+            "description": { "type": "plain_text", "text": "FlexBook Air 13\" + CloudSync + 1yr · $1,749/seat · distributed teams" },
+            "value": "BUNDLE-REMOTE-START"
+          },
+          {
+            "text": { "type": "plain_text", "text": ":computer: Dev Workstation Bundle" },
+            "description": { "type": "plain_text", "text": "ProBook Pro 16\" + CloudSync + 3yr Support · $3,399/seat · eng teams" },
+            "value": "BUNDLE-DEV-WS"
+          },
+          {
+            "text": { "type": "plain_text", "text": ":gear: Custom bundle — build your own" },
+            "description": { "type": "plain_text", "text": "Start with an empty bundle and add components manually" },
+            "value": "custom"
+          }
+        ]
+      }
+    },
+    { "type": "divider" },
+    {
+      "type": "header",
+      "text": { "type": "plain_text", "text": "Bundle preview", "emoji": true }
+    },
+    {
+      "type": "section",
+      "text": { "type": "mrkdwn", "text": "*ProBook Enterprise Bundle*  `BUNDLE-PBE-ENT`\n_Includes 3 SKUs · priced as a unit · each component rolls up into its own quote line._" }
+    },
+    {
+      "type": "section",
+      "fields": [
+        { "type": "mrkdwn", "text": ":computer: *ProBook Elite 14\"*\n`SKU-PBE-14` · $2,299" },
+        { "type": "mrkdwn", "text": ":cloud: *CloudSync Pro*\n`SKU-CSP-ANN` · $149 / user / yr" },
+        { "type": "mrkdwn", "text": ":wrench: *Extended Support 3yr*\n`SKU-SUP-3Y` · $199 / device" },
+        { "type": "mrkdwn", "text": ":moneybag: *Bundle price*\n*$2,799* per seat (save $200)" }
+      ]
+    },
+    {
+      "type": "input",
+      "block_id": "bundle_qty",
+      "label": { "type": "plain_text", "text": "How many seats?" },
+      "element": {
+        "type": "number_input",
+        "action_id": "bundle_qty_input",
+        "is_decimal_allowed": false,
+        "min_value": "1",
+        "initial_value": "20"
+      }
+    },
+    {
+      "type": "input",
+      "block_id": "bundle_term",
+      "label": { "type": "plain_text", "text": "Term" },
+      "element": {
+        "type": "static_select",
+        "action_id": "bundle_term_select",
+        "initial_option": { "text": { "type": "plain_text", "text": "Annual — co-termed" }, "value": "annual_coterm" },
+        "options": [
+          { "text": { "type": "plain_text", "text": "Annual — co-termed" }, "value": "annual_coterm" },
+          { "text": { "type": "plain_text", "text": "Monthly" }, "value": "monthly" },
+          { "text": { "type": "plain_text", "text": "3-year" }, "value": "3y" }
+        ]
+      }
+    },
+    {
+      "type": "context",
+      "elements": [
+        { "type": "mrkdwn", "text": ":warning: Bundle will replace individually-listed CloudSync Pro + Extended Support lines already on the quote. RevFlow will ask to confirm on the next screen." }
+      ]
+    },
+    { "type": "divider" },
+    {
+      "type": "section",
+      "fields": [
+        { "type": "mrkdwn", "text": "*Bundle total*\n$55,980.00" },
+        { "type": "mrkdwn", "text": "*Savings vs à la carte*\n:large_green_circle: $4,000.00" }
+      ]
+    }
+  ]
+}

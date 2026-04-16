@@ -1,0 +1,132 @@
+{
+  "_meta": {
+    "id": "04e_configure_bundle",
+    "title": "Configure bundle — edit contents (from overflow)",
+    "surface": "modal",
+    "description": "views.push triggered by the line's overflow → 'Configure bundle'. Shown when the selected line is a bundle (e.g. ProBook Enterprise Bundle). User can toggle included SKUs, adjust per-component qty, and swap components within the bundle rule set. On submit, the child QuoteLineItems are patched and the parent bundle line is re-priced.",
+    "rca_endpoint": "GET /connect/cpq/bundles/{id}  →  PATCH child QuoteLineItems  →  POST /industries/cpq/quotes/actions/get-instant-price"
+  },
+  "type": "modal",
+  "callback_id": "configure_bundle",
+  "private_metadata": "{\"draft_id\":\"draft-8d2f\",\"line_id\":\"line_1\",\"bundle_id\":\"BUNDLE-PBE-ENT\",\"return_to\":\"create_quote_step2\"}",
+  "title": { "type": "plain_text", "text": "Configure bundle" },
+  "submit": { "type": "plain_text", "text": "Save bundle" },
+  "close": { "type": "plain_text", "text": "Cancel" },
+  "blocks": [
+    {
+      "type": "context",
+      "elements": [
+        { "type": "mrkdwn", "text": ":package: *ProBook Enterprise Bundle*  `BUNDLE-PBE-ENT` · 20 seats · Bundle price $2,799 / seat" }
+      ]
+    },
+    {
+      "type": "section",
+      "text": { "type": "mrkdwn", "text": "*Required components* — can't be removed, but you can swap variants and set per-component qty." }
+    },
+    { "type": "divider" },
+    {
+      "type": "section",
+      "text": { "type": "mrkdwn", "text": ":computer: *ProBook Elite 14\"*  `SKU-PBE-14`\n_Required · 1 per seat_" },
+      "accessory": {
+        "type": "overflow",
+        "action_id": "comp_laptop_menu",
+        "options": [
+          { "text": { "type": "plain_text", "text": "Swap → ProBook Pro 16\" (+$700/seat)" }, "value": "swap_pbp16" },
+          { "text": { "type": "plain_text", "text": "Swap → FlexBook Air 13\" (−$900/seat)" }, "value": "swap_fba13" },
+          { "text": { "type": "plain_text", "text": "Open SKU configurator" }, "value": "configure" }
+        ]
+      }
+    },
+    {
+      "type": "section",
+      "text": { "type": "mrkdwn", "text": ":cloud: *CloudSync Pro*  `SKU-CSP-ANN`\n_Required · 1 license per seat · annual_" },
+      "accessory": {
+        "type": "static_select",
+        "action_id": "cloudsync_tier",
+        "initial_option": { "text": { "type": "plain_text", "text": "Pro — $149 / user / yr" }, "value": "pro" },
+        "options": [
+          { "text": { "type": "plain_text", "text": "Standard — $89 / user / yr" }, "value": "std" },
+          { "text": { "type": "plain_text", "text": "Pro — $149 / user / yr" }, "value": "pro" },
+          { "text": { "type": "plain_text", "text": "Enterprise — $219 / user / yr" }, "value": "ent" }
+        ]
+      }
+    },
+    {
+      "type": "section",
+      "text": { "type": "mrkdwn", "text": ":wrench: *Extended Support 3yr*  `SKU-SUP-3Y`\n_Required · 1 per device · $199 / device_" }
+    },
+    { "type": "divider" },
+    {
+      "type": "section",
+      "text": { "type": "mrkdwn", "text": "*Optional add-ons within this bundle*" }
+    },
+    {
+      "type": "input",
+      "block_id": "optional_addons",
+      "optional": true,
+      "label": { "type": "plain_text", "text": "Include optional components" },
+      "element": {
+        "type": "checkboxes",
+        "action_id": "optional_checks",
+        "options": [
+          {
+            "text": { "type": "mrkdwn", "text": ":mouse: *Wireless mouse + keyboard kit*  `SKU-ACC-KBM`" },
+            "description": { "type": "plain_text", "text": "+$79 / seat · optional peripheral" },
+            "value": "ACC-KBM"
+          },
+          {
+            "text": { "type": "mrkdwn", "text": ":carry_on_luggage: *Travel sleeve*  `SKU-ACC-SLV`" },
+            "description": { "type": "plain_text", "text": "+$29 / seat · branded travel case" },
+            "value": "ACC-SLV"
+          },
+          {
+            "text": { "type": "mrkdwn", "text": ":shield: *Endpoint Security add-on*  `SKU-SEC-EP`" },
+            "description": { "type": "plain_text", "text": "+$19 / user / yr · AI-recommended (84% attach at Acme)" },
+            "value": "SEC-EP"
+          }
+        ]
+      }
+    },
+    { "type": "divider" },
+    {
+      "type": "input",
+      "block_id": "bundle_seats",
+      "label": { "type": "plain_text", "text": "Bundle seats" },
+      "element": {
+        "type": "number_input",
+        "action_id": "bundle_seats_input",
+        "is_decimal_allowed": false,
+        "min_value": "1",
+        "initial_value": "20"
+      }
+    },
+    {
+      "type": "input",
+      "block_id": "coterm",
+      "optional": true,
+      "label": { "type": "plain_text", "text": "Co-term with existing Acme subscriptions" },
+      "element": {
+        "type": "checkboxes",
+        "action_id": "coterm_check",
+        "options": [
+          { "text": { "type": "plain_text", "text": "Yes — align end date to 2027-03-31 (Acme master anniversary)" }, "value": "coterm_yes" }
+        ]
+      }
+    },
+    {
+      "type": "context",
+      "elements": [
+        { "type": "mrkdwn", "text": ":sparkles: *RevFlow AI* · This bundle already matches 78% of Acme's historical pattern. Minimal edits recommended." }
+      ]
+    },
+    {
+      "type": "section",
+      "fields": [
+        { "type": "mrkdwn", "text": "*Bundle subtotal*\n$55,980.00" },
+        { "type": "mrkdwn", "text": "*Savings vs à la carte*\n:large_green_circle: $4,000.00" },
+        { "type": "mrkdwn", "text": "*Lines in bundle*\n3 required · 0 optional" },
+        { "type": "mrkdwn", "text": "*Next anniversary*\n2027-03-31" }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,115 @@
+{
+  "_meta": {
+    "id": "04c_ai_suggest_addons",
+    "title": "AI — suggest add-ons (from Step 2)",
+    "surface": "modal",
+    "description": "views.push triggered by 'AI — suggest add-ons' on Create Quote · Step 2. RevFlow AI analyzes the current 3 draft lines + Acme's deal history and proposes attach SKUs with reasoning, attach rate, and margin impact. Selected items are added as new quote lines on submit.",
+    "rca_endpoint": "POST /revflow/ai/suggest-addons  (internal) → returns SKUs → PATCH draft quote on submit"
+  },
+  "type": "modal",
+  "callback_id": "ai_suggest_addons",
+  "private_metadata": "{\"draft_id\":\"draft-8d2f\",\"account_id\":\"001XX000003DHPr\",\"return_to\":\"create_quote_step2\"}",
+  "title": { "type": "plain_text", "text": "AI · Suggested add-ons" },
+  "submit": { "type": "plain_text", "text": "Add 3 selected" },
+  "close": { "type": "plain_text", "text": "Cancel" },
+  "blocks": [
+    {
+      "type": "context",
+      "elements": [
+        { "type": "mrkdwn", "text": ":sparkles: *RevFlow AI* · analyzing 3 draft lines + 6 past Acme deals · Confidence: *high*" }
+      ]
+    },
+    {
+      "type": "header",
+      "text": { "type": "plain_text", "text": "4 add-ons recommended", "emoji": true }
+    },
+    {
+      "type": "section",
+      "text": { "type": "mrkdwn", "text": "These SKUs appear in *>60% of deals* similar to this one (Acme, $40-60k, laptops + SaaS). Preselected items are safe attaches — deselect anything you don't want." }
+    },
+    { "type": "divider" },
+    {
+      "type": "input",
+      "block_id": "addon_selection",
+      "label": { "type": "plain_text", "text": "Select add-ons to attach" },
+      "element": {
+        "type": "checkboxes",
+        "action_id": "addon_checks",
+        "initial_options": [
+          {
+            "text": { "type": "mrkdwn", "text": ":shield: *Endpoint Security — CloudSync Add-on*  `SKU-SEC-EP`" },
+            "description": { "type": "mrkdwn", "text": "+$19/user/yr · *84%* Acme attach · _mandated by 2024 security audit_" },
+            "value": "SEC-EP"
+          },
+          {
+            "text": { "type": "mrkdwn", "text": ":graduation_cap: *Onboarding — White Glove Setup*  `SKU-SVC-ONB`" },
+            "description": { "type": "mrkdwn", "text": "$4,900 one-time · *71%* Acme attach · _last 4 Acme deals included it_" },
+            "value": "SVC-ONB"
+          },
+          {
+            "text": { "type": "mrkdwn", "text": ":wrench: *Spare Parts Kit — 10% buffer*  `SKU-HW-SP`" },
+            "description": { "type": "mrkdwn", "text": "$199 × 2 = $398 · *66%* attach on 20+ device deals · _covers 3yr window_" },
+            "value": "HW-SP"
+          }
+        ],
+        "options": [
+          {
+            "text": { "type": "mrkdwn", "text": ":shield: *Endpoint Security — CloudSync Add-on*  `SKU-SEC-EP`" },
+            "description": { "type": "mrkdwn", "text": "+$19/user/yr · *84%* Acme attach · _mandated by 2024 security audit_" },
+            "value": "SEC-EP"
+          },
+          {
+            "text": { "type": "mrkdwn", "text": ":graduation_cap: *Onboarding — White Glove Setup*  `SKU-SVC-ONB`" },
+            "description": { "type": "mrkdwn", "text": "$4,900 one-time · *71%* Acme attach · _last 4 Acme deals included it_" },
+            "value": "SVC-ONB"
+          },
+          {
+            "text": { "type": "mrkdwn", "text": ":wrench: *Spare Parts Kit — 10% buffer*  `SKU-HW-SP`" },
+            "description": { "type": "mrkdwn", "text": "$199 × 2 = $398 · *66%* attach on 20+ device deals · _covers 3yr window_" },
+            "value": "HW-SP"
+          },
+          {
+            "text": { "type": "mrkdwn", "text": ":chart_with_upwards_trend: *Analytics Seat Pack (5 seats)*  `SKU-CSP-ANLY`" },
+            "description": { "type": "mrkdwn", "text": "$890/yr · *34%* attach · _lower confidence — new VP Ops used it before_" },
+            "value": "CSP-ANLY"
+          }
+        ]
+      }
+    },
+    { "type": "divider" },
+    {
+      "type": "header",
+      "text": { "type": "plain_text", "text": "Impact if you add all 3 preselected", "emoji": true }
+    },
+    {
+      "type": "section",
+      "fields": [
+        { "type": "mrkdwn", "text": "*Added value*\n+$5,678.00" },
+        { "type": "mrkdwn", "text": "*New quote subtotal*\n$53,878.00" },
+        { "type": "mrkdwn", "text": "*Blended margin*\n46% → 48%" },
+        { "type": "mrkdwn", "text": "*Approval impact*\nNone — stays under $60k" }
+      ]
+    },
+    {
+      "type": "context",
+      "elements": [
+        { "type": "mrkdwn", "text": ":warning: *Why not everything?* RevFlow withheld the *Premium SLA add-on* — Acme rejected it on their last 3 quotes, attach rate 8%." }
+      ]
+    },
+    {
+      "type": "actions",
+      "elements": [
+        {
+          "type": "button",
+          "text": { "type": "plain_text", "text": ":thumbsdown: Not useful — explain" },
+          "action_id": "ai_feedback_bad"
+        },
+        {
+          "type": "button",
+          "text": { "type": "plain_text", "text": ":mag: See reasoning trace" },
+          "action_id": "ai_reasoning"
+        }
+      ]
+    }
+  ]
+}

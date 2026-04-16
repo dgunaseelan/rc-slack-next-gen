@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 280" width="600" height="280" role="img" aria-label="Accounts receivable aging: Current $184k, 1-30 days $62k, 31-60 $34k, 61-90 $18k, 90+ $9k">
+  <rect width="600" height="280" fill="#1a1d21"/>
+  <text x="24" y="32" fill="#d1d2d3" font-family="-apple-system, system-ui, sans-serif" font-size="14" font-weight="700">AR Aging</text>
+  <text x="24" y="56" fill="#ffffff" font-family="-apple-system, system-ui, sans-serif" font-size="22" font-weight="700">$307,410 outstanding</text>
+  <text x="240" y="56" fill="#e01e5a" font-family="-apple-system, system-ui, sans-serif" font-size="13" font-weight="600">$27k at risk (60+ days)</text>
+
+  <g stroke="#2c2d30" stroke-width="1">
+    <line x1="80" y1="230" x2="576" y2="230"/>
+    <line x1="80" y1="180" x2="576" y2="180"/>
+    <line x1="80" y1="130" x2="576" y2="130"/>
+    <line x1="80" y1="90" x2="576" y2="90"/>
+  </g>
+
+  <rect x="100" y="94" width="70" height="136" fill="#2eb67d" rx="3"/>
+  <rect x="200" y="157" width="70" height="73" fill="#ecb22e" rx="3"/>
+  <rect x="300" y="190" width="70" height="40" fill="#eb7b2b" rx="3"/>
+  <rect x="400" y="210" width="70" height="20" fill="#e01e5a" rx="3"/>
+  <rect x="500" y="219" width="70" height="11" fill="#a30a2b" rx="3"/>
+
+  <g fill="#ffffff" font-family="-apple-system, system-ui, sans-serif" font-size="12" font-weight="600" text-anchor="middle">
+    <text x="135" y="86">$184k</text>
+    <text x="235" y="149">$62k</text>
+    <text x="335" y="182">$34k</text>
+    <text x="435" y="202">$18k</text>
+    <text x="535" y="211">$9k</text>
+  </g>
+
+  <g fill="#868686" font-family="-apple-system, system-ui, sans-serif" font-size="11" text-anchor="middle">
+    <text x="135" y="250">Current</text>
+    <text x="235" y="250">1-30 days</text>
+    <text x="335" y="250">31-60</text>
+    <text x="435" y="250">61-90</text>
+    <text x="535" y="250">90+</text>
+  </g>
+</svg>

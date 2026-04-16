@@ -1,0 +1,131 @@
+{
+  "_meta": {
+    "id": "04a_add_product_search",
+    "title": "Add Product — search overlay (from Step 2)",
+    "surface": "modal",
+    "description": "views.push triggered by the 'Add product' button on Create Quote · Step 2. Typeahead search over the Acme-negotiated price book with AI re-ranking. Each result has an 'Add' accessory that patches the draft quote and returns to Step 2 via views.update.",
+    "rca_endpoint": "POST /connect/cpq/products/search  (then PATCH draft quote lines on select)"
+  },
+  "type": "modal",
+  "callback_id": "add_product_search",
+  "private_metadata": "{\"draft_id\":\"draft-8d2f\",\"account_id\":\"001XX000003DHPr\",\"return_to\":\"create_quote_step2\"}",
+  "title": { "type": "plain_text", "text": "Add product" },
+  "submit": { "type": "plain_text", "text": "Add 2 to quote" },
+  "close": { "type": "plain_text", "text": "Cancel" },
+  "blocks": [
+    {
+      "type": "context",
+      "elements": [
+        { "type": "mrkdwn", "text": ":page_facing_up: *New Quote · Acme Corp* · draft-8d2f · Price book: *Acme Corp — negotiated*" }
+      ]
+    },
+    {
+      "type": "input",
+      "block_id": "search",
+      "dispatch_action": true,
+      "label": { "type": "plain_text", "text": "Search products" },
+      "element": {
+        "type": "plain_text_input",
+        "action_id": "search_input",
+        "placeholder": { "type": "plain_text", "text": "Try: \"laptop\", \"cloudsync\", \"SKU-PBE\"..." },
+        "initial_value": "laptop"
+      }
+    },
+    {
+      "type": "actions",
+      "elements": [
+        {
+          "type": "static_select",
+          "placeholder": { "type": "plain_text", "text": "Category" },
+          "action_id": "category_filter",
+          "options": [
+            { "text": { "type": "plain_text", "text": "All categories" }, "value": "all" },
+            { "text": { "type": "plain_text", "text": "Hardware › Laptops" }, "value": "hw_laptop" },
+            { "text": { "type": "plain_text", "text": "Hardware › Desktops" }, "value": "hw_desktop" },
+            { "text": { "type": "plain_text", "text": "Software › SaaS" }, "value": "sw_saas" },
+            { "text": { "type": "plain_text", "text": "Services › Support" }, "value": "svc_support" }
+          ],
+          "initial_option": { "text": { "type": "plain_text", "text": "Hardware › Laptops" }, "value": "hw_laptop" }
+        },
+        {
+          "type": "static_select",
+          "placeholder": { "type": "plain_text", "text": "Sort by" },
+          "action_id": "sort_by",
+          "options": [
+            { "text": { "type": "plain_text", "text": ":sparkles: AI relevance" }, "value": "ai" },
+            { "text": { "type": "plain_text", "text": "Price: low to high" }, "value": "price_asc" },
+            { "text": { "type": "plain_text", "text": "Price: high to low" }, "value": "price_desc" },
+            { "text": { "type": "plain_text", "text": "Alphabetical" }, "value": "name" }
+          ],
+          "initial_option": { "text": { "type": "plain_text", "text": ":sparkles: AI relevance" }, "value": "ai" }
+        },
+        {
+          "type": "checkboxes",
+          "action_id": "stock_only",
+          "options": [
+            { "text": { "type": "plain_text", "text": "In stock only" }, "value": "in_stock" }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "context",
+      "elements": [
+        { "type": "mrkdwn", "text": ":sparkles: *RevFlow AI* ranked 12 results for *Acme Corp* — boosting ProBook line (Acme reordered 3× in 2025) and dimming models they've never bought." }
+      ]
+    },
+    { "type": "divider" },
+    {
+      "type": "section",
+      "text": { "type": "mrkdwn", "text": ":star: *ProBook Elite 14\" — Enterprise*  `SKU-PBE-14`\nIntel Core Ultra 9 · 32GB · 1TB SSD\n*$2,299* for Acme · _already on this quote_" },
+      "accessory": {
+        "type": "button",
+        "text": { "type": "plain_text", "text": "Already added" },
+        "action_id": "add_line_PBE_14",
+        "value": "PBE-14"
+      }
+    },
+    {
+      "type": "section",
+      "text": { "type": "mrkdwn", "text": ":computer: *ProBook Pro 16\" — Workstation*  `SKU-PBP-16`\nCore Ultra 9 · 64GB · 2TB SSD\n*$2,999* for Acme  ·  :bulb: _Often bundled with Elite 14 for dev teams_" },
+      "accessory": {
+        "type": "button",
+        "text": { "type": "plain_text", "text": ":heavy_plus_sign: Add" },
+        "style": "primary",
+        "action_id": "add_line_PBP_16",
+        "value": "PBP-16"
+      }
+    },
+    {
+      "type": "section",
+      "text": { "type": "mrkdwn", "text": ":computer: *FlexBook Air 13\" — Ultralight*  `SKU-FBA-13`\nCore Ultra 7 · 16GB · 512GB SSD\n*$1,399* for Acme" },
+      "accessory": {
+        "type": "button",
+        "text": { "type": "plain_text", "text": ":heavy_plus_sign: Add" },
+        "action_id": "add_line_FBA_13",
+        "value": "FBA-13"
+      }
+    },
+    {
+      "type": "section",
+      "text": { "type": "mrkdwn", "text": ":computer: *ProBook Standard 14\" — SMB*  `SKU-PBS-14`\nCore Ultra 5 · 16GB · 512GB SSD\n*$1,199* for Acme  ·  _Discontinuing Q4 — last stock_" },
+      "accessory": {
+        "type": "button",
+        "text": { "type": "plain_text", "text": ":heavy_plus_sign: Add" },
+        "action_id": "add_line_PBS_14",
+        "value": "PBS-14"
+      }
+    },
+    { "type": "divider" },
+    {
+      "type": "section",
+      "text": { "type": "mrkdwn", "text": "*Staged to add (2):* ProBook Pro 16\" × 20  ·  FlexBook Air 13\" × 5" }
+    },
+    {
+      "type": "context",
+      "elements": [
+        { "type": "mrkdwn", "text": "Showing 4 of 12 · <fakeurl.com|See all results>  ·  Changes stage here and only commit when you hit *Add to quote*." }
+      ]
+    }
+  ]
+}

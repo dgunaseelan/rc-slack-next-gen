@@ -1,0 +1,113 @@
+{
+  "_meta": {
+    "id": "04_create_quote_step1",
+    "title": "Create Quote — Step 1: Customer & terms",
+    "surface": "modal",
+    "description": "Opened from global shortcut or Home tab CTA. views.open with private_metadata carrying draft state. Uses views.update to progress through steps.",
+    "rca_endpoint": "(prep only — no RCA call yet)"
+  },
+  "type": "modal",
+  "callback_id": "create_quote_step1",
+  "private_metadata": "{\"step\":1,\"draft_id\":\"draft-8d2f\"}",
+  "title": { "type": "plain_text", "text": "New Quote" },
+  "submit": { "type": "plain_text", "text": "Next: Line items" },
+  "close": { "type": "plain_text", "text": "Cancel" },
+  "blocks": [
+    {
+      "type": "context",
+      "elements": [
+        { "type": "mrkdwn", "text": "*Step 1 of 3* · Customer & terms  ·  :white_circle: :black_circle: :black_circle:" }
+      ]
+    },
+    {
+      "type": "header",
+      "text": { "type": "plain_text", "text": "Who is this quote for?", "emoji": true }
+    },
+    {
+      "type": "input",
+      "block_id": "account",
+      "label": { "type": "plain_text", "text": "Account" },
+      "hint": { "type": "plain_text", "text": "Type to search Salesforce Accounts" },
+      "element": {
+        "type": "external_select",
+        "action_id": "account_select",
+        "placeholder": { "type": "plain_text", "text": "Start typing…" },
+        "min_query_length": 2
+      }
+    },
+    {
+      "type": "input",
+      "block_id": "opportunity",
+      "optional": true,
+      "label": { "type": "plain_text", "text": "Link to opportunity (optional)" },
+      "element": {
+        "type": "external_select",
+        "action_id": "opp_select",
+        "placeholder": { "type": "plain_text", "text": "Search opportunities for this account" },
+        "min_query_length": 1
+      }
+    },
+    { "type": "divider" },
+    {
+      "type": "header",
+      "text": { "type": "plain_text", "text": "Terms", "emoji": true }
+    },
+    {
+      "type": "input",
+      "block_id": "currency",
+      "label": { "type": "plain_text", "text": "Currency" },
+      "element": {
+        "type": "static_select",
+        "action_id": "currency_select",
+        "initial_option": { "text": { "type": "plain_text", "text": "USD — US Dollar" }, "value": "USD" },
+        "options": [
+          { "text": { "type": "plain_text", "text": "USD — US Dollar" }, "value": "USD" },
+          { "text": { "type": "plain_text", "text": "EUR — Euro" }, "value": "EUR" },
+          { "text": { "type": "plain_text", "text": "GBP — Pound Sterling" }, "value": "GBP" },
+          { "text": { "type": "plain_text", "text": "INR — Indian Rupee" }, "value": "INR" },
+          { "text": { "type": "plain_text", "text": "JPY — Japanese Yen" }, "value": "JPY" }
+        ]
+      }
+    },
+    {
+      "type": "input",
+      "block_id": "pricebook",
+      "label": { "type": "plain_text", "text": "Price book" },
+      "element": {
+        "type": "static_select",
+        "action_id": "pricebook_select",
+        "options": [
+          { "text": { "type": "plain_text", "text": "Standard 2026" }, "value": "std_2026" },
+          { "text": { "type": "plain_text", "text": "Enterprise 2026" }, "value": "ent_2026" },
+          { "text": { "type": "plain_text", "text": "Acme Corp — negotiated" }, "value": "acme_neg" }
+        ]
+      }
+    },
+    {
+      "type": "input",
+      "block_id": "effective",
+      "label": { "type": "plain_text", "text": "Effective date" },
+      "element": {
+        "type": "datepicker",
+        "action_id": "effective_date",
+        "initial_date": "2026-04-16"
+      }
+    },
+    {
+      "type": "input",
+      "block_id": "expires",
+      "label": { "type": "plain_text", "text": "Valid until" },
+      "element": {
+        "type": "datepicker",
+        "action_id": "expires_date",
+        "initial_date": "2026-05-16"
+      }
+    },
+    {
+      "type": "context",
+      "elements": [
+        { "type": "mrkdwn", "text": ":sparkles: RevFlow AI will preselect *Acme Corp — negotiated* once you pick Acme (based on their existing agreement)." }
+      ]
+    }
+  ]
+}

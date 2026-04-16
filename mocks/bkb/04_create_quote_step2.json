@@ -1,0 +1,184 @@
+{
+  "_meta": {
+    "id": "04_create_quote_step2",
+    "title": "Create Quote — Step 2: Line items",
+    "surface": "modal",
+    "description": "views.update of step 1. Add Product pushes a search overlay (views.push). Each line renders as a section header + an input block for qty + an actions row with term-select/configure. Live subtotal via industries_cpq_quotes_instant_price.",
+    "rca_endpoint": "POST /industries/cpq/quotes/actions/get-instant-price (on each qty/discount change)"
+  },
+  "type": "modal",
+  "callback_id": "create_quote_step2",
+  "private_metadata": "{\"step\":2,\"draft_id\":\"draft-8d2f\",\"account_id\":\"001XX000003DHPr\"}",
+  "title": { "type": "plain_text", "text": "New Quote · Acme" },
+  "submit": { "type": "plain_text", "text": "Next: Review" },
+  "close": { "type": "plain_text", "text": "Back" },
+  "blocks": [
+    {
+      "type": "context",
+      "elements": [
+        { "type": "mrkdwn", "text": "*Step 2 of 3* · Line items  ·  :white_check_mark: :white_circle: :black_circle:" }
+      ]
+    },
+    {
+      "type": "header",
+      "text": { "type": "plain_text", "text": "What are you selling?", "emoji": true }
+    },
+    {
+      "type": "actions",
+      "elements": [
+        {
+          "type": "button",
+          "text": { "type": "plain_text", "text": ":heavy_plus_sign: Add product", "emoji": true },
+          "style": "primary",
+          "action_id": "add_product"
+        },
+        {
+          "type": "button",
+          "text": { "type": "plain_text", "text": ":package: Add bundle", "emoji": true },
+          "action_id": "add_bundle"
+        },
+        {
+          "type": "button",
+          "text": { "type": "plain_text", "text": ":sparkles: AI — suggest add-ons", "emoji": true },
+          "action_id": "ai_suggest_addons"
+        }
+      ]
+    },
+    { "type": "divider" },
+
+    {
+      "type": "section",
+      "text": { "type": "mrkdwn", "text": "*1. ProBook Elite 14\" — Enterprise*  `SKU-PBE-14`\n_Unit price: $2,299.00_" },
+      "accessory": {
+        "type": "overflow",
+        "action_id": "line_1_menu",
+        "options": [
+          { "text": { "type": "plain_text", "text": "Configure bundle" }, "value": "configure" },
+          { "text": { "type": "plain_text", "text": "Apply line discount" }, "value": "discount" },
+          { "text": { "type": "plain_text", "text": "Duplicate line" }, "value": "duplicate" },
+          { "text": { "type": "plain_text", "text": "Remove" }, "value": "remove" }
+        ]
+      }
+    },
+    {
+      "type": "input",
+      "block_id": "line_1_qty",
+      "label": { "type": "plain_text", "text": "Quantity" },
+      "element": {
+        "type": "number_input",
+        "action_id": "line_1_qty_input",
+        "is_decimal_allowed": false,
+        "min_value": "1",
+        "initial_value": "20"
+      }
+    },
+    {
+      "type": "input",
+      "block_id": "line_1_term",
+      "label": { "type": "plain_text", "text": "Term" },
+      "element": {
+        "type": "static_select",
+        "action_id": "line_1_term_select",
+        "initial_option": { "text": { "type": "plain_text", "text": "One-time" }, "value": "onetime" },
+        "options": [
+          { "text": { "type": "plain_text", "text": "One-time" }, "value": "onetime" },
+          { "text": { "type": "plain_text", "text": "Monthly subscription" }, "value": "monthly" },
+          { "text": { "type": "plain_text", "text": "Annual subscription" }, "value": "annual" }
+        ]
+      }
+    },
+    {
+      "type": "actions",
+      "block_id": "line_1_actions",
+      "elements": [
+        {
+          "type": "button",
+          "text": { "type": "plain_text", "text": "Configure line", "emoji": true },
+          "action_id": "line_1_configure"
+        }
+      ]
+    },
+    { "type": "divider" },
+
+    {
+      "type": "section",
+      "text": { "type": "mrkdwn", "text": "*2. CloudSync Pro — Annual*  `SKU-CSP-ANN`\n_Unit price: $149.00 / user / year_" },
+      "accessory": {
+        "type": "overflow",
+        "action_id": "line_2_menu",
+        "options": [
+          { "text": { "type": "plain_text", "text": "Apply line discount" }, "value": "discount" },
+          { "text": { "type": "plain_text", "text": "Remove" }, "value": "remove" }
+        ]
+      }
+    },
+    {
+      "type": "input",
+      "block_id": "line_2_qty",
+      "label": { "type": "plain_text", "text": "Seats" },
+      "element": {
+        "type": "number_input",
+        "action_id": "line_2_qty_input",
+        "is_decimal_allowed": false,
+        "min_value": "1",
+        "initial_value": "20"
+      }
+    },
+    {
+      "type": "input",
+      "block_id": "line_2_term",
+      "label": { "type": "plain_text", "text": "Term" },
+      "element": {
+        "type": "static_select",
+        "action_id": "line_2_term_select",
+        "initial_option": { "text": { "type": "plain_text", "text": "Annual subscription" }, "value": "annual" },
+        "options": [
+          { "text": { "type": "plain_text", "text": "Monthly subscription" }, "value": "monthly" },
+          { "text": { "type": "plain_text", "text": "Annual subscription" }, "value": "annual" },
+          { "text": { "type": "plain_text", "text": "3-year term" }, "value": "3y" }
+        ]
+      }
+    },
+    { "type": "divider" },
+
+    {
+      "type": "section",
+      "text": { "type": "mrkdwn", "text": "*3. Extended Support — 3yr Onsite*  `SKU-SUP-3Y`\n_$199.00 per device · billed once per device_" },
+      "accessory": {
+        "type": "overflow",
+        "action_id": "line_3_menu",
+        "options": [
+          { "text": { "type": "plain_text", "text": "Apply line discount" }, "value": "discount" },
+          { "text": { "type": "plain_text", "text": "Remove" }, "value": "remove" }
+        ]
+      }
+    },
+    {
+      "type": "input",
+      "block_id": "line_3_qty",
+      "label": { "type": "plain_text", "text": "Devices covered" },
+      "element": {
+        "type": "number_input",
+        "action_id": "line_3_qty_input",
+        "is_decimal_allowed": false,
+        "min_value": "1",
+        "initial_value": "20"
+      }
+    },
+
+    { "type": "divider" },
+    {
+      "type": "context",
+      "elements": [
+        { "type": "mrkdwn", "text": ":sparkles: *RevFlow AI* — 78% of Acme's past deals bundle CloudSync + Extended Support. These 3 lines match their historical buying pattern." }
+      ]
+    },
+    {
+      "type": "section",
+      "fields": [
+        { "type": "mrkdwn", "text": "*Subtotal*\n$48,200.00" },
+        { "type": "mrkdwn", "text": "*Lines*\n3 products · 20 devices · 20 seats" }
+      ]
+    }
+  ]
+}
