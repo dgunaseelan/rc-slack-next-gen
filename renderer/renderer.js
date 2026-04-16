@@ -20,7 +20,7 @@
     { id: "07_invoice_card",       title: "Invoice Card",          channel: "#deal-acme-q2" },
     { id: "08_collect_payment",    title: "Collect Payment",       channel: "Collect payment" },
     { id: "09_ai_assistant_plan",  title: "AI Assistant Plan",     channel: "RevFlow AI" },
-    { id: "10_ai_suggestion_card", title: "AI Proactive Nudge",    channel: "Priya · DM" }
+    { id: "10_ai_suggestion_card", title: "AI Proactive Nudge",    channel: "Meredith · DM" }
   ];
 
   // ============================================================
@@ -619,8 +619,7 @@
   // Theme toggle
   function initTheme() {
     const btn = document.getElementById("theme-toggle");
-    const saved = localStorage.getItem("revflow-theme");
-    if (saved) document.documentElement.dataset.theme = saved;
+    document.documentElement.dataset.theme = localStorage.getItem("revflow-theme") || "light";
     btn.addEventListener("click", () => {
       const next = document.documentElement.dataset.theme === "light" ? "dark" : "light";
       document.documentElement.dataset.theme = next;

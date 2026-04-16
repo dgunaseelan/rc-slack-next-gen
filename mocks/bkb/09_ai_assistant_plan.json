@@ -12,10 +12,10 @@
       "elements": [
         {
           "type": "image",
-          "image_url": "https://placehold.co/48x48/0ea5e9/ffffff/png?text=P",
-          "alt_text": "Priya"
+          "image_url": "https://placehold.co/48x48/0ea5e9/ffffff/png?text=M",
+          "alt_text": "Meredith"
         },
-        { "type": "mrkdwn", "text": "*Priya*  ·  2:14 PM" }
+        { "type": "mrkdwn", "text": "*Meredith*  ·  2:14 PM" }
       ]
     },
     {
