@@ -31,15 +31,32 @@
         <span id="stage-title" class="stage-title">—</span>
         <span id="stage-surface" class="stage-surface">—</span>
       </div>
-      <div class="stage-actions">
+      <div id="stage-actions" class="stage-actions">
         <a id="open-in-bkb" class="btn btn-ghost" target="_blank" rel="noopener">Open in Block Kit Builder ↗</a>
         <a id="view-json" class="btn btn-ghost" target="_blank" rel="noopener">View raw JSON ↗</a>
+      </div>
+      <div id="flow-actions" class="stage-actions" hidden>
+        <button id="flow-prev" class="btn btn-ghost" type="button">◀ Prev</button>
+        <button id="flow-next" class="btn btn-ghost" type="button">Next ▶</button>
+        <button id="flow-restart" class="btn btn-ghost" type="button">↻ Restart</button>
+        <button id="flow-exit" class="btn" type="button">Exit demo</button>
       </div>
     </div>
     <p id="stage-description" class="stage-description"></p>
 
+    <div id="flow-bar" class="flow-bar" hidden>
+      <div class="flow-stepper" id="flow-stepper"></div>
+      <div class="flow-hint" id="flow-hint">
+        <span class="flow-hint-dot"></span>
+        <span class="flow-hint-text">Click any button inside the mock to advance. Non-navigating actions fire a toast below.</span>
+      </div>
+    </div>
+
     <div id="viewport" class="viewport"></div>
   </main>
+
+  <div id="toast-container" class="toast-container" aria-live="polite"></div>
+  <div id="overflow-popover" class="overflow-popover" hidden></div>
 
   <script src="renderer.js"></script>
 </body>
