@@ -1,0 +1,123 @@
+{
+  "_meta": {
+    "id": "11a_assistant_quote_products",
+    "title": "Assistant · AI recommends products (turn 1/3)",
+    "surface": "assistant",
+    "description": "First AI turn in a 3-turn chat-to-quote conversation. Meredith types a freeform request; AI streams a collapsed plan block (thinking steps), then drops compact product cards with inline Add buttons. The card IS the reply — no prose wall, no 'type yes to confirm'.",
+    "rca_endpoint": "POST /revflow/ai/chat (conversation turn) + GET /connect/cpq/products/search (backend tool call)"
+  },
+  "blocks": [
+    {
+      "type": "context",
+      "elements": [
+        { "type": "image", "image_url": "https://placehold.co/24x24/0ea5e9/ffffff/png?text=M", "alt_text": "Meredith" },
+        { "type": "mrkdwn", "text": "*Meredith*  ·  2:31 PM" }
+      ]
+    },
+    {
+      "type": "section",
+      "text": { "type": "mrkdwn", "text": "Quote Acme: 20 ProBook laptops + renew CloudSync for the expanded team." }
+    },
+    { "type": "divider" },
+    {
+      "type": "context",
+      "elements": [
+        { "type": "mrkdwn", "text": ":sparkles: *RevFlow AI*  ·  2:31 PM" }
+      ]
+    },
+    {
+      "type": "plan",
+      "title": "Thought for 1.8s",
+      "tasks": [
+        { "task_id": "t1", "title": "Pulled Acme's last 6 quotes", "status": "complete" },
+        { "task_id": "t2", "title": "Checked CloudSync contract (ends May 31)", "status": "complete" },
+        { "task_id": "t3", "title": "Scored 12 candidate SKUs on affinity + margin", "status": "complete" },
+        { "task_id": "t4", "title": "Drafted recommendations", "status": "complete" }
+      ]
+    },
+    {
+      "type": "section",
+      "text": { "type": "mrkdwn", "text": "Here's what I'd add. Acme's pattern is *ProBook Elite + CloudSync Pro + 3yr Support*." }
+    },
+    {
+      "type": "section",
+      "fields": [
+        { "type": "mrkdwn", "text": ":computer: *ProBook Elite 14\"*\n`SKU-PBE-14`" },
+        { "type": "mrkdwn", "text": "*$2,299* / unit\n20 units = $45,980" },
+        { "type": "mrkdwn", "text": "*Margin*\n46%" },
+        { "type": "mrkdwn", "text": "*Acme attach*\n100% (last 6)" }
+      ]
+    },
+    {
+      "type": "actions",
+      "elements": [
+        {
+          "type": "button",
+          "text": { "type": "plain_text", "text": ":heavy_plus_sign: Add 20 to quote", "emoji": true },
+          "style": "primary",
+          "value": "add_sku_pbe14_20",
+          "action_id": "assistant_add_pbe14"
+        },
+        {
+          "type": "button",
+          "text": { "type": "plain_text", "text": "Configure", "emoji": true },
+          "value": "configure_pbe14",
+          "action_id": "assistant_config_pbe14"
+        },
+        {
+          "type": "button",
+          "text": { "type": "plain_text", "text": ":x: Skip", "emoji": true },
+          "value": "skip_pbe14",
+          "action_id": "assistant_skip_pbe14"
+        }
+      ]
+    },
+    { "type": "divider" },
+    {
+      "type": "section",
+      "fields": [
+        { "type": "mrkdwn", "text": ":cloud: *CloudSync Pro (renewal)*\n`SKU-CSP-ANN`" },
+        { "type": "mrkdwn", "text": "*$149* / user / yr\n30 seats = $4,470" },
+        { "type": "mrkdwn", "text": "*Term*\nAnnual, co-termed" },
+        { "type": "mrkdwn", "text": "*Uplift*\n20 → 30 seats (+50%)" }
+      ]
+    },
+    {
+      "type": "context",
+      "elements": [
+        { "type": "mrkdwn", "text": ":bulb: _Acme's headcount grew ~25% per LinkedIn. I sized 30 seats, not 20._" }
+      ]
+    },
+    {
+      "type": "actions",
+      "elements": [
+        {
+          "type": "button",
+          "text": { "type": "plain_text", "text": ":heavy_plus_sign: Add 30 seats", "emoji": true },
+          "style": "primary",
+          "value": "add_sku_csp_30",
+          "action_id": "assistant_add_csp30"
+        },
+        {
+          "type": "button",
+          "text": { "type": "plain_text", "text": ":arrow_down: 20 seats only", "emoji": true },
+          "value": "add_sku_csp_20",
+          "action_id": "assistant_add_csp20"
+        },
+        {
+          "type": "button",
+          "text": { "type": "plain_text", "text": ":x: Skip", "emoji": true },
+          "value": "skip_csp",
+          "action_id": "assistant_skip_csp"
+        }
+      ]
+    },
+    { "type": "divider" },
+    {
+      "type": "context",
+      "elements": [
+        { "type": "mrkdwn", "text": ":speech_balloon: _Or type: e.g. \"also add Extended Support 3yr\"_" }
+      ]
+    }
+  ]
+}

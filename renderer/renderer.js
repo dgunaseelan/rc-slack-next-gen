@@ -20,7 +20,10 @@
     { id: "07_invoice_card",       title: "Invoice Card",          channel: "#deal-acme-q2" },
     { id: "08_collect_payment",    title: "Collect Payment",       channel: "Collect payment" },
     { id: "09_ai_assistant_plan",  title: "AI Assistant Plan",     channel: "RevFlow AI" },
-    { id: "10_ai_suggestion_card", title: "AI Proactive Nudge",    channel: "Meredith · DM" }
+    { id: "10_ai_suggestion_card", title: "AI Proactive Nudge",    channel: "Meredith · DM" },
+    { id: "11a_assistant_quote_products", title: "Assistant chat · Products (1/3)",  channel: "Assistant panel" },
+    { id: "11b_assistant_quote_discount", title: "Assistant chat · Discount (2/3)",  channel: "Assistant panel" },
+    { id: "11c_assistant_quote_approval", title: "Assistant chat · Approval (3/3)",  channel: "Assistant panel" }
   ];
 
   // ============================================================

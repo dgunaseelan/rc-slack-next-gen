@@ -1,0 +1,77 @@
+{
+  "_meta": {
+    "id": "11c_assistant_quote_approval",
+    "title": "Assistant · AI submits approval + next step (turn 3/3)",
+    "surface": "assistant",
+    "description": "Third AI turn after Meredith picked 12%. Shows approval preview (who/SLA/impact) with Submit button, then proactively asks about the next logical action (draft customer email) — demonstrating how the assistant keeps the user flowing forward without dumping prose.",
+    "rca_endpoint": "POST /services/data/v66.0/composite (wraps Approval.process SOAP) → later POST /services/data/v66.0/sobjects/EmailMessage"
+  },
+  "blocks": [
+    {
+      "type": "context",
+      "elements": [
+        { "type": "mrkdwn", "text": ":white_check_mark: *Applied 12% discount.*  New total: *$45,961* (after tax)" }
+      ]
+    },
+    {
+      "type": "section",
+      "text": { "type": "mrkdwn", "text": ":clipboard: *Needs approval — 12% exceeds the 10% auto-threshold*" }
+    },
+    {
+      "type": "section",
+      "fields": [
+        { "type": "mrkdwn", "text": "*Approver*\n:bust_in_silhouette: Alex Chen (Sales Manager)" },
+        { "type": "mrkdwn", "text": "*SLA*\n24h (his avg: 3.2h)" },
+        { "type": "mrkdwn", "text": "*Margin impact*\n46% → 39%" },
+        { "type": "mrkdwn", "text": "*Competing with*\nGlobex (open RFP)" }
+      ]
+    },
+    {
+      "type": "actions",
+      "elements": [
+        {
+          "type": "button",
+          "text": { "type": "plain_text", "text": ":paper_plane: Submit for approval", "emoji": true },
+          "style": "primary",
+          "value": "submit_approval",
+          "action_id": "assistant_submit_approval"
+        },
+        {
+          "type": "button",
+          "text": { "type": "plain_text", "text": ":arrows_counterclockwise: Tweak discount", "emoji": true },
+          "value": "tweak_discount",
+          "action_id": "assistant_tweak_discount"
+        }
+      ]
+    },
+    { "type": "divider" },
+    {
+      "type": "context",
+      "elements": [
+        { "type": "mrkdwn", "text": ":sparkles: *RevFlow AI*  ·  _after Meredith clicks Submit_" }
+      ]
+    },
+    {
+      "type": "section",
+      "text": { "type": "mrkdwn", "text": ":bell: I'll ping you in Slack the moment Alex approves. Meanwhile — want me to draft the customer-facing email so it's ready to send?" }
+    },
+    {
+      "type": "actions",
+      "elements": [
+        {
+          "type": "button",
+          "text": { "type": "plain_text", "text": ":email: Draft the email", "emoji": true },
+          "style": "primary",
+          "value": "draft_email",
+          "action_id": "assistant_draft_email"
+        },
+        {
+          "type": "button",
+          "text": { "type": "plain_text", "text": "Later — I'll wait", "emoji": true },
+          "value": "email_later",
+          "action_id": "assistant_email_later"
+        }
+      ]
+    }
+  ]
+}
