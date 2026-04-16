@@ -583,6 +583,36 @@
     });
   }
 
+  // Convert AI-surface-only block types (plan, markdown) into BKB-compatible
+  // shapes so "Open in Block Kit Builder" doesn't silently reject the payload.
+  // Slack's public Block Kit Builder validator only knows the classic set:
+  // section, divider, image, actions, context, header, input, file, video,
+  // rich_text. Unknown types crash the preview.
+  function downgradeForBkb(blocks) {
+    const out = [];
+    for (const b of blocks) {
+      if (b.type === "plan") {
+        const title = typeof b.title === "string" ? b.title : (b.title && b.title.text) || "Thinking…";
+        const lines = (b.tasks || []).map(t => {
+          const mark = t.status === "complete" ? ":white_check_mark:" : t.status === "in_progress" ? ":hourglass_flowing_sand:" : ":white_circle:";
+          return `${mark} ${t.title}`;
+        });
+        const body = lines.length ? `:sparkles: _${title}_\n${lines.join("\n")}` : `:sparkles: _${title}_`;
+        out.push({ type: "section", text: { type: "mrkdwn", text: body } });
+        continue;
+      }
+      if (b.type === "markdown") {
+        out.push({
+          type: "section",
+          text: { type: "mrkdwn", text: b.text || "" }
+        });
+        continue;
+      }
+      out.push(b);
+    }
+    return out;
+  }
+
   async function selectMock(id) {
     activeId = id;
     document.querySelectorAll(".nav-item").forEach(b => {
@@ -609,8 +639,9 @@
       const ns = document.getElementById(`ns-${id}`);
       if (ns) ns.textContent = (meta.surface || "message").toUpperCase();
 
-      // Generate Block Kit Builder URL (strip _meta)
-      const bkbPayload = { ...payload };
+      // Generate Block Kit Builder URL — strip _meta and downgrade AI-surface
+      // block types (plan, markdown) that the public BKB validator rejects.
+      const bkbPayload = { ...payload, blocks: downgradeForBkb(payload.blocks || []) };
       delete bkbPayload._meta;
       const bkbUrl = `https://app.slack.com/block-kit-builder#${encodeURIComponent(JSON.stringify(bkbPayload))}`;
       document.getElementById("open-in-bkb").href = bkbUrl;
