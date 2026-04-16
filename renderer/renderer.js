@@ -619,6 +619,10 @@
   // Theme toggle
   function initTheme() {
     const btn = document.getElementById("theme-toggle");
+    if (!localStorage.getItem("revflow-theme-v2")) {
+      localStorage.removeItem("revflow-theme");
+      localStorage.setItem("revflow-theme-v2", "1");
+    }
     document.documentElement.dataset.theme = localStorage.getItem("revflow-theme") || "light";
     btn.addEventListener("click", () => {
       const next = document.documentElement.dataset.theme === "light" ? "dark" : "light";
