@@ -35,6 +35,9 @@
         <a id="open-in-bkb" class="btn btn-ghost" target="_blank" rel="noopener">Open in Block Kit Builder ↗</a>
         <a id="view-json" class="btn btn-ghost" target="_blank" rel="noopener">View raw JSON ↗</a>
       </div>
+      <div id="chat-demo-actions" class="stage-actions" hidden>
+        <button id="chat-demo-exit-top" class="btn" type="button">Exit demo</button>
+      </div>
       <div id="flow-actions" class="stage-actions" hidden>
         <button id="flow-prev" class="btn btn-ghost" type="button">◀ Prev</button>
         <button id="flow-next" class="btn btn-ghost" type="button">Next ▶</button>
@@ -53,6 +56,18 @@
     </div>
 
     <div id="viewport" class="viewport"></div>
+
+    <div id="chat-demo-bar" class="chat-demo-bar" hidden>
+      <div class="chat-demo-progress">
+        <span id="chat-demo-counter" class="chat-demo-counter">Turn 1 of 1</span>
+        <div class="chat-demo-progress-track"><div id="chat-demo-progress-fill" class="chat-demo-progress-fill"></div></div>
+      </div>
+      <div class="chat-demo-actions">
+        <button id="chat-demo-restart" class="btn btn-ghost" type="button">↻ Restart</button>
+        <button id="chat-demo-exit" class="btn btn-ghost" type="button">Exit demo</button>
+        <button id="chat-demo-next" class="btn btn-primary" type="button">Next message ▶</button>
+      </div>
+    </div>
   </main>
 
   <div id="toast-container" class="toast-container" aria-live="polite"></div>

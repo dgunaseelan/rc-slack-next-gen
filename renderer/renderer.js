@@ -2,20 +2,40 @@
   "use strict";
 
   // ============================================================
-  // Interactive flow definition — chains mocks together so buttons
+  // Interactive flow definitions — chains mocks together so buttons
   // actually navigate, mimicking the real Slack experience.
   // ============================================================
-  const FLOW_SEQ = [
-    { id: "02_browse_products",     label: "Browse Catalog",    channel: "#deal-acme-q2" },
-    { id: "03_product_details",     label: "Product Details",   channel: "#deal-acme-q2" },
-    { id: "04_create_quote_step1",  label: "Quote Terms",       channel: "New Quote" },
-    { id: "04_create_quote_step2",  label: "Line Items",        channel: "New Quote · Acme" },
-    { id: "04d_configure_line",     label: "Configure Line",    channel: "Configure line" },
-    { id: "04_create_quote_step3",  label: "Review + AI",       channel: "Review quote" },
-    { id: "06_approval_request",    label: "Approval Request",  channel: "Alex Chen · DM" },
-    { id: "06_approval_status",     label: "Approved",          channel: "#deal-acme-q2" }
-  ];
-  const FLOW_MAIN_IDS = FLOW_SEQ.map(s => s.id);
+  const FLOWS = {
+    qtc: {
+      title: "Quote-to-Cash",
+      subtitle: "Click-through demo",
+      steps: [
+        { id: "02_browse_products",     label: "Browse Catalog",    channel: "#deal-acme-q2" },
+        { id: "03_product_details",     label: "Product Details",   channel: "#deal-acme-q2" },
+        { id: "04_create_quote_step1",  label: "Quote Terms",       channel: "New Quote" },
+        { id: "04_create_quote_step2",  label: "Line Items",        channel: "New Quote · Acme" },
+        { id: "04d_configure_line",     label: "Configure Line",    channel: "Configure line" },
+        { id: "04_create_quote_step3",  label: "Review + AI",       channel: "Review quote" },
+        { id: "06_approval_request",    label: "Approval Request",  channel: "Alex Chen · DM" },
+        { id: "06_approval_status",     label: "Approved",          channel: "#deal-acme-q2" }
+      ]
+    },
+    invoice: {
+      title: "Invoice-to-Paid",
+      subtitle: "Billing + payment",
+      steps: [
+        { id: "07_invoice_card",     label: "Invoice Posted",   channel: "#deal-acme-q2" },
+        { id: "07_invoice_canvas",   label: "Invoice Details",  channel: "Canvas · INV-9012" },
+        { id: "08_collect_payment",  label: "Collect Payment",  channel: "Collect payment" },
+        { id: "08a_payment_success", label: "Paid",             channel: "#deal-acme-q2" }
+      ]
+    }
+  };
+  // Reverse index: mock id → flow key that owns it
+  const FLOW_OWNER = {};
+  for (const [key, f] of Object.entries(FLOWS)) {
+    for (const s of f.steps) FLOW_OWNER[s.id] = key;
+  }
   // When the user is on a side-overlay mock, which main step it "belongs" to.
   const OVERLAY_PARENT = {
     "04a_add_product_search": "04_create_quote_step2",
@@ -93,16 +113,61 @@
     },
     "06_approval_status": {
       "send_customer":  "__toast__",
-      "generate_order": "__toast__",
+      "generate_order": "07_invoice_card",
       "view_audit":     "__toast__"
+    },
+    // ----- Invoice-to-Paid flow -----
+    "07_invoice_card": {
+      "open_canvas":     "07_invoice_canvas",
+      "collect_payment": "08_collect_payment",
+      "download_pdf":    "__toast__",
+      "send_reminder":   "__toast__"
+    },
+    "07_invoice_canvas": {
+      "send_invoice":     "__toast__",
+      "generate_pdf":     "__toast__",
+      "collect_payment":  "08_collect_payment",
+      "invoice_overflow": "__toast__"
+    },
+    "08_collect_payment": {
+      "modal-submit":  "08a_payment_success",
+      "modal-close":   "07_invoice_canvas",
+      "method_select": "__toast__",
+      "discount_check": "__toast__"
+    },
+    "08a_payment_success": {
+      "send_receipt":    "__toast__",
+      "view_invoice":    "07_invoice_canvas",
+      "view_accounting": "__toast__",
+      "payment_overflow": "__toast__"
     }
   };
 
+  // ============================================================
+  // Assistant chat mocks that get a "Play step-by-step" interactive demo.
+  // Each click reveals the next conversational turn (split at dividers).
+  // ============================================================
+  const CHAT_DEMO_IDS = new Set([
+    "11_assistant_quote_chat",
+    "12_assistant_renewal_nudge_chat",
+    "13_assistant_invoice_dispute_chat",
+    "14_assistant_ar_collection_chat",
+    "15_assistant_gbb_packager_chat",
+    "16_assistant_usage_order_chat"
+  ]);
+
   const SECTIONS = [
     {
-      title: "▶ Interactive Demo",
+      title: "▶ Interactive Demos",
       items: [
-        { id: "__flow__", title: "Quote-to-Cash end-to-end", channel: "Click-through demo", flow: true }
+        { id: "__flow__qtc",     title: "Quote-to-Cash end-to-end", channel: FLOWS.qtc.subtitle,     flow: "qtc" },
+        { id: "__flow__invoice", title: "Invoice-to-Paid",          channel: FLOWS.invoice.subtitle, flow: "invoice" },
+        { id: "__demo__11_assistant_quote_chat",           title: "Chat → Quote (step-by-step)", channel: "Assistant · click through",   chatDemo: "11_assistant_quote_chat" },
+        { id: "__demo__12_assistant_renewal_nudge_chat",   title: "Renewal at Risk (step-by-step)", channel: "Assistant · click through", chatDemo: "12_assistant_renewal_nudge_chat" },
+        { id: "__demo__13_assistant_invoice_dispute_chat", title: "Invoice Dispute (step-by-step)", channel: "Assistant · click through", chatDemo: "13_assistant_invoice_dispute_chat" },
+        { id: "__demo__14_assistant_ar_collection_chat",   title: "Overdue AR Loop (step-by-step)", channel: "Assistant · click through", chatDemo: "14_assistant_ar_collection_chat" },
+        { id: "__demo__15_assistant_gbb_packager_chat",    title: "Good / Better / Best (step-by-step)", channel: "Assistant · click through", chatDemo: "15_assistant_gbb_packager_chat" },
+        { id: "__demo__16_assistant_usage_order_chat",     title: "Usage-based Order (step-by-step)", channel: "Assistant · click through", chatDemo: "16_assistant_usage_order_chat" }
       ]
     },
     {
@@ -133,15 +198,16 @@
         { id: "05_apply_discount",     title: "Apply Discount",        channel: "Apply discount" },
         { id: "06_approval_request",   title: "Approval Request",      channel: "Alex Chen · DM" },
         { id: "06_approval_status",    title: "Approval Status",       channel: "#deal-acme-q2" },
-        { id: "07_invoice_canvas",     title: "Invoice Canvas",        channel: "Canvas · INV-9012" },
         { id: "07_invoice_card",       title: "Invoice Card",          channel: "#deal-acme-q2" },
+        { id: "07_invoice_canvas",     title: "Invoice Canvas",        channel: "Canvas · INV-9012" },
         { id: "08_collect_payment",    title: "Collect Payment",       channel: "Collect payment" },
+        { id: "08a_payment_success",   title: "Payment Received",      channel: "#deal-acme-q2" },
         { id: "09_ai_assistant_plan",  title: "AI Assistant Plan",     channel: "RevFlow AI" },
         { id: "10_ai_suggestion_card", title: "AI Proactive Nudge",    channel: "Meredith · DM" }
       ]
     }
   ];
-  const MOCKS = SECTIONS.flatMap(s => s.items).filter(m => !m.flow);
+  const MOCKS = SECTIONS.flatMap(s => s.items).filter(m => !m.flow && !m.chatDemo);
 
   // ============================================================
   // Emoji shortcode map (subset — covers what the mocks use)
@@ -678,11 +744,17 @@
     </button>`;
     let counter = 0;
     const sectionsHtml = SECTIONS.map(section => {
-      const isFlowSection = section.items.some(i => i.flow);
+      const isFlowSection = section.items.some(i => i.flow || i.chatDemo);
       const itemsHtml = section.items.map(m => {
         if (m.flow) {
           return `<button class="nav-item nav-item--flow" data-id="${m.id}">
             <span class="nav-num">▶</span>
+            <span class="nav-text">${escapeHtml(m.title)}<div class="nav-surface">${escapeHtml(m.channel || "")}</div></span>
+          </button>`;
+        }
+        if (m.chatDemo) {
+          return `<button class="nav-item nav-item--demo" data-id="${m.id}" data-chat-demo="${escapeHtml(m.chatDemo)}">
+            <span class="nav-num">✨</span>
             <span class="nav-text">${escapeHtml(m.title)}<div class="nav-surface">${escapeHtml(m.channel || "")}</div></span>
           </button>`;
         }
@@ -706,13 +778,41 @@
       const id = btn.dataset.id;
       if (id === "home") {
         if (flowMode) exitFlowMode({ navigate: false });
+        if (chatDemoMode) exitChatDemo({ silent: true });
         renderHome();
-      } else if (id === "__flow__") {
-        enterFlowMode();
+      } else if (id.startsWith("__flow__")) {
+        const flowKey = id.replace("__flow__", "");
+        enterFlowMode(FLOWS[flowKey] ? flowKey : "qtc");
+      } else if (id.startsWith("__demo__")) {
+        const mockId = btn.dataset.chatDemo || id.replace("__demo__", "");
+        if (flowMode) exitFlowMode({ navigate: false });
+        startChatDemoFromNav(mockId);
       } else {
         if (flowMode) exitFlowMode({ navigate: false });
         selectMock(id);
       }
+    });
+  }
+
+  // Entry point used by sidebar + hash routing. Loads the mock's stage bar
+  // (so title/description show) then enters chat-demo mode for it.
+  async function startChatDemoFromNav(mockId) {
+    if (!CHAT_DEMO_IDS.has(mockId)) {
+      selectMock(mockId);
+      return;
+    }
+    if (chatDemoMode) exitChatDemo({ silent: true });
+    // Set the deep-link hash first so subsequent hashchange events (fired by
+    // selectMock et al.) see the final target and don't re-route us.
+    if (location.hash !== `#demo/${mockId}`) location.hash = `demo/${mockId}`;
+    // Prime the stage (title, subtitle, "view JSON" link) without touching the
+    // hash, then enter chat-demo mode on top.
+    await selectMock(mockId, { updateHash: false });
+    await enterChatDemo(mockId);
+    // Mark the demo nav item active (selectMock activates the plain mock entry)
+    const demoNavId = `__demo__${mockId}`;
+    document.querySelectorAll(".nav-item").forEach(b => {
+      b.classList.toggle("active", b.dataset.id === demoNavId);
     });
   }
 
@@ -743,7 +843,7 @@
       </section>
 
       <section class="home-cards">
-        <a href="#11_assistant_quote_chat" class="home-card home-card-agent">
+        <a href="#demo/11_assistant_quote_chat" class="home-card home-card-agent">
           <div>
             <span class="home-card-tag">Section 01 · 6 conversations</span>
             <h2>Agent &amp; Slack Experience</h2>
@@ -754,7 +854,7 @@
             <li><strong>Reactive.</strong> Paste discovery notes, forward a dispute email, ask <em>"what's overdue on my book?"</em> It streams back reasoning, pulls from Salesforce + billing + email, hands you compact cards with rich action buttons.</li>
             <li><strong>Not verbose.</strong> Every step is a tap, not a paragraph. No <em>"reply YES to confirm."</em> No 400-word AI essays. Buttons replace the chat, the chat replaces the worklist.</li>
           </ul>
-          <div class="home-card-cta">Start with the chat-to-quote flow <span class="arrow">→</span></div>
+          <div class="home-card-cta">Play the chat-to-quote demo step-by-step <span class="arrow">→</span></div>
         </a>
 
         <a href="#01_home_tab" class="home-card home-card-ui">
@@ -770,6 +870,42 @@
           </ul>
           <div class="home-card-cta">Start with the home dashboard <span class="arrow">→</span></div>
         </a>
+      </section>
+
+      <section class="home-quickstart">
+        <div class="home-quickstart-head">
+          <div class="home-quickstart-eyebrow">▶ Try the interactive demos</div>
+          <p class="home-quickstart-sub">Click through the actual Slack surfaces end-to-end — every button is wired to the next screen, AI insights included.</p>
+        </div>
+        <div class="home-quickstart-grid">
+          <a href="#flow/qtc" class="home-quickstart-tile home-quickstart-tile--qtc">
+            <div class="home-quickstart-badge">Flow 1 · 8 steps</div>
+            <h3>Quote-to-Cash end-to-end</h3>
+            <p>Browse catalog → product details → build a 3-line quote → configure a line → review with AI margin insights → request discount approval → approved.</p>
+            <div class="home-quickstart-chips">
+              <span class="home-quickstart-chip">Catalog</span>
+              <span class="home-quickstart-chip">Quote builder</span>
+              <span class="home-quickstart-chip">AI review</span>
+              <span class="home-quickstart-chip">Approval DM</span>
+            </div>
+            <div class="home-quickstart-cta">Start the walkthrough <span class="arrow">→</span></div>
+          </a>
+          <a href="#flow/invoice" class="home-quickstart-tile home-quickstart-tile--invoice">
+            <div class="home-quickstart-badge">Flow 2 · 4 steps</div>
+            <h3>Invoice-to-Paid</h3>
+            <p>Invoice posts to channel → open the full canvas → collect payment on a saved method with early-pay discount → payment received, GL posted, quota updated.</p>
+            <div class="home-quickstart-chips">
+              <span class="home-quickstart-chip">Invoice card</span>
+              <span class="home-quickstart-chip">Canvas doc</span>
+              <span class="home-quickstart-chip">Payment modal</span>
+              <span class="home-quickstart-chip">Paid receipt</span>
+            </div>
+            <div class="home-quickstart-cta">Start the walkthrough <span class="arrow">→</span></div>
+          </a>
+        </div>
+        <div class="home-quickstart-tip">
+          Tip · finish <em>Quote-to-Cash</em> and click <strong>Generate order</strong> on the Approved step — the stepper bridges straight into <em>Invoice-to-Paid</em> for one continuous close-the-loop demo.
+        </div>
       </section>
 
       <section class="home-stats">
@@ -807,6 +943,10 @@
   `;
 
   function renderHome() {
+    // Always call exitChatDemo — it's idempotent and also acts as a safety net
+    // against stale "chat-demo-bar" visibility if any previous exit path missed
+    // hiding the element.
+    exitChatDemo({ silent: true });
     activeId = "home";
     location.hash = "home";
     document.querySelectorAll(".nav-item").forEach(b => {
@@ -849,14 +989,47 @@
     return out;
   }
 
-  async function selectMock(id) {
+  // ============================================================
+  // Chat-demo state (step-by-step reveal for assistant chat mocks)
+  // ============================================================
+  let chatDemoMode = false;
+  let chatDemoPayload = null;
+  let chatDemoInfo = null;
+  let chatDemoTurns = [];   // array of block[] — each turn = blocks between dividers
+  let chatDemoIndex = 0;    // how many turns are currently revealed
+
+  // Split a flat block list into "turns" using divider blocks as boundaries.
+  // Dividers themselves are kept at the end of each preceding turn so the
+  // rendered surface still shows the separators between revealed turns.
+  function splitBlocksIntoTurns(blocks) {
+    const turns = [];
+    let current = [];
+    for (const b of blocks) {
+      if (b && b.type === "divider") {
+        if (current.length) {
+          current.push(b);
+          turns.push(current);
+          current = [];
+        }
+        // Standalone divider at start → ignore
+      } else {
+        current.push(b);
+      }
+    }
+    if (current.length) turns.push(current);
+    return turns;
+  }
+
+  async function selectMock(id, { updateHash = true } = {}) {
     activeId = id;
     document.querySelectorAll(".nav-item").forEach(b => {
       b.classList.toggle("active", b.dataset.id === id);
     });
-    location.hash = id;
+    if (updateHash) location.hash = id;
     document.querySelector(".stage-bar").style.display = "";
     document.getElementById("stage-description").style.display = "";
+    // Leave any active chat demo when navigating via sidebar
+    if (chatDemoMode) exitChatDemo({ silent: true });
 
     const info = MOCKS.find(m => m.id === id);
     try {
@@ -895,30 +1068,234 @@
   }
 
   // ============================================================
+  // Chat-demo lifecycle
+  // ============================================================
+  async function enterChatDemo(id) {
+    const info = MOCKS.find(m => m.id === id);
+    if (!info || !CHAT_DEMO_IDS.has(id)) return;
+    try {
+      const res = await fetch(`../mocks/bkb/${id}.json`);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const payload = await res.json();
+
+      chatDemoMode = true;
+      chatDemoPayload = payload;
+      chatDemoInfo = info;
+      chatDemoTurns = splitBlocksIntoTurns(payload.blocks || []);
+      chatDemoIndex = Math.min(1, chatDemoTurns.length);
+
+      document.body.classList.add("chat-demo-mode");
+      document.getElementById("chat-demo-bar").hidden = false;
+      const primaryActions = document.getElementById("stage-actions");
+      const demoActions = document.getElementById("chat-demo-actions");
+      if (primaryActions) primaryActions.hidden = true;
+      if (demoActions) demoActions.hidden = false;
+
+      renderChatDemoTurn({ animate: false });
+    } catch (err) {
+      showToast(`Could not start demo: ${err.message}`, "action");
+    }
+  }
+
+  function renderChatDemoTurn({ animate = true } = {}) {
+    if (!chatDemoMode || !chatDemoPayload) return;
+    const visibleBlocks = chatDemoTurns.slice(0, chatDemoIndex).flat();
+    const partialPayload = { ...chatDemoPayload, blocks: visibleBlocks };
+    const { html, surface } = renderSurface(partialPayload, chatDemoInfo);
+    const vp = document.getElementById("viewport");
+    vp.dataset.surface = surface;
+    vp.innerHTML = html;
+
+    // Tag each rendered top-level block with a turn index so we can animate
+    // only the newly revealed turn. Turns are contiguous runs of blocks.
+    const allBlockEls = vp.querySelectorAll(".slack-surface > .slack-message > .bk-block, .slack-surface > .bk-block");
+    let cursor = 0;
+    for (let t = 0; t < chatDemoIndex; t++) {
+      const turnLen = chatDemoTurns[t].length;
+      for (let i = 0; i < turnLen && cursor < allBlockEls.length; i++, cursor++) {
+        allBlockEls[cursor].dataset.demoTurn = String(t);
+      }
+    }
+    if (animate) {
+      const lastTurn = String(chatDemoIndex - 1);
+      allBlockEls.forEach(el => {
+        if (el.dataset.demoTurn === lastTurn) el.classList.add("chat-demo-reveal");
+      });
+      // Scroll the entire page to the bottom so the newest message is always
+      // in view, even for short early turns. Two frames defer the scroll long
+      // enough for layout (new blocks, reveal animation) to settle, otherwise
+      // document.scrollingElement.scrollHeight still reflects the pre-update
+      // height and we'd stop short.
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          const root = document.scrollingElement || document.documentElement;
+          window.scrollTo({ top: root.scrollHeight, behavior: "smooth" });
+        });
+      });
+    }
+
+    updateChatDemoControls();
+  }
+
+  function updateChatDemoControls() {
+    const total = chatDemoTurns.length || 1;
+    const counter = document.getElementById("chat-demo-counter");
+    const fill = document.getElementById("chat-demo-progress-fill");
+    const nextBtn = document.getElementById("chat-demo-next");
+    if (counter) counter.textContent = `Turn ${chatDemoIndex} of ${total}`;
+    if (fill) {
+      // CSS decides which axis this progress value applies to (height on wide
+      // screens, width on narrow). Expose the raw percentage via a custom
+      // property and let the stylesheet wire it into the correct dimension.
+      fill.style.setProperty("--chat-demo-progress", `${(chatDemoIndex / total) * 100}%`);
+    }
+    if (nextBtn) {
+      if (chatDemoIndex >= total) {
+        nextBtn.textContent = "✓ Conversation complete";
+        nextBtn.disabled = true;
+      } else {
+        nextBtn.textContent = "Next message ▶";
+        nextBtn.disabled = false;
+      }
+    }
+  }
+
+  function chatDemoAdvance() {
+    if (!chatDemoMode) return;
+    if (chatDemoIndex >= chatDemoTurns.length) return;
+    chatDemoIndex += 1;
+    renderChatDemoTurn({ animate: true });
+  }
+
+  function chatDemoRestart() {
+    if (!chatDemoMode) return;
+    chatDemoIndex = Math.min(1, chatDemoTurns.length);
+    renderChatDemoTurn({ animate: true });
+    showToast("Demo restarted", "nav");
+  }
+
+  function exitChatDemo({ silent = false } = {}) {
+    const wasActive = chatDemoMode;
+    chatDemoMode = false;
+    chatDemoPayload = null;
+    chatDemoInfo = null;
+    chatDemoTurns = [];
+    chatDemoIndex = 0;
+    // These are idempotent so callers can safely invoke exitChatDemo defensively
+    // (e.g. on every navigation) without worrying about current state.
+    document.body.classList.remove("chat-demo-mode");
+    const bar = document.getElementById("chat-demo-bar");
+    if (bar) bar.hidden = true;
+    const primaryActions = document.getElementById("stage-actions");
+    const demoActions = document.getElementById("chat-demo-actions");
+    if (primaryActions) primaryActions.hidden = false;
+    if (demoActions) demoActions.hidden = true;
+    if (wasActive && !silent && activeId) {
+      // Re-render the full mock so the user sees the complete conversation again
+      selectMock(activeId);
+    }
+  }
+
+  function initChatDemoControls() {
+    const nextBtn = document.getElementById("chat-demo-next");
+    const restartBtn = document.getElementById("chat-demo-restart");
+    const exitBtn = document.getElementById("chat-demo-exit");
+    const exitTopBtn = document.getElementById("chat-demo-exit-top");
+    if (nextBtn) nextBtn.addEventListener("click", chatDemoAdvance);
+    if (restartBtn) restartBtn.addEventListener("click", chatDemoRestart);
+    if (exitBtn) exitBtn.addEventListener("click", () => exitChatDemo());
+    if (exitTopBtn) exitTopBtn.addEventListener("click", () => exitChatDemo());
+
+    // Buttons inside the mock also advance the demo — feels like a real
+    // conversation where tapping a suggested reply moves the thread forward.
+    document.addEventListener("click", e => {
+      if (!chatDemoMode) return;
+      if (flowMode) return; // let the flow handler take over
+      const vp = document.getElementById("viewport");
+      if (!vp.contains(e.target)) return;
+      const actionable = e.target.closest("[data-action-id], .bk-button, [data-flow-action]");
+      if (!actionable) return;
+      // Ignore raw links (they navigate externally)
+      if (actionable.tagName === "A") return;
+      e.preventDefault();
+      e.stopPropagation();
+      const label = (actionable.textContent || "").trim().replace(/\s+/g, " ");
+      if (chatDemoIndex < chatDemoTurns.length) {
+        showToast(`→ ${label || "Continue"}`, "nav");
+        chatDemoAdvance();
+      } else {
+        showToast(`${label || "action"} · end of demo`, "action");
+      }
+    }, true);
+
+    // Keyboard: → to advance, Esc to exit. (Space/Enter intentionally left to
+    // the browser so they trigger focused buttons without double-advancing.)
+    document.addEventListener("keydown", e => {
+      if (!chatDemoMode) return;
+      if (e.target && (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA")) return;
+      if (e.key === "ArrowRight") {
+        e.preventDefault();
+        chatDemoAdvance();
+      } else if (e.key === "Escape") {
+        exitChatDemo();
+      }
+    });
+  }
+
+  // ============================================================
   // Interactive flow mode
   // ============================================================
   let flowMode = false;
   let flowCurrentId = null; // id of the mock currently visible (main or overlay)
+  let flowCurrentKey = "qtc"; // which flow in FLOWS is active
 
-  function isMainStep(id)   { return FLOW_MAIN_IDS.includes(id); }
-  function mainStepIdxFor(id) {
-    if (isMainStep(id)) return FLOW_MAIN_IDS.indexOf(id);
+  function flowKeyFor(id) {
+    if (FLOW_OWNER[id]) return FLOW_OWNER[id];
     const parent = OVERLAY_PARENT[id];
-    return parent ? FLOW_MAIN_IDS.indexOf(parent) : -1;
+    return parent ? FLOW_OWNER[parent] : null;
+  }
+  function stepsFor(key) { return (FLOWS[key] || FLOWS.qtc).steps; }
+  function isMainStep(id) { return Boolean(FLOW_OWNER[id]); }
+  function mainStepIdxFor(id, key) {
+    const flowKey = key || flowCurrentKey;
+    const steps = stepsFor(flowKey);
+    const direct = steps.findIndex(s => s.id === id);
+    if (direct !== -1) return direct;
+    const parent = OVERLAY_PARENT[id];
+    return parent ? steps.findIndex(s => s.id === parent) : -1;
   }
 
-  function enterFlowMode(startId) {
+  function enterFlowMode(flowKeyOrStartId, maybeStartId) {
+    // Two calling styles:
+    //   enterFlowMode("qtc")                        → start at first step of qtc
+    //   enterFlowMode("invoice", "07_invoice_canvas") → start at a specific step
+    //   enterFlowMode()                             → default to qtc
+    //   enterFlowMode("04_create_quote_step2")      → legacy: auto-detect flow
+    if (chatDemoMode) exitChatDemo({ silent: true });
+    let flowKey = "qtc";
+    let startId;
+    if (FLOWS[flowKeyOrStartId]) {
+      flowKey = flowKeyOrStartId;
+      startId = maybeStartId;
+    } else if (flowKeyOrStartId) {
+      flowKey = flowKeyFor(flowKeyOrStartId) || "qtc";
+      startId = flowKeyOrStartId;
+    }
+    flowCurrentKey = flowKey;
     flowMode = true;
     document.body.classList.add("flow-mode");
     document.getElementById("flow-bar").hidden = false;
     document.getElementById("flow-actions").hidden = false;
     document.getElementById("stage-actions").hidden = true;
-    // Sidebar activation: mark the interactive-demo entry active
+    // Sidebar activation: mark the current flow's nav entry active
+    const navId = `__flow__${flowKey}`;
     document.querySelectorAll(".nav-item").forEach(b => {
-      b.classList.toggle("active", b.dataset.id === "__flow__");
+      b.classList.toggle("active", b.dataset.id === navId);
     });
-    const first = startId && (isMainStep(startId) || OVERLAY_PARENT[startId]) ? startId : FLOW_SEQ[0].id;
-    location.hash = `flow/${first}`;
+    const steps = stepsFor(flowKey);
+    const validStart = startId && (stepsFor(flowKey).some(s => s.id === startId) || OVERLAY_PARENT[startId]);
+    const first = validStart ? startId : steps[0].id;
+    location.hash = `flow/${flowKey}/${first}`;
     loadFlowStep(first);
   }
 
@@ -934,8 +1311,18 @@
   }
 
   async function loadFlowStep(id) {
+    // Auto-switch active flow if the target mock belongs to a different flow
+    // (e.g. bridging qtc → invoice via "Generate order" on Approved).
+    const owner = flowKeyFor(id);
+    if (owner && owner !== flowCurrentKey) {
+      flowCurrentKey = owner;
+      const navId = `__flow__${owner}`;
+      document.querySelectorAll(".nav-item").forEach(b => {
+        b.classList.toggle("active", b.dataset.id === navId);
+      });
+    }
     flowCurrentId = id;
-    location.hash = `flow/${id}`;
+    location.hash = `flow/${flowCurrentKey}/${id}`;
     document.querySelector(".stage-bar").style.display = "";
     document.getElementById("stage-description").style.display = "";
     renderFlowStepper();
@@ -965,30 +1352,32 @@
 
   function renderFlowStepper() {
     const stepper = document.getElementById("flow-stepper");
-    const activeIdx = mainStepIdxFor(flowCurrentId);
+    const steps = stepsFor(flowCurrentKey);
+    const activeIdx = mainStepIdxFor(flowCurrentId, flowCurrentKey);
     const overlayLabel = OVERLAY_PARENT[flowCurrentId]
       ? (MOCKS.find(m => m.id === flowCurrentId)?.title || flowCurrentId)
       : null;
-    stepper.innerHTML = FLOW_SEQ.map((step, i) => {
-      const state = i < activeIdx ? "done" : i === activeIdx ? "active" : "pending";
-      const connector = i < FLOW_SEQ.length - 1 ? `<span class="flow-connector ${i < activeIdx ? "done" : ""}"></span>` : "";
-      return `<button class="flow-step ${state}" data-flow-jump="${step.id}" type="button" title="${escapeHtml(step.label)}">
-          <span class="flow-step-dot">${i < activeIdx ? "✓" : i + 1}</span>
-          <span class="flow-step-label">${escapeHtml(step.label)}</span>
-        </button>${connector}`;
-    }).join("");
-    // Overlay banner
+    const flowTitle = FLOWS[flowCurrentKey]?.title || "Flow";
+    stepper.innerHTML =
+      `<span class="flow-stepper-title">${escapeHtml(flowTitle)}</span>` +
+      steps.map((step, i) => {
+        const state = i < activeIdx ? "done" : i === activeIdx ? "active" : "pending";
+        const connector = i < steps.length - 1 ? `<span class="flow-connector ${i < activeIdx ? "done" : ""}"></span>` : "";
+        return `<button class="flow-step ${state}" data-flow-jump="${step.id}" type="button" title="${escapeHtml(step.label)}">
+            <span class="flow-step-dot">${i < activeIdx ? "✓" : i + 1}</span>
+            <span class="flow-step-label">${escapeHtml(step.label)}</span>
+          </button>${connector}`;
+      }).join("");
     const hint = document.getElementById("flow-hint");
     if (overlayLabel) {
-      hint.innerHTML = `<span class="flow-hint-dot overlay"></span><span class="flow-hint-text"><strong>Overlay:</strong> ${escapeHtml(overlayLabel)} · Cancel/Save returns to Line items.</span>`;
+      hint.innerHTML = `<span class="flow-hint-dot overlay"></span><span class="flow-hint-text"><strong>Overlay:</strong> ${escapeHtml(overlayLabel)} · Cancel/Save returns to the parent step.</span>`;
     } else {
       hint.innerHTML = `<span class="flow-hint-dot"></span><span class="flow-hint-text">Click any button inside the mock to advance. Non-navigating actions fire a toast below.</span>`;
     }
-    // Prev/Next enablement
     const prevBtn = document.getElementById("flow-prev");
     const nextBtn = document.getElementById("flow-next");
     prevBtn.disabled = activeIdx <= 0;
-    nextBtn.disabled = activeIdx >= FLOW_SEQ.length - 1 || activeIdx < 0;
+    nextBtn.disabled = activeIdx >= steps.length - 1 || activeIdx < 0;
   }
 
   function flowNavigate(targetId, actionLabel) {
@@ -1031,8 +1420,10 @@
   }
 
   function stepLabelFor(id) {
-    const main = FLOW_SEQ.find(s => s.id === id);
-    if (main) return main.label;
+    for (const f of Object.values(FLOWS)) {
+      const s = f.steps.find(x => x.id === id);
+      if (s) return s.label;
+    }
     const mock = MOCKS.find(m => m.id === id);
     return mock ? mock.title : id;
   }
@@ -1076,14 +1467,18 @@
   // ----- Flow controls wiring -----
   function initFlowControls() {
     document.getElementById("flow-prev").addEventListener("click", () => {
-      const idx = mainStepIdxFor(flowCurrentId);
-      if (idx > 0) loadFlowStep(FLOW_SEQ[idx - 1].id);
+      const steps = stepsFor(flowCurrentKey);
+      const idx = mainStepIdxFor(flowCurrentId, flowCurrentKey);
+      if (idx > 0) loadFlowStep(steps[idx - 1].id);
     });
     document.getElementById("flow-next").addEventListener("click", () => {
-      const idx = mainStepIdxFor(flowCurrentId);
-      if (idx >= 0 && idx < FLOW_SEQ.length - 1) loadFlowStep(FLOW_SEQ[idx + 1].id);
+      const steps = stepsFor(flowCurrentKey);
+      const idx = mainStepIdxFor(flowCurrentId, flowCurrentKey);
+      if (idx >= 0 && idx < steps.length - 1) loadFlowStep(steps[idx + 1].id);
     });
-    document.getElementById("flow-restart").addEventListener("click", () => loadFlowStep(FLOW_SEQ[0].id));
+    document.getElementById("flow-restart").addEventListener("click", () => {
+      loadFlowStep(stepsFor(flowCurrentKey)[0].id);
+    });
     document.getElementById("flow-exit").addEventListener("click", exitFlowMode);
     // Viewport + stepper interception (delegated, survives innerHTML swaps)
     document.addEventListener("click", e => {
@@ -1143,11 +1538,35 @@
   }
 
   function parseFlowHash(h) {
-    if (h === "flow") return { flow: true, id: FLOW_SEQ[0].id };
+    if (h === "flow") return { flow: true, flowKey: "qtc", id: FLOWS.qtc.steps[0].id };
     if (h.startsWith("flow/")) {
+      const parts = h.slice(5).split("/");
+      // #flow/<key>/<id>
+      if (parts.length === 2 && FLOWS[parts[0]]) {
+        const flowKey = parts[0];
+        const id = parts[1];
+        const valid = stepsFor(flowKey).some(s => s.id === id) || OVERLAY_PARENT[id];
+        return { flow: true, flowKey, id: valid ? id : stepsFor(flowKey)[0].id };
+      }
+      // #flow/<key> (start of flow)
+      if (parts.length === 1 && FLOWS[parts[0]]) {
+        const flowKey = parts[0];
+        return { flow: true, flowKey, id: stepsFor(flowKey)[0].id };
+      }
+      // Legacy: #flow/<id> — auto-detect flow
+      if (parts.length === 1) {
+        const id = parts[0];
+        const owner = flowKeyFor(id);
+        if (owner) return { flow: true, flowKey: owner, id };
+      }
+    }
+    return null;
+  }
+
+  function parseChatDemoHash(h) {
+    if (h.startsWith("demo/")) {
       const id = h.slice(5);
-      const valid = isMainStep(id) || OVERLAY_PARENT[id];
-      return { flow: true, id: valid ? id : FLOW_SEQ[0].id };
+      if (CHAT_DEMO_IDS.has(id)) return { chatDemo: true, id };
     }
     return null;
   }
@@ -1158,10 +1577,14 @@
     renderSidebar();
     prefetchSurfaces();
     initFlowControls();
+    initChatDemoControls();
     const hash = location.hash.replace("#", "");
     const flowReq = parseFlowHash(hash);
+    const demoReq = parseChatDemoHash(hash);
     if (flowReq) {
-      enterFlowMode(flowReq.id);
+      enterFlowMode(flowReq.flowKey, flowReq.id);
+    } else if (demoReq) {
+      startChatDemoFromNav(demoReq.id);
     } else if (!hash || hash === "home") {
       renderHome();
     } else if (MOCKS.find(m => m.id === hash)) {
@@ -1172,12 +1595,18 @@
     window.addEventListener("hashchange", () => {
       const h = location.hash.replace("#", "");
       const fr = parseFlowHash(h);
+      const dr = parseChatDemoHash(h);
       if (fr) {
-        if (!flowMode) enterFlowMode(fr.id);
+        if (!flowMode) enterFlowMode(fr.flowKey, fr.id);
         else if (fr.id !== flowCurrentId) loadFlowStep(fr.id);
         return;
       }
+      if (dr) {
+        if (!chatDemoMode || activeId !== dr.id) startChatDemoFromNav(dr.id);
+        return;
+      }
       if (flowMode) exitFlowMode({ navigate: false });
+      if (chatDemoMode) exitChatDemo({ silent: true });
       if ((h === "" || h === "home") && activeId !== "home") renderHome();
       else if (MOCKS.find(m => m.id === h) && h !== activeId) selectMock(h);
     });

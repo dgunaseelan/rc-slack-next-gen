@@ -62,6 +62,15 @@
 
 * { box-sizing: border-box; }
 
+/* Authoritative [hidden] rule.
+   The browser default `[hidden] { display: none }` has specificity (0,0,1,0)
+   — the same as a class selector. Any later `.some-class { display: flex }`
+   wins the cascade and breaks the `hidden` HTML attribute. This app toggles
+   visibility via `element.hidden = true` in several places (flow actions,
+   chat-demo bar, overflow popover, stage actions), so we force [hidden] to
+   always win. Keep this rule near the top of the file. */
+[hidden] { display: none !important; }
+
 html, body {
   margin: 0;
   padding: 0;
@@ -291,6 +300,154 @@ body {
 }
 .home-vision strong { color: var(--ink); font-weight: 700; }
 
+/* ---------- Quickstart (interactive demo launcher) ---------- */
+.home-quickstart {
+  padding: 0 0 44px;
+  margin-bottom: 44px;
+  border-bottom: 1px solid var(--edge);
+}
+.home-quickstart-head { margin-bottom: 18px; }
+.home-quickstart-eyebrow {
+  display: inline-block;
+  font-size: 11px; font-weight: 800;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--accent-2);
+  padding: 5px 12px; border-radius: 999px;
+  background: rgba(29, 155, 209, 0.12);
+  margin-bottom: 12px;
+}
+.home-quickstart-sub {
+  margin: 0; max-width: 720px;
+  font-size: 15px; line-height: 1.55;
+  color: var(--ink-2);
+}
+.home-quickstart-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+}
+.home-quickstart-tile {
+  display: flex; flex-direction: column; gap: 12px;
+  padding: 24px 24px 22px;
+  border-radius: 14px;
+  border: 1px solid var(--edge-2);
+  background: var(--surface);
+  color: var(--ink);
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+  transition: transform 140ms ease, box-shadow 180ms ease, border-color 180ms ease;
+}
+.home-quickstart-tile::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(29,155,209,0.10), rgba(168,85,247,0.08));
+  opacity: 0.7;
+  pointer-events: none;
+  transition: opacity 200ms ease;
+}
+.home-quickstart-tile::after {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #1d9bd1, #a855f7);
+}
+.home-quickstart-tile > * { position: relative; z-index: 1; }
+.home-quickstart-tile:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 32px rgba(29, 155, 209, 0.18), var(--card-shadow);
+  border-color: rgba(29, 155, 209, 0.4);
+}
+.home-quickstart-tile:hover::before { opacity: 1; }
+
+.home-quickstart-tile--invoice::after {
+  background: linear-gradient(90deg, #2eb67d, #1d9bd1);
+}
+.home-quickstart-tile--invoice::before {
+  background: linear-gradient(135deg, rgba(46,182,125,0.12), rgba(29,155,209,0.08));
+}
+.home-quickstart-tile--invoice:hover {
+  box-shadow: 0 14px 32px rgba(46, 182, 125, 0.18), var(--card-shadow);
+  border-color: rgba(46, 182, 125, 0.42);
+}
+
+.home-quickstart-badge {
+  align-self: flex-start;
+  font-size: 10.5px; font-weight: 800;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--ink-2);
+  padding: 3px 10px; border-radius: 999px;
+  background: var(--bg-3);
+  border: 1px solid var(--edge-2);
+}
+.home-quickstart-tile--invoice .home-quickstart-badge {
+  color: var(--success);
+  background: rgba(46,182,125,0.10);
+  border-color: rgba(46,182,125,0.28);
+}
+.home-quickstart-tile--qtc .home-quickstart-badge {
+  color: var(--accent-2);
+  background: rgba(29,155,209,0.10);
+  border-color: rgba(29,155,209,0.28);
+}
+.home-quickstart-tile h3 {
+  margin: 0;
+  font-size: 20px; font-weight: 800;
+  letter-spacing: -0.2px;
+  line-height: 1.2;
+  color: var(--ink);
+}
+.home-quickstart-tile p {
+  margin: 0;
+  font-size: 14px; line-height: 1.55;
+  color: var(--ink-2);
+}
+.home-quickstart-chips {
+  display: flex; flex-wrap: wrap; gap: 6px;
+  margin-top: 2px;
+}
+.home-quickstart-chip {
+  font-size: 11px; font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: var(--surface-2);
+  border: 1px solid var(--edge);
+  color: var(--ink-2);
+}
+.home-quickstart-cta {
+  margin-top: auto;
+  padding-top: 6px;
+  font-size: 13.5px; font-weight: 800;
+  color: var(--accent-2);
+  display: flex; align-items: center; gap: 6px;
+}
+.home-quickstart-tile--invoice .home-quickstart-cta { color: var(--success); }
+.home-quickstart-cta .arrow {
+  font-weight: 900;
+  transition: transform 160ms ease;
+  display: inline-block;
+}
+.home-quickstart-tile:hover .home-quickstart-cta .arrow { transform: translateX(4px); }
+
+.home-quickstart-tip {
+  margin-top: 18px;
+  padding: 12px 16px;
+  border-radius: 10px;
+  background: var(--surface-2);
+  border: 1px dashed var(--edge-2);
+  font-size: 13px;
+  color: var(--ink-2);
+  line-height: 1.5;
+}
+.home-quickstart-tip strong { color: var(--ink); font-weight: 800; }
+.home-quickstart-tip em { color: var(--accent-2); font-style: normal; font-weight: 700; }
+
+@media (max-width: 880px) {
+  .home-quickstart-grid { grid-template-columns: 1fr; }
+}
+
 .home-cards {
   display: grid; grid-template-columns: repeat(2, 1fr);
   gap: 20px; margin-bottom: 48px;
@@ -401,7 +558,10 @@ body {
 .nav-home.active {
   background: linear-gradient(135deg, rgba(29,155,209,0.22), rgba(168,85,247,0.22));
   border-color: var(--edge-2);
+  color: var(--ink);
 }
+.nav-home.active .nav-num     { color: var(--accent-2); }
+.nav-home.active .nav-surface { color: var(--ink-2); }
 
 @media (max-width: 880px) {
   .home-cards, .home-stats, .home-footer-row { grid-template-columns: 1fr; }
@@ -949,6 +1109,45 @@ body {
   color: #fff;
 }
 
+/* Sidebar: chat-demo entries — slightly different accent from the flow demos
+   so the two groups read as distinct families. */
+.nav-item--demo {
+  margin: 2px 8px 4px;
+  padding: 9px 10px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, rgba(236, 72, 153, 0.06), rgba(168, 85, 247, 0.10));
+  border: 1px solid rgba(168, 85, 247, 0.22);
+  color: var(--ink);
+  font-weight: 600;
+  transition: transform 0.12s, background 0.12s, border-color 0.12s;
+}
+.nav-item--demo:hover {
+  background: linear-gradient(135deg, rgba(236, 72, 153, 0.12), rgba(168, 85, 247, 0.18));
+  border-color: rgba(168, 85, 247, 0.45);
+  transform: translateY(-1px);
+  color: var(--ink);
+}
+.nav-item--demo.active {
+  background: linear-gradient(135deg, #ec4899, #a855f7);
+  color: #fff;
+  border-color: transparent;
+  box-shadow: 0 4px 18px rgba(168, 85, 247, 0.35);
+}
+.nav-item--demo.active .nav-surface { color: rgba(255, 255, 255, 0.82); }
+.nav-item--demo .nav-num {
+  background: rgba(168, 85, 247, 0.18);
+  color: #a855f7;
+  border-radius: 50%;
+  width: 22px; height: 22px;
+  display: grid; place-items: center;
+  font-size: 11px;
+  font-weight: 800;
+}
+.nav-item--demo.active .nav-num {
+  background: rgba(255, 255, 255, 0.28);
+  color: #fff;
+}
+
 /* Flow bar + stepper */
 .flow-bar {
   margin: 14px 0 18px;
@@ -965,6 +1164,20 @@ body {
   overflow-x: auto;
   padding-bottom: 6px;
   scrollbar-width: thin;
+}
+.flow-stepper-title {
+  flex-shrink: 0;
+  margin-right: 10px;
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent-2);
+  background: rgba(29, 155, 209, 0.12);
+  border: 1px solid rgba(29, 155, 209, 0.28);
+  border-radius: 999px;
+  white-space: nowrap;
 }
 .flow-step {
   display: flex;
@@ -1144,4 +1357,236 @@ body.flow-mode .viewport { box-shadow: 0 10px 32px rgba(29, 155, 209, 0.15), var
   color: var(--success);
   font-weight: 900;
   margin-right: 4px;
+}
+
+/* ==================== Chat step-by-step demo ==================== */
+.btn.btn-primary {
+  background: linear-gradient(135deg, #1d9bd1, #a855f7);
+  color: #fff;
+  border-color: transparent;
+  box-shadow: 0 1px 0 rgba(255,255,255,0.15) inset, 0 2px 6px rgba(29, 155, 209, 0.25);
+}
+.btn.btn-primary:hover { filter: brightness(1.05); background: linear-gradient(135deg, #1d9bd1, #a855f7); }
+.btn.btn-primary:disabled {
+  opacity: 0.6;
+  cursor: default;
+  filter: none;
+  background: var(--bg-3);
+  color: var(--ink-3);
+  box-shadow: none;
+}
+
+/* ============================================================
+   Chat-demo layout
+   ============================================================
+   Visibility is handled by the global [hidden] rule at the top of this file. */
+
+/* In demo mode the .stage becomes a 2-column CSS grid. Grid (vs flex-wrap)
+   guarantees that the chat (column 1) and the rail (column 2) always share a
+   single row, even when the available stage width is tight.
+   Header rows (title, description, hidden flow-bar) span both columns.
+   Stage max-width is preserved (same 1100px as non-demo mode) so the chat
+   doesn't stretch across a huge monitor. */
+body.chat-demo-mode .stage {
+  display: grid;
+  /* `auto` lets the chat column shrink to its natural content width (the
+     surface's own max-width — e.g. 520px for assistant). `justify-content:
+     start` then packs both columns to the left so the rail sits right next
+     to the chat instead of being pushed to the far right of the stage. */
+  grid-template-columns: auto 220px;
+  justify-content: start;
+  column-gap: 24px;
+  row-gap: 16px;
+  align-items: start;
+  /* Extra bottom breathing room so when the user scrolls to the end of the
+     conversation, the chat card doesn't butt up against the browser chrome
+     (which makes it look like content is cut off). Also keeps the chat
+     clear of the sticky bottom-pinned rail. */
+  padding-bottom: 180px;
+}
+body.chat-demo-mode .stage > .stage-bar,
+body.chat-demo-mode .stage > #stage-description,
+body.chat-demo-mode .stage > #flow-bar {
+  grid-column: 1 / -1;
+  min-width: 0;
+}
+/* Viewport keeps its surface-specific max-width (e.g. 520px for assistant
+   chats, 600px for modals, 680px for home). We only set min-width: 0 so grid
+   overflow resolution works; we deliberately DON'T override width/max-width
+   here — otherwise the chat stretches across the full column and leaves a
+   large blank gap between it and the rail. */
+body.chat-demo-mode .stage > .viewport {
+  grid-column: 1;
+  min-width: 0;
+  justify-self: start;
+}
+body.chat-demo-mode .stage > .chat-demo-bar {
+  grid-column: 2;
+}
+body.chat-demo-mode .viewport {
+  box-shadow: 0 0 0 2px rgba(29, 155, 209, 0.25), var(--shadow);
+  transition: box-shadow 0.2s ease;
+}
+
+/* In-grid rail anchored to the RIGHT of the chat and BOTTOM of the viewport.
+   `align-self: end` places the panel at the bottom of the grid cell (so it
+   lines up with the bottom of the chat when the chat is short). Combined
+   with `position: sticky; bottom: 24px`, the panel stays pinned 24px above
+   the viewport bottom as the user scrolls through long conversations —
+   essentially "floats at the bottom of the screen" while the chat grows. */
+.chat-demo-bar {
+  position: sticky;
+  bottom: 24px;
+  align-self: end;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 20px 18px;
+  border-radius: 16px;
+  background: linear-gradient(180deg, rgba(29, 155, 209, 0.10), rgba(168, 85, 247, 0.10)), var(--surface);
+  border: 1px solid var(--edge-2);
+  box-shadow: 0 18px 48px rgba(0,0,0,0.18);
+  animation: chatDemoPanelIn 280ms cubic-bezier(.2,.9,.3,1) both;
+  /* Give the panel enough height to show a meaningful vertical progress bar
+     even for short conversations. */
+  min-height: 360px;
+}
+@keyframes chatDemoPanelIn {
+  from { opacity: 0; transform: translateX(18px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+.chat-demo-bar::before {
+  content: "Step-by-step demo";
+  display: block;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-2);
+  opacity: 0.85;
+}
+
+/* Progress area is a horizontal mini-layout: counter label on the left
+   (rotated to read vertically) and a tall vertical fill track on the right. */
+.chat-demo-progress {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  gap: 12px;
+  min-height: 180px;
+}
+.chat-demo-counter {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  color: var(--ink);
+  white-space: nowrap;
+  padding: 4px 0;
+}
+/* Vertical track: 8px wide column that fills from the BOTTOM upward as the
+   user advances through turns. */
+.chat-demo-progress-track {
+  width: 8px;
+  flex: 1 1 auto;
+  min-height: 140px;
+  border-radius: 999px;
+  background: var(--bg-3);
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+}
+.chat-demo-progress-fill {
+  width: 100%;
+  height: var(--chat-demo-progress, 0%);
+  background: linear-gradient(0deg, #1d9bd1, #a855f7);
+  transition: height 0.35s cubic-bezier(.2,.9,.3,1);
+  border-radius: 999px;
+}
+
+/* Actions: primary (Next) at the top, secondary below. Flex-direction
+   column-reverse keeps the declaration order in HTML as
+   [Restart, Exit, Next] but puts Next on top visually. */
+.chat-demo-actions {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 8px;
+}
+.chat-demo-actions .btn { width: 100%; justify-content: center; }
+
+/* Reveal animation for newly added turn only */
+body.chat-demo-mode .bk-block.chat-demo-reveal {
+  animation: chatDemoReveal 420ms cubic-bezier(.2,.9,.3,1) both;
+}
+@keyframes chatDemoReveal {
+  0%   { opacity: 0; transform: translateY(8px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* Narrow screens: collapse the grid to single-column block flow and dock the
+   panel to the bottom of the viewport as a horizontal bar. */
+@media (max-width: 960px) {
+  body.chat-demo-mode .stage {
+    display: block;
+    padding-bottom: 180px;
+  }
+  body.chat-demo-mode .stage > .viewport,
+  body.chat-demo-mode .stage > .stage-bar,
+  body.chat-demo-mode .stage > #stage-description,
+  body.chat-demo-mode .stage > #flow-bar {
+    grid-column: unset;
+    width: auto;
+    max-width: none;
+  }
+  body.chat-demo-mode .stage > .chat-demo-bar { grid-column: unset; }
+  .chat-demo-bar {
+    position: fixed;
+    top: auto;
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
+    width: auto;
+    align-self: auto;
+    flex-direction: row;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 16px;
+    min-height: 0;
+    z-index: 5000;
+  }
+  .chat-demo-bar::before { display: none; }
+  .chat-demo-progress {
+    flex: 1 1 auto;
+    flex-direction: column;
+    gap: 6px;
+    min-height: 0;
+  }
+  .chat-demo-counter {
+    writing-mode: horizontal-tb;
+    transform: none;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--ink-2);
+  }
+  .chat-demo-progress-track {
+    width: auto;
+    height: 6px;
+    min-height: 0;
+    display: block;
+  }
+  .chat-demo-progress-fill {
+    width: var(--chat-demo-progress, 0%);
+    height: 100%;
+    background: linear-gradient(90deg, #1d9bd1, #a855f7);
+    transition: width 0.35s cubic-bezier(.2,.9,.3,1);
+  }
+  .chat-demo-actions {
+    margin-top: 0;
+    flex-direction: row;
+  }
+  .chat-demo-actions .btn { width: auto; }
 }
