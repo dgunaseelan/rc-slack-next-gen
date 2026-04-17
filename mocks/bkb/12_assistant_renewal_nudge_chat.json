@@ -104,7 +104,7 @@
       { "type": "mrkdwn", "text": ":bulb: _Suggested cadence: intro email D0 (warm intro from Jordan), follow-up D3, decision call D7._" }
     ]},
     { "type": "actions", "elements": [
-      { "type": "button", "text": { "type": "plain_text", "text": ":pen: Send for e-sign", "emoji": true }, "style": "primary", "value": "send_esign", "action_id": "renewal_send_esign" },
+      { "type": "button", "text": { "type": "plain_text", "text": ":black_nib: Send for e-sign", "emoji": true }, "style": "primary", "value": "send_esign", "action_id": "renewal_send_esign" },
       { "type": "button", "text": { "type": "plain_text", "text": ":people_holding_hands: Loop in CSM first", "emoji": true }, "value": "loop_csm", "action_id": "renewal_loop_csm" },
       { "type": "button", "text": { "type": "plain_text", "text": ":eye: Preview customer PDF", "emoji": true }, "value": "preview_pdf", "action_id": "renewal_preview_pdf" }
     ]},

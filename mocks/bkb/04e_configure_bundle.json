@@ -70,12 +70,12 @@
         "action_id": "optional_checks",
         "options": [
           {
-            "text": { "type": "mrkdwn", "text": ":mouse: *Wireless mouse + keyboard kit*  `SKU-ACC-KBM`" },
+            "text": { "type": "mrkdwn", "text": ":computer_mouse: *Wireless mouse + keyboard kit*  `SKU-ACC-KBM`" },
             "description": { "type": "plain_text", "text": "+$79 / seat · optional peripheral" },
             "value": "ACC-KBM"
           },
           {
-            "text": { "type": "mrkdwn", "text": ":carry_on_luggage: *Travel sleeve*  `SKU-ACC-SLV`" },
+            "text": { "type": "mrkdwn", "text": ":luggage: *Travel sleeve*  `SKU-ACC-SLV`" },
             "description": { "type": "plain_text", "text": "+$29 / seat · branded travel case" },
             "value": "ACC-SLV"
           },

@@ -22,7 +22,7 @@
     {
       "type": "section",
       "fields": [
-        { "type": "mrkdwn", "text": "*:chart_with_upwards_trend:  MRR*\n`$412,380`  :small_green_triangle: 8.2%" },
+        { "type": "mrkdwn", "text": "*:chart_with_upwards_trend:  MRR*\n`$412,380`  :arrow_up_small: 8.2%" },
         { "type": "mrkdwn", "text": "*:briefcase:  Open Pipeline*\n`$1.84M`  across 23 deals" },
         { "type": "mrkdwn", "text": "*:pencil:  Quotes in flight*\n`7`  · 2 awaiting approval" },
         { "type": "mrkdwn", "text": "*:warning:  AR at risk*\n`$27,410`  · 60+ days overdue" }

@@ -229,7 +229,7 @@
       "elements": [
         {
           "type": "button",
-          "text": { "type": "plain_text", "text": ":paper_plane: Submit for approval", "emoji": true },
+          "text": { "type": "plain_text", "text": ":outbox_tray: Submit for approval", "emoji": true },
           "style": "primary",
           "value": "submit_approval",
           "action_id": "assistant_submit_approval"
@@ -252,7 +252,7 @@
     },
     {
       "type": "section",
-      "text": { "type": "mrkdwn", "text": ":paper_plane: Submitted. Thanks." }
+      "text": { "type": "mrkdwn", "text": ":outbox_tray: Submitted. Thanks." }
     },
     { "type": "divider" },
     {
