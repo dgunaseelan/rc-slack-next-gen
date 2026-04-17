@@ -1,0 +1,89 @@
+{
+  "_meta": {
+    "id": "08a_payment_success",
+    "title": "Payment received — posted back to deal channel",
+    "surface": "message",
+    "description": "Posted in the thread of the original invoice card after the Payment Gateway Adapter returns a successful charge. chat.postMessage with optimistic UI while the Apex REST callback completes; reconciled after /commerce/billing/payments/{id}/actions/apply settles.",
+    "rca_endpoint": "Payment Gateway Adapter callback → POST /commerce/billing/payments/{paymentId}/actions/apply → POST /commerce/billing/invoices/{invoiceId}/actions/status"
+  },
+  "blocks": [
+    {
+      "type": "header",
+      "text": { "type": "plain_text", "text": ":white_check_mark: Payment received — $45,915.28", "emoji": true }
+    },
+    {
+      "type": "context",
+      "elements": [
+        {
+          "type": "image",
+          "image_url": "https://placehold.co/48x48/16a34a/ffffff/png?text=%E2%9C%93",
+          "alt_text": "Payment received"
+        },
+        { "type": "mrkdwn", "text": "*RevFlow Billing* · Apr 16, 2026 at 3:12 PM · Settled via Stripe adapter" }
+      ]
+    },
+    {
+      "type": "section",
+      "text": { "type": "mrkdwn", "text": "*Invoice <fakeurl.com|INV-9012>* for *Acme Corp* is marked :large_green_circle: *Paid*.\nCharged *Visa •••• 4242* (default) · Confirmation `ch_3P7kLz2Rb9qQ`." }
+    },
+    {
+      "type": "section",
+      "fields": [
+        { "type": "mrkdwn", "text": "*Amount*\n$45,915.28 USD" },
+        { "type": "mrkdwn", "text": "*Early-pay discount*\n:white_check_mark: 2% ($918.31) applied" },
+        { "type": "mrkdwn", "text": "*Processor fee*\n$1,331.44 _(2.9% + $0.30)_" },
+        { "type": "mrkdwn", "text": "*Net deposit*\n*$44,583.84*" },
+        { "type": "mrkdwn", "text": "*Order*\n<fakeurl.com|SO-2271> _(from Q-8847)_" },
+        { "type": "mrkdwn", "text": "*GL posting*\nAR → Cash · Apr 16" }
+      ]
+    },
+    { "type": "divider" },
+    {
+      "type": "context",
+      "elements": [
+        { "type": "mrkdwn", "text": ":sparkles: *RevFlow AI* — Paid *29 days early*. Acme's average days-to-pay just moved *18 → 14*. I'll flag their next invoice as a candidate for a 2% early-pay discount by default." }
+      ]
+    },
+    {
+      "type": "context",
+      "elements": [
+        { "type": "mrkdwn", "text": ":chart_with_upwards_trend: This closes *Q-8847* (Acme Q2 refresh). Pipeline for *Meredith Schmidt* updated · Q2 attainment 91% → *104%* :tada:" }
+      ]
+    },
+    { "type": "divider" },
+    {
+      "type": "actions",
+      "elements": [
+        {
+          "type": "button",
+          "text": { "type": "plain_text", "text": ":email: Send receipt", "emoji": true },
+          "style": "primary",
+          "value": "receipt_INV-9012",
+          "action_id": "send_receipt"
+        },
+        {
+          "type": "button",
+          "text": { "type": "plain_text", "text": ":receipt: View invoice", "emoji": true },
+          "value": "view_INV-9012",
+          "action_id": "view_invoice"
+        },
+        {
+          "type": "button",
+          "text": { "type": "plain_text", "text": ":bank: View GL entry", "emoji": true },
+          "value": "gl_INV-9012",
+          "action_id": "view_accounting"
+        },
+        {
+          "type": "overflow",
+          "action_id": "payment_overflow",
+          "options": [
+            { "text": { "type": "plain_text", "text": "Download receipt PDF" }, "value": "pdf" },
+            { "text": { "type": "plain_text", "text": "Forward to CS team" }, "value": "forward_cs" },
+            { "text": { "type": "plain_text", "text": "Issue refund" }, "value": "refund" },
+            { "text": { "type": "plain_text", "text": "Copy confirmation #" }, "value": "copy_conf" }
+          ]
+        }
+      ]
+    }
+  ]
+}
