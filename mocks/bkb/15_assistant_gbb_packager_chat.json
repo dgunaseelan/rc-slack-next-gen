@@ -3,13 +3,13 @@
     "id": "15_assistant_gbb_packager_chat",
     "title": "Assistant · Good/Better/Best quote packager",
     "surface": "assistant",
-    "description": "User-initiated, Revenue Cloud only. Meredith pastes discovery notes; AI generates 3 tiered quotes in parallel (compare card), drills into ramp schedule for Better, accepts Extended Warranty across tiers, finalizes 3 co-termed quotes, and offers a customer-facing compare deck.",
+    "description": "User-initiated, Revenue Cloud only. Dharsunn pastes discovery notes; AI generates 3 tiered quotes in parallel (compare card), drills into ramp schedule for Better, accepts Extended Warranty across tiers, finalizes 3 co-termed quotes, and offers a customer-facing compare deck.",
     "rca_endpoint": "POST /revflow/ai/parse-discovery-notes → GET /connect/cpq/pricebooks/{id}/bundles → POST /industries/cpq/quotes/actions/build-package × 3 → /ramp-schedule → /co-term → POST /revflow/decks/compose"
   },
   "blocks": [
     { "type": "context", "elements": [
-      { "type": "image", "image_url": "https://placehold.co/24x24/0ea5e9/ffffff/png?text=M", "alt_text": "Meredith" },
-      { "type": "mrkdwn", "text": "*Meredith*  ·  3:14 PM" }
+      { "type": "image", "image_url": "https://placehold.co/24x24/0ea5e9/ffffff/png?text=D", "alt_text": "Dharsunn" },
+      { "type": "mrkdwn", "text": "*Dharsunn*  ·  3:14 PM" }
     ]},
     { "type": "section", "text": { "type": "mrkdwn", "text": "Discovery notes from Initech call — give me good/better/best by Monday:\n\n> _Initech · ~80 engineers · wants ProBook laptops for 25 new hires · interested in CloudSync (comparing vs Dropbox) · kept mentioning SOC2 / ISO · budget ~$150K · CFO wants 3yr TCO not annual_" }},
     { "type": "divider" },
@@ -36,8 +36,8 @@
     ]},
     { "type": "divider" },
     { "type": "context", "elements": [
-      { "type": "image", "image_url": "https://placehold.co/24x24/0ea5e9/ffffff/png?text=M", "alt_text": "Meredith" },
-      { "type": "mrkdwn", "text": "*Meredith*  ·  3:17 PM" }
+      { "type": "image", "image_url": "https://placehold.co/24x24/0ea5e9/ffffff/png?text=D", "alt_text": "Dharsunn" },
+      { "type": "mrkdwn", "text": "*Dharsunn*  ·  3:17 PM" }
     ]},
     { "type": "section", "text": { "type": "mrkdwn", "text": "CFO wants 3yr TCO not annual — are these ramped or flat? Show me year-by-year on Better." }},
     { "type": "divider" },
@@ -62,8 +62,8 @@
     ]},
     { "type": "divider" },
     { "type": "context", "elements": [
-      { "type": "image", "image_url": "https://placehold.co/24x24/0ea5e9/ffffff/png?text=M", "alt_text": "Meredith" },
-      { "type": "mrkdwn", "text": "*Meredith*  ·  3:20 PM" }
+      { "type": "image", "image_url": "https://placehold.co/24x24/0ea5e9/ffffff/png?text=D", "alt_text": "Dharsunn" },
+      { "type": "mrkdwn", "text": "*Dharsunn*  ·  3:20 PM" }
     ]},
     { "type": "section", "text": { "type": "mrkdwn", "text": "Prepay. And add Extended Warranty on laptops for Better and Best." }},
     { "type": "divider" },
@@ -89,8 +89,8 @@
     ]},
     { "type": "divider" },
     { "type": "context", "elements": [
-      { "type": "image", "image_url": "https://placehold.co/24x24/0ea5e9/ffffff/png?text=M", "alt_text": "Meredith" },
-      { "type": "mrkdwn", "text": "*Meredith*  ·  3:22 PM" }
+      { "type": "image", "image_url": "https://placehold.co/24x24/0ea5e9/ffffff/png?text=D", "alt_text": "Dharsunn" },
+      { "type": "mrkdwn", "text": "*Dharsunn*  ·  3:22 PM" }
     ]},
     { "type": "section", "text": { "type": "mrkdwn", "text": "Accept both. Finalize the 3 quotes." }},
     { "type": "divider" },

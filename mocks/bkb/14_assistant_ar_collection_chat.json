@@ -3,13 +3,13 @@
     "id": "14_assistant_ar_collection_chat",
     "title": "Assistant · Overdue AR worklist drive-through",
     "surface": "assistant",
-    "description": "User-initiated. Meredith asks what's overdue; AI shows aging buckets, drills into Globex, drafts a payment plan, accepts an inline chat edit ('soften paragraph 2'), sends, and queues the next overdue account. Pattern: worklist loop with inline text edits.",
+    "description": "User-initiated. Dharsunn asks what's overdue; AI shows aging buckets, drills into Globex, drafts a payment plan, accepts an inline chat edit ('soften paragraph 2'), sends, and queues the next overdue account. Pattern: worklist loop with inline text edits.",
     "rca_endpoint": "GET /revflow/ar/aging → GET /services/data/v66.0/sobjects/Account/{id}/Activities → Zuora POST /v1/payment-schedules → POST /services/data/v66.0/sobjects/Task → POST /services/data/v66.0/sobjects/EmailMessage"
   },
   "blocks": [
     { "type": "context", "elements": [
-      { "type": "image", "image_url": "https://placehold.co/24x24/0ea5e9/ffffff/png?text=M", "alt_text": "Meredith" },
-      { "type": "mrkdwn", "text": "*Meredith*  ·  Fri 3:42 PM" }
+      { "type": "image", "image_url": "https://placehold.co/24x24/0ea5e9/ffffff/png?text=D", "alt_text": "Dharsunn" },
+      { "type": "mrkdwn", "text": "*Dharsunn*  ·  Fri 3:42 PM" }
     ]},
     { "type": "section", "text": { "type": "mrkdwn", "text": "What's overdue on my book?" }},
     { "type": "divider" },
@@ -33,8 +33,8 @@
     ]},
     { "type": "divider" },
     { "type": "context", "elements": [
-      { "type": "image", "image_url": "https://placehold.co/24x24/0ea5e9/ffffff/png?text=M", "alt_text": "Meredith" },
-      { "type": "mrkdwn", "text": "*Meredith*  ·  Fri 3:43 PM" }
+      { "type": "image", "image_url": "https://placehold.co/24x24/0ea5e9/ffffff/png?text=D", "alt_text": "Dharsunn" },
+      { "type": "mrkdwn", "text": "*Dharsunn*  ·  Fri 3:43 PM" }
     ]},
     { "type": "section", "text": { "type": "mrkdwn", "text": "Focus on Globex." }},
     { "type": "divider" },
@@ -64,8 +64,8 @@
     ]},
     { "type": "divider" },
     { "type": "context", "elements": [
-      { "type": "image", "image_url": "https://placehold.co/24x24/0ea5e9/ffffff/png?text=M", "alt_text": "Meredith" },
-      { "type": "mrkdwn", "text": "*Meredith*  ·  Fri 3:44 PM" }
+      { "type": "image", "image_url": "https://placehold.co/24x24/0ea5e9/ffffff/png?text=D", "alt_text": "Dharsunn" },
+      { "type": "mrkdwn", "text": "*Dharsunn*  ·  Fri 3:44 PM" }
     ]},
     { "type": "section", "text": { "type": "mrkdwn", "text": "Payment plan. Tom already flagged cashflow — meet him where he is." }},
     { "type": "divider" },
@@ -79,7 +79,7 @@
       { "type": "mrkdwn", "text": "*C · Custom*\nYou pick dates + split" },
       { "type": "mrkdwn", "text": "*Late-fee waiver*\n:heavy_check_mark: included in all" }
     ]},
-    { "type": "section", "text": { "type": "mrkdwn", "text": ":email: *Draft email (plan B, recommended)*\n\n> Hi Tom,\n> \n> Touching base on INV-09877. I know Q1 has been tight with the EU launch — I want to make this easy. Proposing a split: *$41,200 now, then $20,600* each in Jan and Feb. Late fees waived on the full balance.\n> \n> Works for you? Happy to adjust the dates.\n> \n> — Meredith" }},
+    { "type": "section", "text": { "type": "mrkdwn", "text": ":email: *Draft email (plan B, recommended)*\n\n> Hi Tom,\n> \n> Touching base on INV-09877. I know Q1 has been tight with the EU launch — I want to make this easy. Proposing a split: *$41,200 now, then $20,600* each in Jan and Feb. Late fees waived on the full balance.\n> \n> Works for you? Happy to adjust the dates.\n> \n> — Dharsunn" }},
     { "type": "context", "elements": [
       { "type": "mrkdwn", "text": ":bulb: _Tone-matched to Tom's prior threads (direct, warm, short)._" }
     ]},
@@ -91,8 +91,8 @@
     ]},
     { "type": "divider" },
     { "type": "context", "elements": [
-      { "type": "image", "image_url": "https://placehold.co/24x24/0ea5e9/ffffff/png?text=M", "alt_text": "Meredith" },
-      { "type": "mrkdwn", "text": "*Meredith*  ·  Fri 3:46 PM" }
+      { "type": "image", "image_url": "https://placehold.co/24x24/0ea5e9/ffffff/png?text=D", "alt_text": "Dharsunn" },
+      { "type": "mrkdwn", "text": "*Dharsunn*  ·  Fri 3:46 PM" }
     ]},
     { "type": "section", "text": { "type": "mrkdwn", "text": "Plan B — but soften the second paragraph, it sounds a bit transactional." }},
     { "type": "divider" },
@@ -114,8 +114,8 @@
     ]},
     { "type": "divider" },
     { "type": "context", "elements": [
-      { "type": "image", "image_url": "https://placehold.co/24x24/0ea5e9/ffffff/png?text=M", "alt_text": "Meredith" },
-      { "type": "mrkdwn", "text": "*Meredith*  ·  Fri 3:47 PM" }
+      { "type": "image", "image_url": "https://placehold.co/24x24/0ea5e9/ffffff/png?text=D", "alt_text": "Dharsunn" },
+      { "type": "mrkdwn", "text": "*Dharsunn*  ·  Fri 3:47 PM" }
     ]},
     { "type": "section", "text": { "type": "mrkdwn", "text": "Send." }},
     { "type": "divider" },

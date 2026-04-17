@@ -3,13 +3,13 @@
     "id": "16_assistant_usage_order_chat",
     "title": "Assistant · Usage-based order (direct, paper-light)",
     "surface": "assistant",
-    "description": "User-initiated. Meredith pastes Hooli's 12-month usage forecast; AI parses → maps to usage SKUs → proposes rate card → negotiates multi-parameter concessions → validates MSA clause for 2yr rate lock → generates paper-light order (no quote). Finalization activates metering webhooks + revrec schedule.",
+    "description": "User-initiated. Dharsunn pastes Hooli's 12-month usage forecast; AI parses → maps to usage SKUs → proposes rate card → negotiates multi-parameter concessions → validates MSA clause for 2yr rate lock → generates paper-light order (no quote). Finalization activates metering webhooks + revrec schedule.",
     "rca_endpoint": "POST /revflow/ai/parse-usage-requirements → GET /connect/cpq/products/usage → GET Contract/MSA-2043 → POST /industries/cpq/usage/negotiate-rates → POST /industries/cpq/usage/rate-lock → POST /industries/cpq/orders/actions/paper-light → POST /revflow/metering/activate-webhooks"
   },
   "blocks": [
     { "type": "context", "elements": [
-      { "type": "image", "image_url": "https://placehold.co/24x24/0ea5e9/ffffff/png?text=M", "alt_text": "Meredith" },
-      { "type": "mrkdwn", "text": "*Meredith*  ·  10:12 AM" }
+      { "type": "image", "image_url": "https://placehold.co/24x24/0ea5e9/ffffff/png?text=D", "alt_text": "Dharsunn" },
+      { "type": "mrkdwn", "text": "*Dharsunn*  ·  10:12 AM" }
     ]},
     { "type": "section", "text": { "type": "mrkdwn", "text": "Hooli Gen-AI launch — they gave me a 12-mo forecast:\n\n> _45M API calls/mo steady, peak 80M Nov · 12K GPU-hrs/mo · 8TB storage +500GB/mo · p95 <50ms · 20% committed rest on-demand · budget ~$420K/yr · MSA-2043 signed, paper-light, close EOW_" }},
     { "type": "divider" },
@@ -46,8 +46,8 @@
     ]},
     { "type": "divider" },
     { "type": "context", "elements": [
-      { "type": "image", "image_url": "https://placehold.co/24x24/0ea5e9/ffffff/png?text=M", "alt_text": "Meredith" },
-      { "type": "mrkdwn", "text": "*Meredith*  ·  10:15 AM" }
+      { "type": "image", "image_url": "https://placehold.co/24x24/0ea5e9/ffffff/png?text=D", "alt_text": "Dharsunn" },
+      { "type": "mrkdwn", "text": "*Dharsunn*  ·  10:15 AM" }
     ]},
     { "type": "section", "text": { "type": "mrkdwn", "text": "Negotiate. Push to $410K — they've been a good customer." }},
     { "type": "divider" },
@@ -81,8 +81,8 @@
     ]},
     { "type": "divider" },
     { "type": "context", "elements": [
-      { "type": "image", "image_url": "https://placehold.co/24x24/0ea5e9/ffffff/png?text=M", "alt_text": "Meredith" },
-      { "type": "mrkdwn", "text": "*Meredith*  ·  10:18 AM" }
+      { "type": "image", "image_url": "https://placehold.co/24x24/0ea5e9/ffffff/png?text=D", "alt_text": "Dharsunn" },
+      { "type": "mrkdwn", "text": "*Dharsunn*  ·  10:18 AM" }
     ]},
     { "type": "section", "text": { "type": "mrkdwn", "text": "Accept all. And lock $0.00068 for 2 years with 3% annual uplift — MSA allows it." }},
     { "type": "divider" },
@@ -107,8 +107,8 @@
     ]},
     { "type": "divider" },
     { "type": "context", "elements": [
-      { "type": "image", "image_url": "https://placehold.co/24x24/0ea5e9/ffffff/png?text=M", "alt_text": "Meredith" },
-      { "type": "mrkdwn", "text": "*Meredith*  ·  10:20 AM" }
+      { "type": "image", "image_url": "https://placehold.co/24x24/0ea5e9/ffffff/png?text=D", "alt_text": "Dharsunn" },
+      { "type": "mrkdwn", "text": "*Dharsunn*  ·  10:20 AM" }
     ]},
     { "type": "section", "text": { "type": "mrkdwn", "text": "Lock 2yr. Build the order." }},
     { "type": "divider" },
@@ -129,8 +129,8 @@
     ]},
     { "type": "divider" },
     { "type": "context", "elements": [
-      { "type": "image", "image_url": "https://placehold.co/24x24/0ea5e9/ffffff/png?text=M", "alt_text": "Meredith" },
-      { "type": "mrkdwn", "text": "*Meredith*  ·  10:21 AM" }
+      { "type": "image", "image_url": "https://placehold.co/24x24/0ea5e9/ffffff/png?text=D", "alt_text": "Dharsunn" },
+      { "type": "mrkdwn", "text": "*Dharsunn*  ·  10:21 AM" }
     ]},
     { "type": "section", "text": { "type": "mrkdwn", "text": "Create order." }},
     { "type": "divider" },
